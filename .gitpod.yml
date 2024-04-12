@@ -1,29 +1,16 @@
-workspaceLocation: gitpod/gitpod-ws.code-workspace
-checkoutLocation: gitpod
-
-github:
-    prebuilds:
-        # enable for the master/default branch (defaults to true)
-        master: true
-        # enable for all branches in this repo (defaults to false)
-        branches: false
-        # enable for pull requests coming from this repo (defaults to true)
-        pullRequests: true
-        # enable for pull requests coming from forks (defaults to false)
-        pullRequestsFromForks: true
-        # add a "Review in Gitpod" button as a comment to pull requests (defaults to true)
-        addComment: true
-        # add a "Review in Gitpod" button to pull requests (defaults to false)
-        addBadge: false
-
-# See .github/Dockerfile
 image: ghcr.io/nextflow-io/training:latest
 
 tasks:
     - before: printf 'unset JAVA_TOOL_OPTIONS\n' >> $HOME/.bashrc && exit
 
     - name: Load Eco-Flow Tutorial
-      command: docker pull -q nextflow/rnaseq-nf
+      command: docker pull -q nf-core/rnaseq
+
+    - name: Download aws toolkit
+      command: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
 
     - name: Start Eco-Flow Tutorial
       command: |
