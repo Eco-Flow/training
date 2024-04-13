@@ -1,0 +1,32 @@
+{
+    "folders": [
+        { "path": "./eco-flow-training" },
+    ],
+    "settings": {
+        "typescript.tsdk": "gitpod/node_modules/typescript/lib",
+        "[javascript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.formatOnSave": true,
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.formatOnSave": true,
+        },
+        "[json]": {
+            "editor.insertSpaces": true,
+            "editor.tabSize": 2,
+        },
+        "[yaml]": {
+            "editor.insertSpaces": true,
+            "editor.tabSize": 2,
+        },
+        "[go]": {
+            "editor.formatOnSave": true,
+        },
+        "[tf]": {
+            "editor.insertSpaces": true,
+            "editor.tabSize": 2,
+        },
+        "prettier.configPath": ".prettierrc.json",
+    },
+}
