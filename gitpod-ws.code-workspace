@@ -39,5 +39,6 @@
             "allowModfileModifications": true,
         },
         "prettier.configPath": ".prettierrc.json",
+        "debug.openDebug": "neverOpen",
     },
 }
