@@ -1,3 +1,6 @@
+workspaceLocation: gitpod/gitpod-ws.code-workspace
+checkoutLocation: gitpod
+
 image: ghcr.io/nextflow-io/training:latest
 
 tasks:
