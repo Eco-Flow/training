@@ -1,6 +1,6 @@
-# Running a nf-core pipeline
+# Running a nf-core pipeline (RNA-Seq)
 
-In this final practical, we will show you how to run a nf-core pipeline. nf-core set the standard for building gold standard, reproducible data pipeline, and have become the industry standard for processing RNA-Seq and other common "omics" data types.
+In this final practical, we will show you how to run a nf-core pipeline. nf-core set the standard for building gold standard, reproducible data pipelines, and have become the industry standard for processing RNA-Seq and other common "omics" data types.
 
 They are made up of the efforts of the entire community, and are coordinated by a dedicated team at nf-core. For those beginning their bioinformatics journey, they are a super useful way to get the heavy lifting of bioinformatics done in an efficient way.
 
@@ -59,16 +59,15 @@ You command should look like:
 --input /workspace/training/eco-flow-training/mysamplesheet \`<br>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br>`--fasta /workspace/training/eco-flow-training/genome.fasta`
 </details>
 <br>
+5. You pipeline should now be working.
 
-5. You pipeline should now be working. 
+<br/>
 
 If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the --profile docker flag. Raise a comment to the tutor if you are stuck at this stage. 
+<br>
 
 If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
 
 An overview of all the output types is found here: https://nf-co.re/rnaseq/3.14.0/docs/output. 
 
 Spend 10 minutes exploring the output documentation, and by this time your pipeline run should have finished so you can then explore your own results. 
-
-
-
