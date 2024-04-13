@@ -20,7 +20,7 @@ Hopefully you found that you require a genome (in fasta) and annotation (in gtf 
 
 </details>
 <br>
-2. Now we need to find the data and start building the samplesheet. The raw data are in `./data`. Can you build yourself a sample sheet with the data provided using their full paths.
+2. Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`. Can you build yourself a sample sheet with the data provided using their full paths.
 <br>
 <br>
 <details>
@@ -34,10 +34,19 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,a
 A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverve reads (normally R2, if you have them)), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write unstranded, forward or reverse).
 </details>
 <br>
-3. Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (--fasta), annotation (--gtf) and samplesheet (--input). 
+3. Download the genome and gff file to the data folder.
+
+The genome and annotation are on a webpage, so we can use `wget` to download the genome and annotation, as follows:
+
+`wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
+<br>
+`wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
+
+<br>
+4. Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (--fasta), annotation (--gtf) and samplesheet (--input). 
 <br>
 <br>
-You should use the --fasta /path/to/genome.fa,  --gtf /path/to/annotation.gtf and --input /path/to/samplesheet.csv
+You should use the --fasta /path/to/genome.fasta,  --gtf /path/to/genes.gff.gz and --input /path/to/samplesheet.csv
 
 PLUS: you need to use the flag --profile docker . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq
 <br>
@@ -46,11 +55,20 @@ PLUS: you need to use the flag --profile docker . This is to ensure you are runn
 <br>
 You command should look like:
 
-
 `nextflow run nf-core/rnaseq \`<br>`
 --input /workspace/training/eco-flow-training/mysamplesheet \`<br>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br>`--fasta /workspace/training/eco-flow-training/genome.fasta`
 </details>
 <br>
 
-4. 
+5. You pipeline should now be working. 
+
+If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the --profile docker flag. Raise a comment to the tutor if you are stuck at this stage. 
+
+If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
+
+An overview of all the output types is found here: https://nf-co.re/rnaseq/3.14.0/docs/output. 
+
+Spend 10 minutes exploring the output documentation, and by this time your pipeline run should have finished so you can then explore your own results. 
+
+
 
