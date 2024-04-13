@@ -38,7 +38,19 @@ A sample sheet will contain a sample name, followed by the forward reads (normal
 <br>
 <br>
 You should use the --fasta /path/to/genome.fa,  --gtf /path/to/annotation.gtf and --input /path/to/samplesheet.csv
+
+PLUS: you need to use the flag --profile docker . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq
 <br>
 <br>
+<summary>Cheat sheet</summary>
+<br>
+You command should look like:
+
+
+`nextflow run nf-core/rnaseq \`<br>`
+--input /workspace/training/eco-flow-training/mysamplesheet \`<br>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br>`--fasta /workspace/training/eco-flow-training/genome.fasta`
+</details>
+<br>
+
 4. 
 
