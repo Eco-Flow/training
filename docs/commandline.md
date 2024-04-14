@@ -31,13 +31,12 @@ These are some basic unix commands that you need to familiarize yourself with:
 `ls`	Show all the files in the current directory
 
 `cd`	Change directories<br>
-(use as `cd ./directory` ,  move to a folder called directory in my current dir)<br>
-(or `cd ..` , move back one directory)
-
+(use as `cd ./directory` ,  change to a folder called directory in my current dir)<br>
+(or `cd ..` , change back one directory)
 
 `cp`	Move a file/folder (keep original; -r for recursively)
 
-`mv`	Move a file/folder (a delete original)
+`mv`	Move a file/folder (and delete original)
 
 `rm`	Remove/Delete a file (-r for recursively)
 
@@ -78,6 +77,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `-t`	sort by time changed
 
+
 # Special Characters:
 
 `$`	A variable (or a prompt)
@@ -100,11 +100,11 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `#`	Ignore line
 
+
 # In Practise
 <br>
-Step 0.<br>
 
-**Change directory and create new directories:**
+**Step 0. Change directory and create new directories:**
 
 You can make new directories using the VS code environment by going to the explorer on the left hand side and clicking the new folder button... But we will do this all using the command line.
 
@@ -126,8 +126,7 @@ cd rnaseq_experiment
 
 <br>
 
-Step 1.<br>
-**Create a new text files**
+**Step 1. Create a new text files**
 
 Now make a file called `list.sh` with the following text inside `ls -la` using `nano` or another command line text editor.
 <br>
@@ -145,9 +144,11 @@ and type y (to agree to exit)
 then press enter
 
 </details>
+</br>
 
-<br>
-2. Now try to run the bash script you just wrote in the previous exercise.
+**Step 2.Run the bash script**
+
+Now try to run the bash script you just wrote in the previous exercise.
 
 You execute a script by simply typing its name into the terminal.
 
@@ -170,7 +171,8 @@ Now if you run the command, it should run:
 `bash ./list.sh`
 <br>
 <br>
-3. Using **aliases**
+
+**Step 3. Learn to use aliases**
 <br><br>
 In unix you can often have to use the same commands again and again, and this is where aliases come in handy.
 <br>
