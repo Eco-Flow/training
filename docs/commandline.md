@@ -1,6 +1,6 @@
 # Basics of the command line
 
-This section is designed to give you a "very" brief introduction to the command line, and explain the commands, flags and special characters you need to be aware of in order to run a Nextflow pipeline.
+This section is designed to give you a "very" brief introduction to the command line, and explain the commands, flags and special characters you need to be aware of in order to run a **Nextflow** pipeline.
 
 This is not meant to be exhaustive, and requires additional reading/practicing to truly understand all the following content.
 
@@ -11,7 +11,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `export`	Usually setting an environmental variable
 
-`nano`	Open the nano command line text editor
+`nano`	Open the nano command line text editor (nano <file name>, then exit/save by typing control C, checking the name is correct and entering `y`)
 
 `ssh`	Access a remote server/cluster
 
@@ -69,6 +69,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 # In Practise
 <br>
 Step 0.<br>
+
 **Change directory and create new directories:**
 
 You can make new directories using the VS code environment by going to the explorer on the left hand side and clicking the new folder button... But we will do this all using the command line.
@@ -92,7 +93,9 @@ cd rnaseq_experiment
 <br>
 
 Step 1.<br>
-Next, create a new text file called `list.sh` with the following text inside `ls -la` using `nano`.
+**Create a new text files**
+
+Now make a file called `list.sh` with the following text inside `ls -la` using `nano` or another command line text editor.
 <br>
 <details>
 <summary>Cheat sheet</summary>
