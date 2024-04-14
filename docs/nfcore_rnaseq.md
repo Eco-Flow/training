@@ -11,8 +11,7 @@ The example we will go through is the standard RNA-Seq pipeline which is located
 https://nf-co.re/rnaseq/3.14.0
 <br/>
 <br/>
-Step 1. 
-**Check out the nf-core rnaseq repo**
+**Step 1. Check out the nf-core rnaseq repo**
 <br/>
 First go to nf-core rnaseq (above link), and try to understand what the pipeline is doing and what inputs the pipeline expects.
 
@@ -24,6 +23,8 @@ First go to nf-core rnaseq (above link), and try to understand what the pipeline
 Hopefully you found that you require a genome (in fasta) and annotation (in gtf or gff3), as well as an input samplesheet that contains links to the raw RNA-Seq fastq data
 </details>
 <br/>
+
+
 **Step 2. Build a samplesheet**
 <br/>
 Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`. 
@@ -41,7 +42,8 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,a
 A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverve reads (normally R2, if you have them)), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write unstranded, forward or reverse).
 </details>
 <br/>
-Step 3. 
+
+**Step 3. Download the genome**
 <br/>
 Download the genome and gff file to the data folder.
 
@@ -53,8 +55,8 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 
 Make sure to take note of the PATH that these downloaded files are in, or move them into the data directory.
 
-<br/>
-Step 4. 
+
+**Step 4. Running the pipeline**
 <br/>
 Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--output` name (to anything you wish), else you will receive an error.
 <br/>
@@ -73,10 +75,10 @@ You command should look like:
 --input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--output my_results` 
 </details>
 <br/>
-Step 5.
+
+**Step 5. Checking out the documentation**
 <br/>
 You pipeline should now be working.
-
 <br/>
 
 If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the `--profile docker` flag. Raise a comment to the tutor if you are stuck at this stage. 
@@ -89,7 +91,11 @@ An overview of all the output types is found here: https://nf-co.re/rnaseq/3.14.
 Spend 10 minutes exploring the output documentation, and by this time your pipeline run should have finished so you can then explore your own results. 
 
 <br/>
-6. Find the FASTQC results (in the output directory you chose) and check that the reads were of sufficient quality.
+
+**6. Check the FASTQC results**
+
+Find (in the output directory you chose) and check that the reads were of sufficient quality.
 <br/>
 To know what the fastq quality scores should look like, follow this guide:
+
 https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
