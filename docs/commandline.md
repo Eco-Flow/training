@@ -11,11 +11,12 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `export`	Usually setting an environmental variable
 
-`nano`	Open the nano command line text editor (nano <file name>, then exit/save by typing control C, checking the name is correct and entering `y`)
+`nano`	Open the nano command line text editor<br>
+(`nano file_name`, then exit/save by typing control C, checking the name is correct and entering `y`)
 
 `ssh`	Access a remote server/cluster
 
-`wc –l` 	Word Count (with flag –l prints the # of lines in a file)
+`wc` 	Word Count (with flag –l prints the # of lines in a file)
 
 `perl/python`	Whole programming languages to run code
 
@@ -29,13 +30,16 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `ls`	Show all the files in the current directory
 
-`cd`	Change directories
+`cd`	Change directories<br>
+(use as `cd ./directory` ,  move to a folder called directory in my current dir)<br>
+(or `cd ..` , move back one directory)
 
-`cp`	Move a file/folder (keep original)
+
+`cp`	Move a file/folder (keep original; -r for recursively)
 
 `mv`	Move a file/folder (a delete original)
 
-`rm`	Remove/Delete a file
+`rm`	Remove/Delete a file (-r for recursively)
 
 `mkdir`	Make a new directory
 
@@ -60,11 +64,41 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 # Flags (for the command `ls`):
 
-<img width="266" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/fd1bd0d8-00a4-4c38-87a1-11330f53cfea">
+`-l`	long format
+
+`-r`	reverse order
+
+`-a`	show hidden files
+
+`-m`	comma separated
+
+`-h`	human readable (size)
+
+`-p`	/ after directories 
+
+`-t`	sort by time changed
 
 # Special Characters:
 
-<img width="404" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/2fbaa2b1-78e4-42a0-b0a8-690c2b7191bb">
+`$`	A variable (or a prompt)
+
+`>`	Save
+
+`.`	Current directory
+
+`..`	Previous directory
+
+`/`	Folder
+
+`-`	Flag symbol
+
+`~`	Home directory
+
+`|`	Pipe (send output to another command)
+
+`*`	Wildcard
+
+`#`	Ignore line
 
 # In Practise
 <br>
