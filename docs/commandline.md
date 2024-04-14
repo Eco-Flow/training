@@ -20,18 +20,36 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 # In Practise
 <br>
-1. Make a new working directory, change into this directory and create a new text file called `list.sh` with the following text inside `ls -la` using nano. Don't include the ` symbols.
+Step 0.<br>
+**Change directory and create new directories:**
+
+You can make new directories using the VS code environment by going to the explorer on the left hand side and clicking the new folder button... But we will do this all using the command line.
+
+First, check the location you are in the command line using `pwd`, which prints the working directory. Where you are right now. 
+
+You can see we are in:<br> `/workspace/gitpod/eco-flow-training`.
+
+Use the `ls` command to check what current file and folders we already have in this directory.
+
+Now create a new directory using `mkdir` and name it "rnaseq_experiment", as we will use this during the day to run the RNA-Seq experiment. Then `cd` into this directory.
+
+<details>
+<summary>Cheat sheet</summary>
 <br>
+mkdir rnaseq_experiment
+
+cd rnaseq_experiment
+</details>
+
+<br>
+
+Step 1.<br>
+Next, create a new text file called `list.sh` with the following text inside `ls -la` using `nano`.
 <br>
 <details>
 <summary>Cheat sheet</summary>
 <br>
-
-mkdir my_directory
-
-cd my_directory
-
-nano my_file
+nano list.sh
 
 <write some text>
 
@@ -65,3 +83,38 @@ Now we have change the users rights to allow it to be executable (a script).
 Now if you run the command, it should run:
 
 `bash ./list.sh`
+<br>
+<br>
+3. Using **aliases**
+<br><br>
+In unix you can often have to use the same commands again and again, and this is where aliases come in handy.
+<br>
+<br>
+`alias` is used by assigning another command or set of commands to a single word.
+
+These commands are saved in a file called the `.bash_profile` which is normally in your home directory. On gitpod, it is in /workspace/gitpod/.bash_profile
+
+These are a couple of examples, that reside in your `bash_profile` already:
+
+```
+alias lss='ls -al'      
+# Now lss will list the files in the directory in long form and with hidden files.
+alias h1='head -n 1'    
+# Now h1 will head the top 1 line of a file
+```
+
+Now make your own command to print the last 5 commands you used from `history`
+
+<details>
+<summary>Cheat sheet</summary>
+<br>
+Save the following line in :<br>
+/workspace/gitpod/.bash_profile:<br>
+
+`alias hist5='history | tail -n 5`<br>
+Then source the /workspace/gitpod/.bash_profile file:<br>
+
+`source /workspace/gitpod/.bash_profile file`
+
+"hist5" was the name I used, but you can call it whatever command you wish, as long as it doesn't already exist.
+</details>
