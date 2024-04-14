@@ -8,7 +8,55 @@ This is not meant to be exhaustive, and requires additional reading/practicing t
 
 These are some basic unix commands that you need to familiarize yourself with:
 
-<img width="571" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/bba2e4e6-11e3-4d0f-942f-7945d21ebcce">
+
+`export`	Usually setting an environmental variable
+
+`nano`	Open the nano command line text editor
+
+`ssh`	Access a remote server/cluster
+
+`wc –l` 	Word Count (with flag –l prints the # of lines in a file)
+
+`perl/python`	Whole programming languages to run code
+
+`grep`	Search for a string/word inside a file and print lines
+
+`sudo`	Super user do something (be careful with this!) 
+
+`chmod`	Change the users rights (mode) of a file
+
+`echo`	Print the contents of a variable
+
+`ls`	Show all the files in the current directory
+
+`cd`	Change directories
+
+`cp`	Move a file/folder (keep original)
+
+`mv`	Move a file/folder (a delete original)
+
+`rm`	Remove/Delete a file
+
+`mkdir`	Make a new directory
+
+`history`	Check out all my previous commands
+
+`cat`	Print all lines or concatenate files
+
+`head`	Print the top lines of a file (-n number of lines)
+
+`tail`	Print the bottom lines of a file (-n number of lines)
+
+`man`	Print the manual of a command
+
+`uniq`	Print unique lines
+
+`wget/curl`	Copy the contents of a webpage to the current directory
+
+`open`	Try to open a file type in expected way, e.g. PDF 
+
+`pwd`	Tell me which directory I am in right now
+
 
 # Flags (for the command `ls`):
 
