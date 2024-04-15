@@ -294,18 +294,22 @@ Save the following line in :<br>
 /workspace/gitpod/.bash_profile:<br>
 
 `alias hist5='history | tail -n 5`<br>
-Then source the `/workspace/gitpod/.bash_profile` file:<br>
+
+Then us the command `source` on the `/workspace/gitpod/.bash_profile` file to tell unix to add this alias to the command line:
 
 `source /workspace/gitpod/.bash_profile file`
 
 "hist5" was the name I used, but you can call it whatever command you wish, as long as it doesn't already exist.
 </details>
 
+Also, try out the other commands `lss` and `h1`.
 
 **Step 5. Save your history**
 <br><br>
-Finally, it is a good idea to save you command history from time to time. 
+Finally, it is a good idea to save you command `history`. 
 
-Luckily you can use the history command. Save your current session command history and then save it to a file called "my_history.txt"
+Save your current session command `history` and then save it to a file called "my_history.txt"
 
-Then use the VSCode file system, in the browser panel on the left hand side. Right click the my_history.txt file and select DOWNLOAD, to download the file to your local machine. 
+Then use the VSCode file system, in the browser panel on the left hand side. 
+
+Right click the my_history.txt file and select DOWNLOAD, to download the file to your local machine. 
