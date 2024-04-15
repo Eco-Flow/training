@@ -111,7 +111,7 @@ We read a file, then sort the output, and find the uniq lines, and save to a new
 
 `python`	
 
-# In Practise
+# In Practice
 <br>
 
 **Step 0. Change directory and create new directories:**
@@ -138,7 +138,7 @@ cd rnaseq_experiment
 
 **Step 1. Create a new text files**
 
-Now make a file called `list.sh` with the following text inside `ls -la` using `nano` or another command line text editor.
+Now make a file called `list.sh` with the following text inside "ls -la" using `nano` or another command line text editor.
 <br>
 <details>
 <summary>Cheat sheet</summary>
@@ -189,9 +189,9 @@ In unix you can often have to use the same commands again and again, and this is
 <br>
 `alias` is used by assigning another command or set of commands to a single word.
 
-These commands are saved in a file called the `.bash_profile` which is normally in your home directory. On gitpod, it is in /workspace/gitpod/.bash_profile
+These commands are saved in a file called the `.bash_profile` which is normally in your home directory. On gitpod, it is in `/workspace/gitpod/.bash_profile`
 
-These are a couple of examples, that reside in your `bash_profile` already:
+These are a couple of examples, that reside in your `.bash_profile` already:
 
 ```
 alias lss='ls -al'      
@@ -209,7 +209,7 @@ Save the following line in :<br>
 /workspace/gitpod/.bash_profile:<br>
 
 `alias hist5='history | tail -n 5`<br>
-Then source the /workspace/gitpod/.bash_profile file:<br>
+Then source the `/workspace/gitpod/.bash_profile` file:<br>
 
 `source /workspace/gitpod/.bash_profile file`
 
