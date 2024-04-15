@@ -1,6 +1,8 @@
 # Basics of the command line
 
-This section is designed to give you a "very" brief introduction to the command line, and explain the commands, flags and special characters you need to be aware of in order to run a **Nextflow** pipeline.
+This section is designed to give you a "very" brief introduction to the command line.
+
+We will explain the commands, flags and special characters you need to be aware of in order to run a **Nextflow** pipeline.
 
 This is not meant to be exhaustive, and requires additional reading/practicing to truly understand all the following content.
 
@@ -8,23 +10,13 @@ This is not meant to be exhaustive, and requires additional reading/practicing t
 
 These are some basic unix commands that you need to familiarize yourself with:
 
-
-`export`	Usually setting an environmental variable
-
-`nano`	Open the nano command line text editor<br>
-(`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
-
-`ssh`	Access a remote server/cluster
-
-`wc` 	Word Count (with flag –l prints the # of lines in a file)
-
-`grep`	Search for a string/word inside a file and print lines
-
-`chmod`	Change the users rights (mode) of a file (rwx)
-
-`echo`	Print the contents of a variable
+`man`	Print the manual of a command
 
 `ls`	Show all the files in the current directory
+
+`pwd`	Tell me which directory I am in right now
+
+`tree`  Print the directory structure
 
 `cd`	Change directories<br>
 (use as `cd ./directory` ,  change to a folder called directory in my current dir)<br>
@@ -40,6 +32,21 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `mkdir`	Make a new directory
 
+`chmod`	Change the users rights (mode) of a file 
+(u:users a:all g:group o:other)
+(+-)
+(r:read w:write x:execute)
+(e.g. chmod a+r file , make all users read file)
+
+`nano`	Open the nano command line text editor<br>
+(`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
+
+`wc` 	Word Count (with flag –l prints the # of lines in a file)
+
+`grep`	Search for a string/word inside a file and print lines
+
+`echo`	Prints statement to terminal or prints the contents of a variable ($)
+
 `history`	Check out all my previous commands
 
 `cat`	Print all lines or concatenate files
@@ -48,15 +55,20 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `tail`	Print the bottom lines of a file (-n number of lines)
 
-`man`	Print the manual of a command
-
 `uniq`	Print unique lines
 
 `wget`	Copy the contents of a webpage to the current directory
 
-`open`	Try to open a file type in expected way, e.g. PDF 
+`which`  Tell me the path to the script/program (e.g. `which perl`)
 
-`pwd`	Tell me which directory I am in right now
+
+# Extra commands you should know (but not needed in this course)
+
+`ssh`	Access a remote server/cluster
+
+`export`	Usually setting an environmental variable
+
+`open`	Try to open a file type in expected way, e.g. PDF 
 
 
 # Flags (for the command `ls`):
@@ -74,6 +86,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 `-G`  colour the output
 
 `-S`  sort by size
+
+To know the flags of other commands use `man command_name`
 
 
 # Special Characters:
@@ -107,9 +121,13 @@ We read a file, then sort the output, and find the uniq lines, and save to a new
 
 # Programming languages
 
-`perl` 
+`bash`  A unix command language interpretter
 
-`python`	
+`perl`  A versatile programming language
+
+`python`  A modern versatile programming language
+
+`R`  A statistical programming language
 
 # In Practice
 <br>
@@ -156,7 +174,7 @@ then press enter
 </details>
 </br>
 
-**Step 2.Run the bash script**
+**Step 2.Create and run a bash script**
 
 Now try to run the bash script you just wrote in the previous exercise.
 
@@ -182,7 +200,16 @@ Now if you run the command, it should run:
 <br>
 <br>
 
-**Step 3. Learn to use aliases**
+
+**Step 3. Download a program**
+<br><br>
+In this step, you will download and get the `nextflow` command in your terminal.
+
+`nextflow` is already pre-downloaded, but try to download nextflow it as per the instructions here:
+
+
+
+**Step 4. Learn to use aliases**
 <br><br>
 In unix you can often have to use the same commands again and again, and this is where aliases come in handy.
 <br>
