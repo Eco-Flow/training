@@ -138,18 +138,25 @@ You can make new directories using the VS code environment by going to the explo
 
 First, check the location you are in the command line using `pwd`, which prints the working directory. Where you are right now. 
 
-You can see we are in:<br> `/workspace/gitpod/eco-flow-training`.
+You can see we are in:<br> `/workspace/gitpod/eco-flow-training`. 
 
-Use the `ls` command to check what current file and folders we already have in this directory.
+Use the `ls` command to check what current file and folders we already have in this directory. 
+Or use the `tree` command to see the directory structure.
+
+![image](https://github.com/Eco-Flow/training/assets/9978862/dfefd763-bf05-49e6-91a6-b16080d4d05e)
+
+You can see, we have one directory called `data` (containing some fq files for our RNA-Seq turorial later).
+
+Equally you could have typed `ls data` to see inside this directory.
 
 Now create a new directory using `mkdir` and name it "rnaseq_experiment", as we will use this during the day to run the RNA-Seq experiment. Then `cd` into this directory.
 
 <details>
 <summary>Cheat sheet</summary>
 <br>
-mkdir rnaseq_experiment
+mkdir command_practice
 
-cd rnaseq_experiment
+cd command_practice
 </details>
 
 <br>
@@ -293,3 +300,12 @@ Then source the `/workspace/gitpod/.bash_profile` file:<br>
 
 "hist5" was the name I used, but you can call it whatever command you wish, as long as it doesn't already exist.
 </details>
+
+
+**Step 5. Save your history**
+<br><br>
+Finally, it is a good idea to save you command history from time to time. 
+
+Luckily you can use the history command. Save your current session command history and then save it to a file called "my_history.txt"
+
+Then use the VSCode file system, in the browser panel on the left hand side. Right click the my_history.txt file and select DOWNLOAD, to download the file to your local machine. 
