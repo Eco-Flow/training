@@ -53,8 +53,7 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 <br/>
 `wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
 
-Make sure to take note of the PATH that these downloaded files are in, or move them into the data directory.
-
+Either `cd` to the data folder and run the above command, or you can use the -o flag to select a specific output folder.
 
 **Step 4. Running the pipeline**
 <br/>
@@ -63,7 +62,7 @@ Run the nf-core RNA-Seq pipeline on your input files. Read the online instructio
 <br/>
 You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--output name` flags.
 
-PLUS: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`).
+**PLUS**: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`, used when on an HPC, contact your HPC team for help).
 <br/>
 <br/>
 <details>
