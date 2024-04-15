@@ -41,7 +41,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 `nano`	Open the nano command line text editor<br>
 (`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
 
-`wc` 	Word Count (with flag –l prints the # of lines in a file)
+`wc` 	Word Count (with flag –l prints the # of lines in a file). By default prints the lines, words, characters
 
 `grep`	Search for a string/word inside a file and print lines
 
@@ -56,6 +56,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 `tail`	Print the bottom lines of a file (-n number of lines)
 
 `uniq`	Print unique lines
+
+`sort`  Sort a list 
 
 `wget`	Copy the contents of a webpage to the current directory
 
@@ -155,15 +157,22 @@ Now create a new directory using `mkdir` and name it "rnaseq_experiment", as we 
 <summary>Cheat sheet</summary>
 <br>
 mkdir command_practice
-
 cd command_practice
 </details>
 
 <br>
 
-**Step 1. Create a new text files**
+Now go back one directory to be in `/workspace/gitpod/eco-flow-training`
 
-Now make a file called `list.sh` with the following text inside "ls -la" using `nano` or another command line text editor.
+<details>
+<summary>Cheat sheet</summary>
+<br>
+cd ..
+</details>
+
+**Step 1. Create a new file**
+
+Now make a file called `list.sh` (.sh indicates it is a unix/bash script) with the following text inside "ls -la" using `nano` or another command line text editor (nano instructions are in the help list above, or use `man`).
 <br>
 <details>
 <summary>Cheat sheet</summary>
@@ -181,25 +190,33 @@ then press enter
 </details>
 </br>
 
-**Step 2.Create and run a bash script**
+**Step 2. Run a bash script**
 
 Now try to run the bash script you just wrote in the previous exercise.
 
 You execute a script by simply typing its name into the terminal.
 
-It should say "bash: list.sh: command not found". This is because the command line doesn't know where list.sh is even though its in our current directory. 
+It should say:
+`bash: list.sh: command not found`
 
-To execute the script as a command we need to point to the file
+This is because the command line doesn't know where list.sh is even though its in our current directory. 
+
+To execute the script as a command we need to point to the file (in current directory "." execute list.sh):
 
 `bash ./list.sh`
 
 Again this should fail, because scripts need to be executable. The command line needs to know what to do with this file. 
 
-Thats where the `chmod` command comes in. Change the mode of the file so it is executable.
+It should say:
+`bash: ./list.sh: Permission denied`
+
+Thats where the `chmod` command comes in. Change the mode of the file so it is executable for the user.
 
 `chmod u+x ./list.sh`
 
 Now we have change the users rights to allow it to be executable (a script). 
+
+If you run the script now (`list.sh`) 
 
 Now if you run the command, it should run:
 
@@ -212,7 +229,7 @@ Now if you run the command, it should run:
 <br><br>
 In this step, you will download and get the `nextflow` command in your terminal.
 
-`nextflow` is already pre-downloaded, but we will download it and compile again.
+`nextflow` is already pre-downloaded, but we will download it and compile again (just for fun!).
 
 First go to Nextflow to see how to download the program: 
 https://www.nextflow.io/docs/latest/install.html
@@ -221,7 +238,7 @@ First you can see that it ask you to check which pre-requisite `java` version yo
 
 `java -version`
 
-Luckily in this environment we already have `java` installed (v17.0.10), so we can skip this installation. 
+Luckily in this environment we already have `java` installed (v17.0.10), so we can skip this. 
 
 Next, we can install Nextflow (https://www.nextflow.io/docs/latest/install.html#install-nextflow):
 
@@ -233,7 +250,7 @@ Next, we can install Nextflow (https://www.nextflow.io/docs/latest/install.html#
 
 Now check you have this downloaded file with `ls -l` long format, to see the current file modes. Is the file executable?
 
-If it is not, then you can change the mode using `chmod`
+If it is not, then you can change the mode using `chmod` (a: all is default, so is skipped here)
 
 `chmod +x nextflow`
 
@@ -267,7 +284,37 @@ which nextflow
 nextflow info
 </details>
 
-**Step 4. Learn to use aliases**
+
+**Step 4 (extra) Grep and wc**
+
+Now move to the directory called "exercise".
+
+There is a poem in the file called "cancao_do_exilio". 
+
+Using unix commands alone. 
++ Count the number of lines, words and characters in the file. 
++ The number of time "palmeiras" is used. 
+
+<details>
+<summary>Cheat sheet</summary>
+<br>
+wc cancao_do_exilio
+#Then
+grep palmeiras cancao_do_exilio | wc -l
+#or
+grep -c palmeiras cancao_do_exilio
+</details>
+
+Now try to find the line number that contains the word "Deus". (hint, check out the flags on `grep`)
+
+<details>
+<summary>Cheat sheet</summary>
+<br>
+grep -n Deus cancao_do_exilio
+</details>
+
+
+**Step 5. Learn to use aliases**
 <br><br>
 In unix you can often have to use the same commands again and again, and this is where aliases come in handy.
 <br>
@@ -304,7 +351,7 @@ Then us the command `source` on the `/workspace/gitpod/.bash_profile` file to te
 
 Also, try out the other commands `lss` and `h1`.
 
-**Step 5. Save your history**
+**Step 6. Save your history**
 <br><br>
 Finally, it is a good idea to save you command `history`. 
 
