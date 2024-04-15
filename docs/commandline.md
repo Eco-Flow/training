@@ -205,9 +205,60 @@ Now if you run the command, it should run:
 <br><br>
 In this step, you will download and get the `nextflow` command in your terminal.
 
-`nextflow` is already pre-downloaded, but try to download nextflow it as per the instructions here:
+`nextflow` is already pre-downloaded, but we will download it and compile again.
 
+First go to Nextflow to see how to download the program: 
+https://www.nextflow.io/docs/latest/install.html
 
+First you can see that it ask you to check which pre-requisite `java` version you have:
+
+`java -version`
+
+Luckily in this environment we already have `java` installed (v17.0.10), so we can skip this installation. 
+
+Next, we can install Nextflow (https://www.nextflow.io/docs/latest/install.html#install-nextflow):
+
+`curl -s https://get.nextflow.io | bash`
+
+*The above command uses curl (similar to wget) to pull Nextflow from a webserver and run it using bash
+
+*-s is the silent option (to not print all the normal screen warnings).
+
+Now check you have this downloaded file with `ls -l` long format, to see the current file modes. Is the file executable?
+
+If it is not, then you can change the mode using `chmod`
+
+`chmod +x nextflow`
+
+Now it should be executable. You could run it by running the command `./nextflow`
+
+But it is still not the default nextflow. As we mentioned earlier, nextflow is already installed. 
+
+We can see that by using:
+
+`which nextflow`
+
+So to make our new version of the program we want to use, we need to put this script in a exectuable $PATH.
+
+We can check which directories are executable by typing:
+
+`echo $PATH`
+
+which should give you:
+
+`/ide/bin/remote-cli:/opt/conda/bin:/home/gitpod/.local/bin:/usr/games:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
+
+$PATH is a special environmental variable that stores the executable directories. Any script in any of these paths, will be found no matter what directory you are currently in. BUT it will take the first copy of a script that it finds. 
+
+So now `mv` the copy of nextflow to `/ide/bin/remote-cli/nextflow`. Then check where the default nextflow script is using `which`. Finally type `nextflow info` to see the version of Nextflow you have downloaded. 
+
+<details>
+<summary>Cheat sheet</summary>
+<br>
+mv nextflow /ide/bin/remote-cli/nextflow
+which nextflow
+nextflow info
+</details>
 
 **Step 4. Learn to use aliases**
 <br><br>
