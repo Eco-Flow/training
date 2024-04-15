@@ -12,19 +12,15 @@ These are some basic unix commands that you need to familiarize yourself with:
 `export`	Usually setting an environmental variable
 
 `nano`	Open the nano command line text editor<br>
-(`nano file_name`, then exit/save by typing control C, checking the name is correct and entering `y`)
+(`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
 
 `ssh`	Access a remote server/cluster
 
 `wc` 	Word Count (with flag –l prints the # of lines in a file)
 
-`perl/python`	Whole programming languages to run code
-
 `grep`	Search for a string/word inside a file and print lines
 
-`sudo`	Super user do something (be careful with this!) 
-
-`chmod`	Change the users rights (mode) of a file
+`chmod`	Change the users rights (mode) of a file (rwx)
 
 `echo`	Print the contents of a variable
 
@@ -32,13 +28,15 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `cd`	Change directories<br>
 (use as `cd ./directory` ,  change to a folder called directory in my current dir)<br>
-(or `cd ..` , change back one directory)
+(or `cd ..` , go up one directory)
+(or `cd -` , back to previous directory)
+(or `cd` , takes you to home directory)
 
-`cp`	Move a file/folder (keep original; -r for recursively)
+`cp`	Move a file/folder (keep original; -r for recursively [also to copy a directory])
 
 `mv`	Move a file/folder (and delete original)
 
-`rm`	Remove/Delete a file (-r for recursively)
+`rm`	Remove/Delete a file (-r for recursively [also to remove a directory])
 
 `mkdir`	Make a new directory
 
@@ -54,7 +52,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `uniq`	Print unique lines
 
-`wget/curl`	Copy the contents of a webpage to the current directory
+`wget`	Copy the contents of a webpage to the current directory
 
 `open`	Try to open a file type in expected way, e.g. PDF 
 
@@ -69,24 +67,26 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `-a`	show hidden files
 
-`-m`	comma separated
-
 `-h`	human readable (size)
 
-`-p`	/ after directories 
-
 `-t`	sort by time changed
+
+`-G`  colour the output
+
+`-S`  sort by size
 
 
 # Special Characters:
 
 `$`	A variable (or a prompt)
 
-`>`	Save
+`>`	Save and delete original. **If this file already exists, it will delete the original file**
+
+`>>`  Append/Create a file. **If this file already exists, it will add to the original file**
 
 `.`	Current directory
 
-`..`	Previous directory
+`..`	Directory one level up
 
 `/`	Folder
 
@@ -100,6 +100,16 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `#`	Ignore line
 
+Example:
+
+`cat file | sort | uniq > sorted_uniq_file`
+We read a file, then sort the output, and find the uniq lines, and save to a new file.
+
+# Programming languages
+
+`perl` 
+
+`python`	
 
 # In Practise
 <br>
