@@ -2,28 +2,32 @@
 
 ## Prerequisites
 
-For this course you require just three things:
+For this course you require three things:
 
-1. A browser (ideally chrome based, e.g. Google Chrome, Microsoft edge, Brave, etc.)
+1. A stable internet connection.
 
-2. A Github account (https://github.com/join).
+2. A browser (ideally chrome based, e.g. Google Chrome, Microsoft edge, Brave, etc.).
+
+3. A Github account (https://github.com/join).
 Please follow the instructions, it should take less than 15 minutes.
 <br/>You may need to add a secure entry with your mobile phone.
-
-3. A stable internet connection
 
    <img width="526" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/527f9537-8da2-49e4-b131-e4387717b603">
 
 
 ## Setup of training environment
 
-Next, you will need to test whether you can access the Gitpod training environment.
-
-This is a controlled environment with all the code and files needed installed and ready to go.
+Next, you will need to test whether you can log-in to the Gitpod VS code training environment. 
+This is a free coding environment (10 hours per month, or more if you link your LinkedIn to the account), for testing and developing code, but also for training. It has all the code installed and files you need to complete the course.
 
 To access Gitpod you may need to use your phone to verify who you are.
 
-Click the following link (https://gitpod.io/?autostart=true#https://github.com/Eco-Flow/training/tree/main) and follow the instructions.
+Click the following link:
+
+(https://gitpod.io/?autostart=true#https://github.com/Eco-Flow/training/tree/main) 
+
+and follow the instructions.
+
 <img width="464" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/926164f1-903c-44e2-8ed2-918f8025e59b">
 <img width="315" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/d00c1003-7d3c-4e81-b2ab-e5fe28daf771">
 
@@ -36,3 +40,5 @@ If you have failed to get to this point, please shout out to the tutor!
 
 If you are on our VSCode Gitpod training environment, spend 10 minutes getting to know the environment.
 Go to the VSCode website to learn about what you can do in VSCode: https://code.visualstudio.com/docs/getstarted/userinterface
+
+Remember to close the browser window when you are done, but remember that this will end your session, so make sure to save anything you wish before you close the browser.
