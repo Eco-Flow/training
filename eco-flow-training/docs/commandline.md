@@ -12,12 +12,16 @@ This is not meant to be exhaustive, but gives you the main info you need to know
 
 The terminal is where you give instructions to tell the computer what to do!
 
-In bioinformatics, we use a UNIX terminal, which is an operating system (OS) with a core set of commands/programs available to run code and operate on a computer. The following commands in this tutorial are all UNIX commands and are the main way to interact with your computer. 
+We use a UNIX terminal, which is an operating system (OS) with a core set of commands/programs available to run code and operate on a computer.
+
+The following commands in this tutorial are all UNIX commands and are the main way to interact with your computer.
 
 These are some additional terms you may hear:
 
-LINUX: A flavor of unix which is UNIX based aand 
+LINUX: A flavor of unix with extensions on the base OS
+<br\>
 CLI: Command line interface (your terminal)
+<br\>
 UI: User interface (your desktop layout with click icons)
 
 On a MacOS or LinuxOS machine you will have a UNIX terminal by default. On Windows machines you may have to download a terminal app to have a UNIX feel terminal to run bioinformatics in. Such as the Windows Subsystem for Linux (WSL). For this tutorial we are in a unix compueter, so have a terminal in unix as standard.
@@ -49,12 +53,6 @@ These are some basic unix commands that you need to familiarize yourself with:
 `rm`	Remove/Delete a file (-r for recursively [also to remove a directory])
 
 `mkdir`	Make a new directory
-
-`chmod`	Change the users rights (mode) of a file 
-(u:users a:all g:group o:other)
-(+-)
-(r:read w:write x:execute)
-(e.g. chmod a+r file , make all users read file)
 
 `nano`	Open the nano command line text editor<br>
 (`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
@@ -98,6 +96,15 @@ Extra commands you should know (but not needed in this course):
 `cut`  Allows you to cut out sections of a specified file
 
 </details>
+
+
+## File user rights
+
+`chmod`	Change the users rights (mode) of a file
+(u:users a:all g:group o:other)
+(+-)
+(r:read w:write x:execute)
+(e.g. chmod a+r file , make all users read file)
 
 
 ## Flags (for the command `ls`):
