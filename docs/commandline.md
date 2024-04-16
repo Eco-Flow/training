@@ -77,18 +77,27 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `sort`  Sort a list 
 
-`wget`	Copy the contents of a webpage to the current directory
+`wget`	Copy the contents of a webpage to the current directory (`-O` to specify output name)
+
+`curl`  Copy the contents of a webpage to the current directory (`-o` to specify output name)
 
 `which`  Tell me the path to the script/program (e.g. `which perl`)
 
 
-## Extra commands you should know (but not needed in this course)
+<details>
+<summary>Extra commands</summary>
+<br>
+Extra commands you should know (but not needed in this course):
 
 `ssh`	Access a remote server/cluster
 
 `export`	Usually setting an environmental variable
 
 `open`	Try to open a file type in expected way, e.g. PDF 
+
+`cut`  Allows you to cut out sections of a specified file
+
+</details>
 
 
 ## Flags (for the command `ls`):
@@ -176,6 +185,8 @@ The above would add the eco-flow-training directory to the `$PATH` environmental
 `python`  A modern versatile programming language
 
 `R`  A statistical programming language
+
+`java`  A high-level, object-oriented programming language
 
 Many programs have a shebang  (`#!`) on their first line. This first line tells unix what langauge the script is. This means you don't need to type the name of the program before running a script. 
 
