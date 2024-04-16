@@ -1,14 +1,28 @@
 # Basics of the command line
 
-<img src="img/cmd.png" alt="drawing" width="400"/>
-
 This section is designed to give you a "very" brief introduction to the command line.
 
 We will explain the commands, flags and special characters you need to be aware of in order to run a **Nextflow** pipeline.
 
-This is not meant to be exhaustive, and requires additional reading/practicing to truly understand all the following content.
+This is not meant to be exhaustive, but gives you the main info you need to know.
 
-# Commands:
+## What is the terminal
+
+<img src="img/cmd.png" alt="drawing" width="200"/>
+
+The terminal is where you give instructions to tell the computer what to do!
+
+In bioinformtatics, we use a UNIX terminal, which is an operating system (OS) with a core set of commands/programs available to run and operate on a computer. The following commands in this tutorial are all UNIX commands and are the main way to interact with your computer. 
+
+These are some additional terms you may hear:
+
+LINUX: A flavor of unix which is UNIX based aand 
+CLI: Command line interface (your terminal)
+UI: User interface (your desktop layout with click icons)
+
+On a MacOS or LinuxOS machine you will have a UNIX terminal by default. On Windows machines you may have to download a terminal app to have a UNIX feel terminal to run bioinformatics in. Such as the Windows Subsystem for Linux (WSL). For this tutorial we are in a unix compueter, so have a terminal in unix as standard.
+
+## Commands:
 
 <img src="img/knife.png" alt="drawing" width="400"/>
 
@@ -68,7 +82,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 `which`  Tell me the path to the script/program (e.g. `which perl`)
 
 
-# Extra commands you should know (but not needed in this course)
+## Extra commands you should know (but not needed in this course)
 
 `ssh`	Access a remote server/cluster
 
@@ -77,7 +91,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 `open`	Try to open a file type in expected way, e.g. PDF 
 
 
-# Flags (for the command `ls`):
+## Flags (for the command `ls`):
 
 <img src="img/flags.png" alt="drawing" width="400"/>
 
@@ -98,7 +112,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 To know the flags of other commands use `man command_name`
 
 
-# Special Characters:
+## Special Characters:
 
 `$`	A variable (or a prompt)
 
@@ -127,7 +141,7 @@ Example:
 `cat file | sort | uniq > sorted_uniq_file`
 We read a file, then sort the output, and find the uniq lines, and save to a new file.
 
-# Programming languages
+## Programming languages
 
 `bash`  A unix command language interpretter
 
@@ -137,7 +151,7 @@ We read a file, then sort the output, and find the uniq lines, and save to a new
 
 `R`  A statistical programming language
 
-# In Practice
+## In Practice
 <br>
 
 **Step 0. Change directory and create new directories:**
