@@ -123,7 +123,7 @@ To know the flags of other commands use `man command_name`
 
 ## Special Characters:
 
-<img src="img/hieroglyph.png" alt="drawing" width="400"/>
+<img src="img/hieroglyph.jpeg" alt="drawing" width="400"/>
 
 `$`	A variable (or a prompt)
 
