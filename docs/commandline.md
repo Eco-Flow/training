@@ -305,7 +305,7 @@ nextflow info
 </details>
 
 
-**Step 4 (extra) Grep and wc**
+**Step 4 (extra) grep and wc (word count)**
 
 Now move to the directory called "exercise".
 
@@ -317,12 +317,20 @@ Using unix commands alone.
 
 <details>
 <summary>Cheat sheet</summary>
-<br>
-wc cancao_do_exilio
+<br/>
+
+`wc cancao_do_exilio`
+<br/>
 #Then
-grep palmeiras cancao_do_exilio | wc -l
+<br/>
+
+`grep palmeiras cancao_do_exilio | wc -l`
+<br/>
 #or
-grep -c palmeiras cancao_do_exilio
+<br/>
+
+`grep -c palmeiras cancao_do_exilio`
+<br/>
 </details>
 
 Now try to find the line number that contains the word "Deus". (hint, check out the flags on `grep`)
@@ -330,7 +338,8 @@ Now try to find the line number that contains the word "Deus". (hint, check out 
 <details>
 <summary>Cheat sheet</summary>
 <br>
-grep -n Deus cancao_do_exilio
+
+`grep -n Deus cancao_do_exilio`
 </details>
 
 
@@ -339,6 +348,7 @@ grep -n Deus cancao_do_exilio
 In unix you can often have to use the same commands again and again, and this is where aliases come in handy.
 <br>
 <br>
+
 `alias` is used by assigning another command or set of commands to a single word.
 
 These commands are saved in a file called the `.bash_profile` which is normally in your home directory. On gitpod, it is in `/workspace/gitpod/.bash_profile`
