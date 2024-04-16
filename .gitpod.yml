@@ -29,7 +29,3 @@ vscode:
         # - oderwat.indent-rainbow # Highlight indentation level
         - streetsidesoftware.code-spell-checker # Spelling checker for source code
         - ms-vscode.live-server
-
-"workbench.editorAssociations": {
-    "*.md": "vscode.markdown.preview.editor"
-}
