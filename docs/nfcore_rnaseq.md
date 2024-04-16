@@ -41,13 +41,11 @@ First go to nf-core rnaseq (https://nf-co.re/rnaseq/3.14.0), and try to understa
 <br/>
 Hopefully you found that you require:
   
-a genome (in fasta) 
+* a genome (in fasta) 
 
-an annotation (in gtf or gff3)
+* an annotation (in gtf or gff3)
 
-and
-
-an input samplesheet that contains links to the raw RNA-Seq fastq data
+* an input samplesheet that contains links to the raw RNA-Seq fastq data
 </details>
 <br/>
 
