@@ -1,31 +1,59 @@
 # Running an nf-core pipeline (RNA-Seq)
 
-In this final practical, we will show you how to run a nf-core pipeline. nf-core set the standard for building gold standard, reproducible data pipelines, and have become the industry standard for processing RNA-Seq and other common "omics" data types.
+In this final practical, we will show you how to run a nf-core pipeline (https://nf-co.re/rnaseq/3.14.0). nf-core set the standard for building gold standard, reproducible data pipelines, and have become the industry standard for processing RNA-Seq and other common "omics" data types.
 
 ![image](https://github.com/Eco-Flow/training/assets/9978862/cdb59557-128d-48f8-8df1-0a6b548f89e9)
 
 They are made up of the efforts of the entire community, and are coordinated by a dedicated team at nf-core. For those beginning their bioinformatics journey, they are a super useful way to get the heavy lifting of bioinformatics done in an efficient way.
 
-The example we will go through is the standard RNA-Seq pipeline which is located here: 
 
-https://nf-co.re/rnaseq/3.14.0
+**Step 0. Understanding RNA-Seq**
+
+Before running an RNA-Seq analysis, it is important to understand what we are doing and why. This will be covered in the lecture.
+
+For more reading, It is worth following other online tutorials such as the following to learn more about how to process RNA-Seq data:
+
+
+<details>
+<summary>Links to great RNA-Seq educational resources</summary>
 <br/>
+https://www.azenta.com/blog/quick-start-guide-rna-seq-data-analysis#step1
 <br/>
+https://bioinformatics-core-shared-training.github.io/RNAseq-R/
+<br/>
+https://learn.gencore.bio.nyu.edu/rna-seq-analysis/
+<br/>
+</details>
+
+
+<br/>
+
+
 **Step 1. Check out the nf-core rnaseq repo**
+
 <br/>
-First go to nf-core rnaseq (above link), and try to understand what the pipeline is doing and what inputs the pipeline expects.
+First go to nf-core rnaseq (https://nf-co.re/rnaseq/3.14.0), and try to understand what the pipeline is doing and what inputs the pipeline expects.
 
 ![nf-core rnaseq](./img/image.png)
 
 <details>
 <summary>Cheat sheet</summary>
 <br/>
-Hopefully you found that you require a genome (in fasta) and annotation (in gtf or gff3), as well as an input samplesheet that contains links to the raw RNA-Seq fastq data
+Hopefully you found that you require:
+  
+a genome (in fasta) 
+
+an annotation (in gtf or gff3)
+
+and
+
+an input samplesheet that contains links to the raw RNA-Seq fastq data
 </details>
 <br/>
 
 
 **Step 2. Build a samplesheet**
+
 <br/>
 Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`. 
 <br/>Can you build yourself a sample sheet with the data provided using their full paths.
@@ -44,6 +72,7 @@ A sample sheet will contain a sample name, followed by the forward reads (normal
 <br/>
 
 **Step 3. Download the genome**
+
 <br/>
 Download the genome and gff file to the data folder.
 
@@ -56,6 +85,7 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 Either `cd` to the data folder and run the above command, or you can use the -o flag to select a specific output folder.
 
 **Step 4. Running the pipeline**
+
 <br/>
 Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--output` name (to anything you wish), else you will receive an error.
 <br/>
@@ -76,6 +106,7 @@ You command should look like:
 <br/>
 
 **Step 5. Checking out the documentation**
+
 <br/>
 You pipeline should now be working.
 <br/>
