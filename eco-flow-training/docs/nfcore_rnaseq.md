@@ -127,3 +127,12 @@ Find (in the output directory you chose) and check that the reads were of suffic
 To know what the fastq quality scores should look like, follow this guide:
 
 https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
+
+
+## Finish
+
+You have finished the course. We hope you have learnt some of the basics of pipeline usage with Nextflow. 
+
+The next steps are learning to write in Nextflow yourself. There are awesome training materials at https://training.nextflow.io/
+
+Further, Eco-Flow will be providing more foundational Nextflow courses soon, so feel free to email us, and we can add you to our mailing list (ecoflow dot ucl @ gmail dot com)

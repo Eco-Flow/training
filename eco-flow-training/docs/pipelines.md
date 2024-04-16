@@ -1,5 +1,7 @@
 # Pipeline information
 
+<img src="img/pipe.jpeg" alt="drawing" width="200"/>
+
 This section is presented as a lecture. 
 
 A video link will be added after the course.
@@ -7,6 +9,8 @@ A video link will be added after the course.
 Below we have a brief summary:
 
 ## Nextflow
+
+<img src="img/nextflow.png" alt="drawing" width="200"/>
 
 Nextflow is a language, runtime and community.
 
@@ -23,8 +27,14 @@ In this course, we will cover a short lecture on Nextflow, the video/slides of w
 
 
 
+## Next
 
-To head to menu   -> [click here](../README.md)
+When you are ready:
+
+Head to part 3 -> [click here](./nfcore_rnaseq.md)
+
+or
+
+Head back to menu   -> [click here](../README.md)
 <br/>
 
-To head to part 3 -> [click here](./nfcore_rnaseq.md)
