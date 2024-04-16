@@ -12,7 +12,7 @@ This is not meant to be exhaustive, but gives you the main info you need to know
 
 The terminal is where you give instructions to tell the computer what to do!
 
-In bioinformtatics, we use a UNIX terminal, which is an operating system (OS) with a core set of commands/programs available to run and operate on a computer. The following commands in this tutorial are all UNIX commands and are the main way to interact with your computer. 
+In bioinformatics, we use a UNIX terminal, which is an operating system (OS) with a core set of commands/programs available to run code and operate on a computer. The following commands in this tutorial are all UNIX commands and are the main way to interact with your computer. 
 
 These are some additional terms you may hear:
 
@@ -141,6 +141,32 @@ Example:
 `cat file | sort | uniq > sorted_uniq_file`
 We read a file, then sort the output, and find the uniq lines, and save to a new file.
 
+## Environmental variables
+
+Variables in your terminal hold information and use the `$` sign to declare them.
+
+Environmental variables are accessible globally (anywhere in your machine) and are normally in capital letters:
+
+```
+PATH – All paths that are accessible
+HOME – The base path
+NXF_VER – Nextflow version to use
+USER – Find out your user name
+![image](https://github.com/Eco-Flow/training/assets/9978862/a30d05dd-4c5a-4532-acb7-0c0c1037f9f9)
+```
+
+Try `echo` -ing all of the above variables (e.g. `echo $PATH`). 
+
+`$PATH` shows all the locations on you machine (or gitpod environment in our case) that executable files can be found. 
+
+If you put executable files in one of these directories, then you don't need to put the full path to the script.
+
+You can add directories to the $PATH using the command `export` as follows:
+
+`export PATH=$PATH:/workspace/gitpod/eco-flow-training`
+
+The above would add the eco-flow-training directory to the `$PATH` environmental variable, so any script here will be visible no matter what directory you are in.
+
 ## Programming languages
 
 `bash`  A unix command language interpretter
@@ -151,7 +177,17 @@ We read a file, then sort the output, and find the uniq lines, and save to a new
 
 `R`  A statistical programming language
 
+Many programs have a shebang  (`#!`) on their first line. This first line tells unix what langauge the script is. This means you don't need to type the name of the program before running a script. 
+
+e.g.
+
+`#!/bin/bash`
+`#!/usr/bin/env Rscript`
+`#!/usr/bin/env python3`
+
 ## In Practice
+
+Now its your turn!
 <br>
 
 **Step 0. Change directory and create new directories:**
