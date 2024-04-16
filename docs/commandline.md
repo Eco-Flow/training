@@ -8,6 +8,8 @@ This is not meant to be exhaustive, and requires additional reading/practicing t
 
 # Commands:
 
+<img src="img/knife.png" alt="drawing" width="400"/>
+
 These are some basic unix commands that you need to familiarize yourself with:
 
 `man`	Print the manual of a command
@@ -74,6 +76,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 
 # Flags (for the command `ls`):
+
+<img src="img/flags.png" alt="drawing" width="400"/>
 
 `-l`	long format
 
