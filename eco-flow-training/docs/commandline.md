@@ -170,7 +170,6 @@ PATH – All paths that are accessible
 HOME – The base path
 NXF_VER – Nextflow version to use
 USER – Find out your user name
-![image](https://github.com/Eco-Flow/training/assets/9978862/a30d05dd-4c5a-4532-acb7-0c0c1037f9f9)
 ```
 
 Try `echo` -ing all of the above variables (e.g. `echo $PATH`). 
