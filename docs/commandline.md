@@ -1,5 +1,7 @@
 # Basics of the command line
 
+<img src="img/cmd.png" alt="drawing" width="400"/>
+
 This section is designed to give you a "very" brief introduction to the command line.
 
 We will explain the commands, flags and special characters you need to be aware of in order to run a **Nextflow** pipeline.
