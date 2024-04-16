@@ -42,3 +42,11 @@ If you are on our VSCode Gitpod training environment, spend 10 minutes getting t
 Go to the VSCode website to learn about what you can do in VSCode: https://code.visualstudio.com/docs/getstarted/userinterface
 
 Remember to close the browser window when you are done, but remember that this will end your session, so make sure to save anything you wish before you close the browser.
+
+
+
+
+To head to menu   -> [click here](../README.md)
+<br/>
+
+To head to part 1 -> [click here](./commandline.md)

@@ -439,3 +439,11 @@ Save your current session command `history` and then save it to a file called "m
 Then use the VSCode file system, in the browser panel on the left hand side. 
 
 Right click the my_history.txt file and select DOWNLOAD, to download the file to your local machine. 
+
+
+
+
+To head to menu   -> [click here](../README.md)
+<br/>
+
+To head to part 2 -> [click here](./pipelines.md)

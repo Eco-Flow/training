@@ -20,3 +20,11 @@ Nextflow is a language, runtime and community.
 To learn more about Nextflow there is excellent training material at https://training.nextflow.io/
 
 In this course, we will cover a short lecture on Nextflow, the video/slides of which will be uploaded after the course.
+
+
+
+
+To head to menu   -> [click here](../README.md)
+<br/>
+
+To head to part 3 -> [click here](./nfcore_rnaseq.md)
