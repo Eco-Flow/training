@@ -6,6 +6,9 @@ In this final practical, we will show you how to run a nf-core pipeline (https:/
 
 They are made up of the efforts of the entire community, and are coordinated by a dedicated team at nf-core. For those beginning their bioinformatics journey, they are a super useful way to get the heavy lifting of bioinformatics done in an efficient way.
 
+## Practical course
+
+Follow the next steps to run the nf-core RNA-Seq pipeline on some example data. The aim of this section is to help you feel more confident running nf-core pipelines.
 
 **Step 0. Understanding RNA-Seq**
 
@@ -24,7 +27,12 @@ https://bioinformatics-core-shared-training.github.io/RNAseq-R/
 https://learn.gencore.bio.nyu.edu/rna-seq-analysis/
 <br/>
 </details>
+<br/>
+<br/>
+For our run today, we will run an experiment from the following paper:
+https://pubmed.ncbi.nlm.nih.gov/30576656/
 
+Where we want to compare in yeast cells the effect of depletion of the trancription factor (Rap1)
 
 <br/>
 
@@ -53,24 +61,38 @@ Hopefully you found that you require:
 **Step 2. Build a samplesheet**
 
 <br/>
-Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`. 
-<br/>Can you build yourself a sample sheet with the data provided using their full paths.
+Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`.
+
+SRR6357070 is wild type (paired end reads)
+SRR6357071 is wild type (paired end reads)
+SRR6357072 is wild type (paired end reads)
+
+SRR6357073 is uninduced (single end reads)
+SRR6357074 is uninduced (single end reads)
+SRR6357075 is uninduced (single end reads)
+
+<br/>Can you build yourself a sample sheet with the data provided using their full paths, with both widtype and uninduced replicates.
 <br/>
 <br/>
 <details>
 <summary>Cheat sheet</summary>
 <br/>
 sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,auto
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,auto
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,auto
-
-A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverve reads (normally R2, if you have them)), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write unstranded, forward or reverse).
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L002_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L002_R2_001.fastq.gz,auto
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L003_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L003_R2_001.fastq.gz,auto
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L004_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L004_R2_001.fastq.gz,auto
+<br/>
+<br/>
+A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverse reads (normally R2, if you have them), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write un-stranded, forward or reverse).
 </details>
 <br/>
 
-**Step 3. Download the genome**
+You can also see this example template on the nf-core rnaseq website [here](https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/samplesheet/v3.10/samplesheet_test.csv)
 
+
+
+**Step 3. Download the genome**
+<br/>
 <br/>
 Download the genome and gff file to the data folder.
 
@@ -83,7 +105,7 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 Either `cd` to the data folder and run the above command, or you can use the -o flag to select a specific output folder.
 
 **Step 4. Running the pipeline**
-
+<br/>
 <br/>
 Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--output` name (to anything you wish), else you will receive an error.
 <br/>
@@ -104,7 +126,7 @@ You command should look like:
 <br/>
 
 **Step 5. Checking out the documentation**
-
+<br/>
 <br/>
 You pipeline should now be working.
 <br/>
