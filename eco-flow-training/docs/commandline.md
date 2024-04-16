@@ -186,9 +186,9 @@ The above would add the eco-flow-training directory to the `$PATH` environmental
 
 ## Programming languages
 
-`bash`  A unix command language interpretter
+`bash`  A unix command language interpreter (used as:  `bash my_script.sh`)
 
-`perl`  A versatile programming language
+`perl`  A versatile programming language (used as:  `perl my_script.pl`)
 
 `python`  A modern versatile programming language
 
