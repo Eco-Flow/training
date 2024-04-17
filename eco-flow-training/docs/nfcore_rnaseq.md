@@ -112,13 +112,17 @@ Choose whichever name for the sample as you wish, and choose auto for the strand
 <details>
 <summary>Cheat sheet</summary>
 <br/>
-sample,fastq_1,fastq_2,strandedness<br />
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto<br />
-CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto<br />
-CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto<br />
-MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto<br />
-MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto<br />
-MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto<br />
+
+```
+sample,fastq_1,fastq_2,strandedness
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto
+CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto
+CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto
+MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto
+MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto
+MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto
+
+```
 <br/>
 <br/>
 A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverse reads (normally R2, if you have them), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write un-stranded, forward or reverse).
@@ -148,7 +152,7 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--outdir` name (to anything you wish), else you will receive an error.
 <br/>
 <br/>
-You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--outdir name` flags.
+You should use the `--fasta /path/to/genome.fasta`,  `--gff /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--outdir name` flags.
 
 **PLUS**: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`, used when on an HPC, contact your HPC team for help).
 <br/>
@@ -158,8 +162,15 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.g
 <br/>
 You command should look like:
 
-`nextflow run nf-core/rnaseq` -profile docker<br/>
---input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--outdir my_results`
+```
+nextflow run nf-core/rnaseq \
+-profile docker \
+-c /workspace/gitpod/eco-flow-training/nextflow.config \
+--input /workspace/gitpod/eco-flow-training/samplesheet.csv \
+--gff /workspace/gitpod/eco-flow-training/genes.gff.gz \
+--fasta /workspace/gitpod/eco-flow-training/genome.fasta \
+--outdir my_results 
+```
 </details>
 <br/>
 
