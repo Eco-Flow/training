@@ -104,19 +104,21 @@ SRR6357075 is manipulated (single end reads)
 
 <br/>Can you build yourself a sample sheet with the data provided using their full paths, with both wild-type and manipulated replicates.
 
-You can see the example sample sheet [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input). You whichever name for the sample as you wish, and choose auto for the strandedness field.
+You can see the example sample sheet [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input). 
+
+Choose whichever name for the sample as you wish, and choose auto for the strandedness field.
 <br/>
 <br/>
 <details>
 <summary>Cheat sheet</summary>
 <br/>
-sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto
-CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto
-CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto
-MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto
-MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto
-MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto
+sample,fastq_1,fastq_2,strandedness<br />
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto<br />
+CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto<br />
+CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto<br />
+MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto<br />
+MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto<br />
+MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto<br />
 <br/>
 <br/>
 A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverse reads (normally R2, if you have them), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write un-stranded, forward or reverse).
