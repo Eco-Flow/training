@@ -170,7 +170,7 @@ You command should look like:
 ```
 nextflow run nf-core/rnaseq \
 -profile docker \
--c /workspace/gitpod/eco-flow-training/nextflow.config \
+-c /workspace/gitpod/eco-flow-training/gitpod.config \
 --input /workspace/gitpod/eco-flow-training/samplesheet.csv \
 --gff /workspace/gitpod/eco-flow-training/genes.gff.gz \
 --fasta /workspace/gitpod/eco-flow-training/genome.fasta \
@@ -178,6 +178,9 @@ nextflow run nf-core/rnaseq \
 ```
 </details>
 <br/>
+
+ 👉🏻 **Important**: Notice the use of single (-) and double (--) flags. Single are nextflow core flags and double are settings within the script/pipeline itself.
+ 
 
 **Step 6. Checking out the documentation**
 <br/>
@@ -187,6 +190,7 @@ You pipeline should now be working.
 
 If it ends in an error, most likely you did not specify the correct paths to the input or output files:
 
+e.g.
 ```
 * Missing required parameter: --input
 * Missing required parameter: --outdir
@@ -195,6 +199,7 @@ If it ends in an error, most likely you did not specify the correct paths to the
 OR you did not provide full paths to the genome/annotation 
 (provide the path : /workspace/gitpod/eco-flow-training/genes.gff.gz):
 
+e.g.
 ```
 Caused by:
   Not a valid path value: 'genes.gff.gz'
@@ -202,17 +207,21 @@ Caused by:
 
 OR maybe you forgot to use the `-profile docker` flag. 
 
-
-OR your gitpod session ran out of memory:
-
+e.g.
 ```
-Caused by:
-  Process requirement exceeds available memory -- req: 72 GB; avail: 62.8 GB
+Command exit status:
+  127
+
+Command output:
+  (empty)
+
+Command error:
+  .command.sh: line 7: fastqc: command not found
 ```
 
-In this case. You will need to delete your `work` directory: `rm -rf work`. And try again.
+In this case, `fastqc` is not found because we are trying to find it locally. We don't have it installed, so need to use `-profile docker` to allow the script to find `fastqc`
 
-Raise a comment to the tutor if you are stuck at this stage. 
+If you receive a different error, please raise a comment to the tutor.
 <br/>
 
 If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
