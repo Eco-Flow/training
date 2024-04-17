@@ -98,9 +98,9 @@ SRR6357070 is wild type (paired end reads)
 SRR6357071 is wild type (paired end reads)
 SRR6357072 is wild type (paired end reads)
 
-SRR6357073 is uninduced (single end reads)
-SRR6357074 is uninduced (single end reads)
-SRR6357075 is uninduced (single end reads)
+SRR6357073 is manipulated (single end reads)
+SRR6357074 is manipulated (single end reads)
+SRR6357075 is manipulated (single end reads)
 
 <br/>Can you build yourself a sample sheet with the data provided using their full paths, with both widtype and uninduced replicates.
 <br/>
