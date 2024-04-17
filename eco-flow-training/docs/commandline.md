@@ -175,6 +175,13 @@ Example:
 `cat file | sort | uniq > sorted_uniq_file`
 We read a file, then sort the output, and find the uniq lines, and save to a new file.
 
+## Paths
+
+A full path start with `/`  e.g. `/workspace/gitpod/eco-flow-training`
+
+
+A relative path starts with `.` or `~` e.g. `./data/SRR6357070_1.fastq.gz`
+
 ## Environmental variables
 
 Variables in your terminal hold information and use the `$` sign to declare them.
