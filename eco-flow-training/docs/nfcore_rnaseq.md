@@ -37,7 +37,37 @@ Where we want to compare in yeast cells the effect of depletion of the trancript
 <br/>
 
 
-**Step 1. Check out the nf-core rnaseq repo**
+**Step 1. Check out the raw RNA-Seq data provided for this course**
+
+For this exercise, we have predownloaded a subset of RNA-Seq data from Wu et al. 2018, representing RNA from wild type and Rap1 depletion yeast cells.
+
+This is in the folder `data`. It is important when you receive data to check it yourself manually to see exactly what it is.
+
+Try to `head` one of the fastq files in the `data` folder (don't panic if you get `<��xT�r-�B7�+7P�~~�����...`, this is expected).
+
+The fastq files in this directory are compressed using the command `gzip`, so they are not regular readable files.
+
+We haven't covered this in the basic training, but here is a command you could use to head the top of a gzipped file:
+
+`zcat data/SRR6357070_1.fastq.gz | head`
+
+So `cat` has a related command that can read gzipped files (there is no `zhead`), but we can pipe the out to head to get what we want.
+
+Can you now count the number of lines in a gzipped file using the same logic as above:
+
+<details>
+<summary>Answer</summary>
+<br/>
+
+`zcat data/SRR6357070_1.fastq.gz | wc -l`
+
+or
+
+`zcat data/SRR6357070_1.fastq.gz | wc`
+</details>
+<br/>
+
+**Step 2. Check out the nf-core rnaseq repo**
 
 <br/>
 First go to nf-core rnaseq (https://nf-co.re/rnaseq/3.14.0), and try to understand what the pipeline is doing and what inputs the pipeline expects.
@@ -58,7 +88,7 @@ Hopefully you found that you require:
 <br/>
 
 
-**Step 2. Build a samplesheet**
+**Step 3. Build a samplesheet**
 
 <br/>
 Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`.
@@ -91,7 +121,7 @@ You can also see this example template on the nf-core rnaseq website [here](http
 
 
 
-**Step 3. Download the genome**
+**Step 4. Download the genome and annotation**
 <br/>
 <br/>
 Download the genome and gff file to the data folder.
@@ -100,11 +130,12 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 
 `wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
 <br/>
+
 `wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
 
 Either `cd` to the data folder and run the above command, or you can use the -o flag to select a specific output folder.
 
-**Step 4. Running the pipeline**
+**Step 5. Running the pipeline**
 <br/>
 <br/>
 Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--output` name (to anything you wish), else you will receive an error.
@@ -125,7 +156,7 @@ You command should look like:
 </details>
 <br/>
 
-**Step 5. Checking out the documentation**
+**Step 6. Checking out the documentation**
 <br/>
 <br/>
 You pipeline should now be working.
@@ -142,7 +173,7 @@ Spend 10 minutes exploring the output documentation, and by this time your pipel
 
 <br/>
 
-**6. Check the FASTQC results**
+**Step 7. Check the FASTQC results**
 
 Find (in the output directory you chose) and check that the reads were of sufficient quality.
 <br/>
