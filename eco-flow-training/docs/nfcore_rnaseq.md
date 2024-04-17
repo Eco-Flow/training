@@ -39,13 +39,13 @@ Where we want to compare in yeast cells the effect of depletion of the trancript
 
 **Step 1. Check out the raw RNA-Seq data provided for this course**
 
-For this exercise, we have predownloaded a subset of RNA-Seq data from Wu et al. 2018, representing RNA from wild type and Rap1 depletion yeast cells.
+For this exercise, we have pre-downloaded a subset of RNA-Seq data from Wu et al. 2018, representing RNA from wild type and Rap1 depletion yeast cells.
 
 This is in the folder `data`. It is important when you receive data to check it yourself manually to see exactly what it is.
 
 Try to `head` one of the fastq files in the `data` folder (don't panic if you get `<��xT�r-�B7�+7P�~~�����...`, this is expected).
 
-The fastq files in this directory are compressed using the command `gzip`, so they are not regular readable files.
+The fastq files in this directory are compressed using the command `gzip`, so they are not human readable files.
 
 We haven't covered this in the basic training, but here is a command you could use to head the top of a gzipped file:
 
@@ -70,7 +70,8 @@ or
 **Step 2. Check out the nf-core rnaseq repo**
 
 <br/>
-First go to nf-core rnaseq (https://nf-co.re/rnaseq/3.14.0), and try to understand what the pipeline is doing and what inputs the pipeline expects.
+
+First go to nf-core rnaseq [here](https://nf-co.re/rnaseq/3.14.0) , and try to understand what the pipeline is doing and what inputs the pipeline expects.
 
 ![nf-core rnaseq](./img/image.png)
 
@@ -101,8 +102,6 @@ SRR6357073 is uninduced (single end reads)
 SRR6357074 is uninduced (single end reads)
 SRR6357075 is uninduced (single end reads)
 
-SRR6357076 is induced (paired end reads)
-
 <br/>Can you build yourself a sample sheet with the data provided using their full paths, with both widtype and uninduced replicates.
 <br/>
 <br/>
@@ -130,12 +129,11 @@ Download the genome and gff file to the data folder.
 
 The genome and annotation are on a webpage, so we can use `wget` to download the genome and annotation, as follows:
 
-`wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
+`wget -o genome.fasta https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
 <br/>
 
-`wget https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
+`wget -o genes.gff.gz https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
 
-Either `cd` to the data folder and run the above command, or you can use the -o flag to select a specific output folder.
 
 **Step 5. Running the pipeline**
 <br/>
@@ -190,4 +188,4 @@ You have finished the course. We hope you have learnt some of the basics of pipe
 
 The next steps are learning to write in Nextflow yourself. There are awesome training materials at https://training.nextflow.io/
 
-Further, Eco-Flow will be providing more foundational Nextflow courses soon, so feel free to email us, and we can add you to our mailing list (ecoflow dot ucl @ gmail dot com)
+Further, Eco-Flow will be providing more foundational Nextflow courses soon, so feel free to email us, and we can add you to our mailing list (ecoflow . ucl @ gmail . com)
