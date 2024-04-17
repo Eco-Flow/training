@@ -17,7 +17,7 @@ To start learning a bit about bioinformatics pipeline development, this course a
 
 [**Part 1.**](./eco-flow-training/docs/commandline.md) Command line basics (practical)
 
-[**Part 2.**](./eco-flow-training/docs/nextflow.md) Pipeline lecture (with Nextflow)
+[**Part 2.**](./eco-flow-training/docs/pipelines.md) Pipeline lecture (with Nextflow)
 
 [**Part 3.**](./eco-flow-training/docs/nfcore_rnaseq.md) Run an nf-core RNA-Seq pipeline (practical)
 
