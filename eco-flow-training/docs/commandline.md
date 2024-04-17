@@ -89,7 +89,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `which`  Tell me the path to the script/program (e.g. `which perl`)
 
-
+`gzip`  Compresses or Decompresses files (to save space)
 <details>
 <summary>Extra commands</summary>
 <br>
