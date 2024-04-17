@@ -102,16 +102,19 @@ SRR6357073 is manipulated (single end reads)
 SRR6357074 is manipulated (single end reads)
 SRR6357075 is manipulated (single end reads)
 
-<br/>Can you build yourself a sample sheet with the data provided using their full paths, with both widtype and uninduced replicates.
+<br/>Can you build yourself a sample sheet with the data provided using their full paths, with both wildtype and manipulated replicates.
 <br/>
 <br/>
 <details>
 <summary>Cheat sheet</summary>
 <br/>
 sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L002_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L002_R2_001.fastq.gz,auto
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L003_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L003_R2_001.fastq.gz,auto
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L004_R1_001.fastq.gz,/workspace/gitpod/eco-flow-training/data/AEG588A1_S1_L004_R2_001.fastq.gz,auto
+CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto
+CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto
+CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto
+MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto
+MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto
+MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto
 <br/>
 <br/>
 A sample sheet will contain a sample name, followed by the forward reads (normally R1), followed by the reverse reads (normally R2, if you have them), followed by the strand information (if you want the pipeline to calculate this for you, you use auto, else you write un-stranded, forward or reverse).
