@@ -71,7 +71,7 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `history`	Check out all my previous commands
 
-`cat`	Print all lines or concatenate files
+`cat`	Print all lines or concatenate files (`zcat` prints gzipped files (ending `.gz`))
 
 `head`	Print the top lines of a file (-n number of lines)
 
