@@ -102,7 +102,9 @@ SRR6357073 is manipulated (single end reads)
 SRR6357074 is manipulated (single end reads)
 SRR6357075 is manipulated (single end reads)
 
-<br/>Can you build yourself a sample sheet with the data provided using their full paths, with both wildtype and manipulated replicates.
+<br/>Can you build yourself a sample sheet with the data provided using their full paths, with both wild-type and manipulated replicates.
+
+You can see the example sample sheet [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input). You whichever name for the sample as you wish, and choose auto for the strandedness field.
 <br/>
 <br/>
 <details>
