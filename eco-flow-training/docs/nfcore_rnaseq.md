@@ -1,21 +1,35 @@
 # Running an nf-core pipeline (RNA-Seq)
 
-In this final practical, we will show you how to run a nf-core pipeline (https://nf-co.re/rnaseq/3.14.0). nf-core set the standard for building gold standard, reproducible data pipelines, and have become the industry standard for processing RNA-Seq and other common "omics" data types.
+In this final practical, we will show you how to run a nf-core pipeline (https://nf-co.re/rnaseq/3.14.0). 
+
+**nf-core** are a community who build gold standard, reproducible data pipelines, that have become the industry standard.
 
 ![image](https://github.com/Eco-Flow/training/assets/9978862/cdb59557-128d-48f8-8df1-0a6b548f89e9)
 
 They are made up of the efforts of the entire community, and are coordinated by a dedicated team at nf-core. For those beginning their bioinformatics journey, they are a super useful way to get the heavy lifting of bioinformatics done in an efficient way.
 
+Join them on slack [here](https://nf-co.re/join/slack).
+
 ## Practical course
 
-Follow the next steps to run the nf-core RNA-Seq pipeline on some example data. The aim of this section is to help you feel more confident running nf-core pipelines.
+Follow the next steps to run the nf-core RNA-Seq pipeline on some example data (in the `data` folder). 
+
+In essence, we want to compare the gene expression between wild-type yeast cells and those with a Rap1 gene knock down. 
+
+This comes from an experiment in the following paper:
+https://pubmed.ncbi.nlm.nih.gov/30576656/
+
+<img width="400" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/d51a00c6-4184-4805-b823-3d6248bb2fde">
+
+<br />
+
+<br />
 
 **Step 0. Understanding RNA-Seq**
 
-Before running an RNA-Seq analysis, it is important to understand what we are doing and why. This will be covered in the lecture.
+Before running this RNA-Seq analysis, it is important to understand what RNA-Seq analysis is. This will be covered partly in the lecture.
 
 For more reading, It is worth following other online tutorials such as the following to learn more about how to process RNA-Seq data:
-
 
 <details>
 <summary>Links to great RNA-Seq educational resources</summary>
@@ -28,20 +42,11 @@ https://learn.gencore.bio.nyu.edu/rna-seq-analysis/
 <br/>
 </details>
 <br/>
-<br/>
-For our run today, we will run an experiment from the following paper:
-https://pubmed.ncbi.nlm.nih.gov/30576656/
-
-Where we want to compare in yeast cells the effect of depletion of the trancription factor (Rap1)
-
-<br/>
 
 
-**Step 1. Check out the raw RNA-Seq data provided for this course**
+**Step 1. Check out the raw RNA-Seq data provided**
 
-For this exercise, we have pre-downloaded a subset of RNA-Seq data from Wu et al. 2018, representing RNA from wild type and Rap1 depletion yeast cells.
-
-This is in the folder `data`. It is important when you receive data to check it yourself manually to see exactly what it is.
+Check out the folder `data`. It is important to inspect it yourself manually to see exactly what you have.
 
 Try to `head` one of the fastq files in the `data` folder (don't panic if you get `<��xT�r-�B7�+7P�~~�����...`, this is expected).
 
@@ -51,7 +56,9 @@ We haven't covered this in the basic training, but here is a command you could u
 
 `zcat data/SRR6357070_1.fastq.gz | head`
 
-So `cat` has a related command that can read gzipped files (there is no `zhead`), but we can pipe the out to head to get what we want.
+`zcat` is related to `cat` but can read gzipped files.
+
+There is no `zhead`, so we need to pipe the output of `zcat` to `head`.
 
 Can you now count the number of lines in a gzipped file using the same logic as above:
 
@@ -71,7 +78,7 @@ or
 
 <br/>
 
-First go to nf-core rnaseq [here](https://nf-co.re/rnaseq/3.14.0) , and try to understand what the pipeline is doing and what inputs the pipeline expects.
+Now go to the nf-core rnaseq github repository, [here](https://nf-co.re/rnaseq/3.14.0), and try to understand what the pipeline is doing and what inputs the pipeline expects.
 
 ![nf-core rnaseq](./img/image.png)
 
