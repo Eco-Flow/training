@@ -156,9 +156,9 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gff /path/to/genes.gff.g
 
 **PLUS**: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`, used when on an HPC, contact your HPC team for help).
 
-**PLUS**: on gitpod we are restricted to 60GB memory, so you need to add a special config file
+**PLUS**: on gitpod we are restricted to 60GB memory, so you need to add a special config file:
 
-`-c /workspace/gitpod/eco-flow-training/nextflow.config`
+`-c /workspace/gitpod/eco-flow-training/gitpod.config`
 
 <br/>
 <br/>
