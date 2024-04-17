@@ -159,7 +159,7 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.g
 You command should look like:
 
 `nextflow run nf-core/rnaseq` -profile docker<br/>
---input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--output my_results` 
+--input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--output my_results`
 </details>
 <br/>
 
@@ -169,7 +169,7 @@ You command should look like:
 You pipeline should now be working.
 <br/>
 
-If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the `--profile docker` flag. Raise a comment to the tutor if you are stuck at this stage. 
+If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the `-profile docker` flag. Raise a comment to the tutor if you are stuck at this stage. 
 <br/>
 
 If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
@@ -191,7 +191,7 @@ https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-resu
 
 ## Finish
 
-You have finished the course. We hope you have learnt some of the basics of pipeline usage with Nextflow. 
+You have finished the course. We hope you have learnt some of the basics of pipeline usage with Nextflow.
 
 The next steps are learning to write in Nextflow yourself. There are awesome training materials at https://training.nextflow.io/
 
