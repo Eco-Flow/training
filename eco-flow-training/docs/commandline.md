@@ -32,6 +32,8 @@ On a MacOS or LinuxOS machine you will have a UNIX terminal by default. On Windo
 
 These are some basic unix commands that you need to familiarize yourself with:
 
+**Help and localisation commands**
+
 `man`	Print the manual of a command
 
 `ls`	Show all the files in the current directory
@@ -46,6 +48,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 (or `cd -` , back to previous directory)
 (or `cd` , takes you to home directory)
 
+**Creating, moving and removing commands**
+
 `cp`	Move a file/folder (keep original; -r for recursively [also to copy a directory])
 
 `mv`	Move a file/folder (and delete original)
@@ -56,6 +60,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `nano`	Open the nano command line text editor<br>
 (`nano file_name`, then exit/save by typing control X, checking the name is correct and entering `y`)
+
+**Text manipulation commands**
 
 `wc` 	Word Count (with flag –l prints the # of lines in a file). By default prints the lines, words, characters
 
@@ -74,6 +80,8 @@ These are some basic unix commands that you need to familiarize yourself with:
 `uniq`	Print unique lines
 
 `sort`  Sort a list 
+
+**Other commands**
 
 `wget`	Copy the contents of a webpage to the current directory (`-O` to specify output name)
 
@@ -101,10 +109,17 @@ Extra commands you should know (but not needed in this course):
 ## File user rights
 
 `chmod`	Change the users rights (mode) of a file
+
+<br />
 (u:users a:all g:group o:other)
+<br />
 (+-)
+<br />
 (r:read w:write x:execute)
-(e.g. chmod a+r file , make all users read file)
+<br />
+
+(e.g. `chmod a+r file` , make all users read file)<br />
+
 
 
 ## Flags (for the command `ls`):
