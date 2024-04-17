@@ -89,7 +89,6 @@ These are some basic unix commands that you need to familiarize yourself with:
 
 `which`  Tell me the path to the script/program (e.g. `which perl`)
 
-`gzip`  Compresses or Decompresses files (to save space)
 <details>
 <summary>Extra commands</summary>
 <br>
@@ -102,6 +101,8 @@ Extra commands you should know (but not needed in this course):
 `open`	Try to open a file type in expected way, e.g. PDF 
 
 `cut`  Allows you to cut out sections of a specified file
+
+`gzip`  Compresses or Decompresses files (to save space)
 
 </details>
 
