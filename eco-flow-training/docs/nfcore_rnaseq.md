@@ -136,19 +136,19 @@ Download the genome and gff file to the data folder.
 
 The genome and annotation are on a webpage, so we can use `wget` to download the genome and annotation, as follows:
 
-`wget -o genome.fasta https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
+`wget -O genome.fasta https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genome.fasta`
 <br/>
 
-`wget -o genes.gff.gz https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
+`wget -O genes.gff.gz https://raw.githubusercontent.com/nf-core/test-datasets/7f1614baeb0ddf66e60be78c3d9fa55440465ac8/reference/genes.gff.gz`
 
 
 **Step 5. Running the pipeline**
 <br/>
 <br/>
-Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--output` name (to anything you wish), else you will receive an error.
+Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--outdir` name (to anything you wish), else you will receive an error.
 <br/>
 <br/>
-You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--output name` flags.
+You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--outdir name` flags.
 
 **PLUS**: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`, used when on an HPC, contact your HPC team for help).
 <br/>
@@ -159,7 +159,7 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.g
 You command should look like:
 
 `nextflow run nf-core/rnaseq` -profile docker<br/>
---input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--output my_results`
+--input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--outdir my_results`
 </details>
 <br/>
 
@@ -169,7 +169,34 @@ You command should look like:
 You pipeline should now be working.
 <br/>
 
-If it ends in an error, most likely you did not specify the correct paths to the three input files OR maybe you forgot to use the `-profile docker` flag. Raise a comment to the tutor if you are stuck at this stage. 
+If it ends in an error, most likely you did not specify the correct paths to the input or output files:
+
+```
+* Missing required parameter: --input
+* Missing required parameter: --outdir
+```
+
+OR you did not provide full paths to the genome/annotation 
+(provide the path : /workspace/gitpod/eco-flow-training/genes.gff.gz):
+
+```
+Caused by:
+  Not a valid path value: 'genes.gff.gz'
+```
+
+OR maybe you forgot to use the `-profile docker` flag. 
+
+
+OR your gitpod session ran out of memory:
+
+```
+Caused by:
+  Process requirement exceeds available memory -- req: 72 GB; avail: 62.8 GB
+```
+
+In this case. You will need to delete your `work` directory: `rm -rf work`. And try again.
+
+Raise a comment to the tutor if you are stuck at this stage. 
 <br/>
 
 If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
