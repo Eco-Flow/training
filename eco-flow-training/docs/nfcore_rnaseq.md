@@ -153,7 +153,7 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gtf /path/to/genes.gff.g
 <br/>
 You command should look like:
 
-`nextflow run nf-core/rnaseq` <br/>
+`nextflow run nf-core/rnaseq` -profile docker<br/>
 --input /workspace/training/eco-flow-training/mysamplesheet \`<br/>`--gtf /workspace/training/eco-flow-training/annotation.gtf \`<br/>`--fasta /workspace/training/eco-flow-training/genome.fasta\`<br/>`--output my_results` 
 </details>
 <br/>
