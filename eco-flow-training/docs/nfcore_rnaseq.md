@@ -101,6 +101,8 @@ SRR6357073 is uninduced (single end reads)
 SRR6357074 is uninduced (single end reads)
 SRR6357075 is uninduced (single end reads)
 
+SRR6357076 is induced (paired end reads)
+
 <br/>Can you build yourself a sample sheet with the data provided using their full paths, with both widtype and uninduced replicates.
 <br/>
 <br/>
