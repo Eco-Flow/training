@@ -80,7 +80,7 @@ or
 
 Now go to the nf-core rnaseq github repository, [here](https://nf-co.re/rnaseq/3.14.0), and try to understand what the pipeline is doing and what inputs the pipeline expects.
 
-![nf-core rnaseq](./img/image.png)
+<img src="img/image.png" alt="drawing" width="700"/>
 
 <details>
 <summary>Cheat sheet</summary>
@@ -249,6 +249,8 @@ Find (in the output directory you chose) and check that the reads were of suffic
 To know what the fastq quality scores should look like, follow this guide:
 
 https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
+
+<br/>
 
 
 ## Finish
