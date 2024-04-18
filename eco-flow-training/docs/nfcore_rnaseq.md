@@ -99,19 +99,22 @@ Hopefully you found that you require:
 **Step 3. Build a samplesheet**
 
 <br/>
+
 Now we need to find the data and start building the samplesheet.csv file. The raw data are in `./data`.
 
-SRR6357070 is wild type (paired end reads)
-SRR6357071 is wild type (paired end reads)
-SRR6357072 is wild type (paired end reads)
-
-SRR6357073 is manipulated (single end reads)
-SRR6357074 is manipulated (single end reads)
-SRR6357075 is manipulated (single end reads)
+<br />
+SRR6357070 is wild type (paired end reads)<br />
+SRR6357071 is wild type (paired end reads)<br />
+SRR6357072 is wild type (paired end reads)<br />
+<br />
+SRR6357073 is manipulated (single end reads)<br />
+SRR6357074 is manipulated (single end reads)<br />
+SRR6357075 is manipulated (single end reads)<br />
+<br />
 
 <br/>Can you build yourself a sample sheet with the data provided using their full paths, with both wild-type and manipulated replicates.
 
-You can see the example sample sheet [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input). 
+You can see the example sample sheet [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input), from the nf-core webpage. 
 
 Choose whichever name for the sample as you wish, and choose auto for the strandedness field.
 <br/>
