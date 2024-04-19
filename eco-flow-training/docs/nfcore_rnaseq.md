@@ -89,7 +89,7 @@ Hopefully you found that you require:
   
 * a genome (in fasta) 
 
-* an annotation (in gtf or gff3)
+* an annotation (in gtf or gff)
 
 * an input samplesheet that contains links to the raw RNA-Seq fastq data
 </details>
@@ -159,7 +159,7 @@ The genome and annotation are on a webpage, so we can use `wget` to download the
 **Step 5. Running the pipeline**
 <br/>
 <br/>
-Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gtf`) and samplesheet (`--input`). You also need to set an `--outdir` name (to anything you wish), else you will receive an error.
+Run the nf-core RNA-Seq pipeline on your input files. Read the online instructions of what you need to do to run the pipeline (found here: https://nf-co.re/rnaseq/3.14.0/docs/usage). Using your own paths to genome (`--fasta`), annotation (`--gff`) and samplesheet (`--input`). You also need to set an `--outdir` name (to anything you wish), else you will receive an error.
 <br/>
 <br/>
 You should use the `--fasta /path/to/genome.fasta`,  `--gff /path/to/genes.gff.gz`, `--input /path/to/samplesheet.csv` and `--outdir name` flags.
