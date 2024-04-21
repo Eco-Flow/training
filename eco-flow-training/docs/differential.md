@@ -22,6 +22,46 @@ We need to normalise:
 
 ## How to get the data into `R`
 
+To get the data into R from nf-core RNA-Seq, we can use either the `load` function in R or `read.csv`.
+
 ### Load from nf-core output
 
-The simplest way to get the data into R from nf-core RNA-Seq is to use the `load` function in R.
+nf-core has a Rdata file, which can be loaded into R: `<outdir_name>/Salmon/Rdata`. If you used the default settings in nfcore rnaseq, if you chose a different aligner (e.g. `--aligner star_rsem`), then you would look in the `rsem` folder.
+
+Then in `R`, type:
+
+`load ("star_salmon/deseq2_qc/deseq2_dds.Rdata")`
+
+Now you have the `dds` and `coldata` input required by DESeq2.
+
+### Load from the raw counts
+
+The raw counts that DESeq2 requires are here: `<outdir_name>/salmon/salmon.merged.gene_counts.tsv`. If you used the default settings in nf-core rnaseq, if you chose a different aligner (e.g. `--aligner star_rsem`), then you would look in the `rsem` folder.
+
+`cts <- read.csv("salmon.merged.gene_counts.tsv", h=T, row.names=1, sep="\t")`
+#Read in the tab separated file, with first line as header, and first row as row names.
+
+
+## Running differential expression
+
+
+```
+#Load the DEseq2 library
+library(DESeq2)
+
+# Load the data into a DESeq data object, including the counts, column data (groups) and experimental design.
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design= ~ batch + condition)
+```
+
+
+R
+```
+# Run DEseq
+dds <- DESeq(dds)
+resultsNames(dds) # lists the coefficients
+res <- results(dds, name="condition_trt_vs_untrt")
+# or to shrink log fold changes association with condition:
+res <- lfcShrink(dds, coef="condition_trt_vs_untrt", type="apeglm")
+```
