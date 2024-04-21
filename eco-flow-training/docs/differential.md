@@ -4,7 +4,8 @@ Now that we have run the nf-core RNA-Seq pipeline, we have the raw counts needed
 
 ## Prerequisites
 
-Before we start this section, we assume you know basic `R`. If not I would recommend (https://swirlstats.com/)
+Before we start this section, we assume you know basic `R`. 
+If not I would recommend [swirl](https://swirlstats.com/)
 
 We also would recommend reading the full docs for DESeq2 [here](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
 
