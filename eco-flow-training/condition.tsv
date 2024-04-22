@@ -1,0 +1,7 @@
+,condition,type
+CONTROL_REP1,wild,paired-end
+CONTROL_REP2,wild,paired-end
+CONTROL_REP3,wild,paired-end
+MANIPULATED_REP1,kd,single-read
+MANIPULATED_REP2,kd,single-read
+MANIPULATED_REP3,kd,single-read
