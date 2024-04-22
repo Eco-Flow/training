@@ -37,20 +37,12 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("DESeq2")
 ```
 
+-> Write `yes` when prompted to agree to download.
 
 ## How to get the data into `R`
 
 To get the data into R from nf-core RNA-Seq, we can use either the `load` function in R or `read.csv`.
 
-### Load from nf-core output
-
-nf-core has a Rdata file, which can be loaded into R: `<outdir_name>/Salmon/Rdata`. If you used the default settings in nfcore rnaseq, if you chose a different aligner (e.g. `--aligner star_rsem`), then you would look in the `rsem` folder.
-
-Then in `R`, type:
-
-`load ("star_salmon/deseq2_qc/deseq2_dds.Rdata")`
-
-Now you have the `dds` input required by DESeq2, with the conditions already set (from the samplesheet you provided to nf-core rnaseq).
 
 ### Load from the raw counts
 
@@ -59,37 +51,48 @@ The raw counts that DESeq2 requires are here: `<outdir_name>/star_salmon/salmon.
 `cts <- read.csv("salmon.merged.gene_counts.tsv", h=T, row.names=1, sep="\t")`
 #Read in the tab separated file, with first line as header, and first row as row names.
 
-Next you need to make a coldata sheet, this tells DESeq2 which samples are different or part of a group. For our data we would want this: 
+Next you need to make a coldata sheet, this tells DESeq2 which samples are different or part of a group. For our data we would want this:
 
 ```
-    condition        type
-CONTROL_REP1  wild paired-end
-CONTROL_REP2  wild paired-end
-CONTROL_REP3  wild paired-end
-MANIPULATED_REP1    kd  single-read
-MANIPULATED_REP2    kd  single-read
-MANIPULATED_REP3    kd  single-read
+,condition,type
+CONTROL_REP1,wild,paired-end
+CONTROL_REP2,wild,paired-end
+CONTROL_REP3,wild,paired-end
+MANIPULATED_REP1,kd,single-read
+MANIPULATED_REP2,kd,single-read
+MANIPULATED_REP3,kd,single-read
 ```
+
 !Warning, you must make the names in column 1 exactly the same as what you chose when you wrote the samplesheet for nf-core rnaseq!
 
 Save this to a R variable called `coldata`.
+
+
+```R
+coldata<-read.csv("condition.tsv", h=T, row.names=1)
+```
 
 Now you can load DESeq2 and create the `dds` (**D**ESeq **D**ata **S**et)
 
 
 ```R
 #Load the data into a DESeq data object, including the counts, column data (groups) and experimental design.
-dds <- DESeqDataSetFromMatrix(countData = cts, colData =coldata, design= ~ batch + condition)
+dds <- DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition)
 ```
 
 ## Running differential expression
+
+To run DESeq2, I would again point to the great documentation, as there are many variants you may want to consider.
+
+For now we will do the "quick start" options:
 
 
 ```R
 # Run DEseq
 dds <- DESeq(dds)
 resultsNames(dds) # lists the coefficients
-res <- results(dds, name="condition_trt_vs_untrt")
-# or to shrink log fold changes association with condition:
-res <- lfcShrink(dds, coef="condition_trt_vs_untrt", type="apeglm")
+res <- results(dds)
+write.table(res, "Deseq_results_table.csv", sep="\t", quote=F)
 ```
+
+Now in the R variable `res`, we should have our results, which we save to a file called "Deseq_results_table.csv".

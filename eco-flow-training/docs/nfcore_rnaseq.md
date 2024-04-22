@@ -1,20 +1,20 @@
 # Running an nf-core pipeline (RNA-Seq)
 
-In this final practical, we will show you how to run a nf-core pipeline (https://nf-co.re/rnaseq/3.14.0). 
+In this final practical, we will show you how to run a nf-core RNA-Seq pipeline (https://nf-co.re/rnaseq/3.14.0). 
 
 **nf-core** are a community who build gold standard, reproducible data pipelines, that have become the industry standard.
 
 ![image](https://github.com/Eco-Flow/training/assets/9978862/cdb59557-128d-48f8-8df1-0a6b548f89e9)
 
-They are made up of the efforts of the entire community, and are coordinated by a dedicated team at nf-core. For those beginning their bioinformatics journey, they are a super useful way to get the heavy lifting of bioinformatics done in an efficient way.
+**nf-core** have a variety of [pipelines](https://nf-co.re/pipelines) that tackle key bioinformatic challenges.
 
 Join them on slack [here](https://nf-co.re/join/slack).
 
 ## Practical course
 
-Follow the next steps to run the nf-core RNA-Seq pipeline on some example data (in the `data` folder). 
+We will run the nf-core pipeline on some example data  provided in the `data` folder. 
 
-In essence, we want to compare the gene expression between wild-type yeast cells and those with a Rap1 gene knock down. 
+In essence, we want to compare the gene expression between wild-type yeast cells and those with a Rap1 gene knock down (KD). 
 
 This comes from an experiment in the following paper:
 https://pubmed.ncbi.nlm.nih.gov/30576656/
@@ -34,11 +34,14 @@ For more reading, It is worth following other online tutorials such as the follo
 <details>
 <summary>Links to great RNA-Seq educational resources</summary>
 <br/>
-https://www.azenta.com/blog/quick-start-guide-rna-seq-data-analysis#step1
+
+[1. https://www.azenta.com/blog/quick-start-guide-rna-seq-data-analysis#step1](https://www.azenta.com/blog/quick-start-guide-rna-seq-data-analysis#step1)
 <br/>
-https://bioinformatics-core-shared-training.github.io/RNAseq-R/
+
+[2. https://bioinformatics-core-shared-training.github.io/RNAseq-R/](https://bioinformatics-core-shared-training.github.io/RNAseq-R/)
 <br/>
-https://learn.gencore.bio.nyu.edu/rna-seq-analysis/
+
+[3. https://learn.gencore.bio.nyu.edu/rna-seq-analysis/](https://learn.gencore.bio.nyu.edu/rna-seq-analysis/)
 <br/>
 </details>
 <br/>
@@ -46,7 +49,7 @@ https://learn.gencore.bio.nyu.edu/rna-seq-analysis/
 
 **Step 1. Check out the raw RNA-Seq data provided**
 
-Check out the folder `data`. It is important to inspect it yourself manually to see exactly what you have.
+Check out the folder `data`. It is important to inspect the data yourself manually to see exactly what you have.
 
 Try to `head` one of the fastq files in the `data` folder (don't panic if you get `<��xT�r-�B7�+7P�~~�����...`, this is expected).
 
@@ -87,7 +90,7 @@ Now go to the nf-core rnaseq github repository, [here](https://nf-co.re/rnaseq/3
 <br/>
 Hopefully you found that you require:
   
-* a genome (in fasta) 
+* a genome (in fasta)
 
 * an annotation (in gtf or gff)
 
@@ -192,12 +195,6 @@ nextflow run nf-core/rnaseq \
  👉🏻 **Important**: Notice the use of single (-) and double (--) flags. Single are nextflow core flags and double are settings within the script/pipeline itself.
  
 
-**Step 6. Checking out the documentation**
-<br/>
-<br/>
-You pipeline should now be working.
-<br/>
-
 If it ends in an error, most likely you did not specify the correct paths to the input or output files:
 
 e.g.
@@ -234,23 +231,74 @@ In this case, `fastqc` is not found because we are trying to find it locally. We
 If you receive a different error, please raise a comment to the tutor.
 <br/>
 
+
+**Step 6. Checking out the documentation**
+<br/>
+<br/>
+You pipeline should now be working.
+<br/>
+
 If your pipeline did succeed, you can wait for the pipeline to finish running and start exploring the output of the pipeline.
 
 An overview of all the output types is found here: https://nf-co.re/rnaseq/3.14.0/docs/output. 
 
-Spend 10 minutes exploring the output documentation, and by this time your pipeline run should have finished so you can then explore your own results. 
+Spend 10 minutes exploring the output documentation, and by this time your pipeline run should have finished so you can then explore your own results.
 
-<br/>
+For example:
 
-**Step 7. Check the FASTQC results**
-
-Find (in the output directory you chose) and check that the reads were of sufficient quality.
+Check that the reads were of sufficient quality.
 <br/>
 To know what the fastq quality scores should look like, follow this guide:
 
 https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
 
+Find the output FASTQC results (in your output folder, under `<outdir>/FASTQC`), and check if there were any highlighted issues. 
+
+Then we will discuss these in class.
+
 <br/>
+
+
+**Step 7. Resuming a pipeline and setting flags**
+
+Next, we choose different flags (options) of the nf-core RNA-Seq pipeline. 
+
+In the documents, you should be able to see that you can choose to change the abundance estimator to `rsem`. See [here](https://nf-co.re/rnaseq/3.14.0/docs/usage#alignment-options). Try to work out how you would change your previous nextflow command, to use the star aligner and the rsem quantification tool. **!BUT DO NOT EXECUTE IT!**
+
+<details>
+<summary>Answer</summary>
+<br/>
+
+```
+nextflow run nf-core/rnaseq \
+-profile docker \
+-c /workspace/gitpod/eco-flow-training/gitpod.config \
+--input /workspace/gitpod/eco-flow-training/samplesheet.csv \
+--gff /workspace/gitpod/eco-flow-training/genes.gff.gz \
+--fasta /workspace/gitpod/eco-flow-training/genome.fasta \
+--outdir my_results
+--aligner star_rsem
+```
+</details>
+
+Now before we execute this script, we need to learn about the nextflow flag `-resume`. Using the `-resume` flag means that nextflow will "remember" the previous runs that were executed, and if any of the steps have been done before, it will use the cache-ing system to save repetition.
+
+Now, if you run the above command with the additional flag `-resume`, then it will only repeat the steps after `RSEM`, as that is the last point in the pipeline where we expect the run to change.
+
+<details>
+<summary>What you should see</summary>
+<br/>
+
+```
+CACHE
+```
+</details>
+
+<br/>
+
+**Step 8. Check the FASTQC results**
+
+
 
 
 ## Finish
