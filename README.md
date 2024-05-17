@@ -15,7 +15,7 @@ To start learning a bit about bioinformatics pipeline development, this course a
 
 [**Part 0.**](./eco-flow-training/docs/setup.md) Setup for the course (practical)
 
-[**Part 1.**](./eco-flow-training/docs/commandline.md) Command line basics (practical)
+[**Part 1.**](./eco-flow-training/docs/commandline.md) Command line basics (practical). SKIP if you are confident on command line.
 
 [**Part 2.**](./eco-flow-training/docs/pipelines.md) Pipelines with Nextflow (lecture)
 
