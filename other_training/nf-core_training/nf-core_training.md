@@ -611,11 +611,11 @@ This is what the script block looks like taking into account all the above:
     """
 ```
 
-Note the `'${reads.join(" ")}'` in the command block instead of `$reads`, as both reads (forward and reverse) would be separated by commas, but abyss requires them to be separated by " ".
+Note the `'${reads.join(" ")}'` in the command block instead of `$reads`. By default, the forward and reverse reads are comma-separated in the input tuple, but ABySS requires them to be separated by spaces (`" "`).
 
 - `stub`. Stub process. This is used in dry runs. It will simply create empty files that match the name of the output files:
 
-```
+```groovy
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -628,10 +628,236 @@ Note the `'${reads.join(" ")}'` in the command block instead of `$reads`, as bot
     """
 ```
 
-#### Unit testing
+### Unit testing
 
+Let's inspect the `main.nf.test` created by default, which will contain the code for **unit testing**:
 
+```groovy
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test kmergenie
+nextflow_process {
+
+    name "Test Process KMERGENIE"
+    script "../main.nf"
+    process "KMERGENIE"
+
+    tag "modules"
+    tag "modules_nfcore"
+    tag "kmergenie"
+
+    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used
+    test("sarscov2 - bam") {
+
+        // TODO nf-core: If you are created a test for a chained module
+        // (the module requires running more than one process to generate the required output)
+        // add the 'setup' method here.
+        // You can find more information about how to use a 'setup' method in the docs (https://nf-co.re/docs/contributing/modules#steps-for-creating-nf-test-for-chained-modules).
+
+        when {
+            process {
+                """
+                // TODO nf-core: define inputs of the process here. Example:
+                
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assertAll(
+                { assert snapshot(
+                    process.out,
+                    path(process.out.versions[0]).yaml
+                ).match() }
+                //TODO nf-core: Add all required assertions to verify the test output.
+                // See https://nf-co.re/docs/contributing/tutorials/nf-test_assertions for more information and examples.
+            )
+        }
+
+    }
+
+    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
+    test("sarscov2 - bam - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                // TODO nf-core: define inputs of the process here. Example:
+                
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assertAll(
+                { assert snapshot(
+                    process.out,
+                    path(process.out.versions[0]).yaml
+                ).match() }
+            )
+        }
+
+    }
+
+}
+
+```
+
+The first section of the script is the process declaration:
+
+```groovy
+nextflow_process {
+
+    name "Test Process KMERGENIE"
+    script "../main.nf"
+    process "KMERGENIE"
+```
+
+Where the script defines the process (`"Test Process KMERGENIE"`), points to the `main.nf` of the module, and specifies the process name to test `"KMERGENIE"`. We can leave it as it is.
+
+Next are the tags:
+
+```groovy
+    tag "modules"
+    tag "modules_nfcore"
+    tag "kmergenie"
+```
+
+Their purpose is to organize tests into categories for selective running. More tags can be added if whished.
+
+Next, we have the test definition:
+
+```groovy
+    test("sarscov2 - bam") {
+
+        // TODO nf-core: If you are created a test for a chained module
+        // (the module requires running more than one process to generate the required output)
+        // add the 'setup' method here.
+        // You can find more information about how to use a 'setup' method in the docs (https://nf-co.re/docs/contributing/modules#steps-for-creating-nf-test-for-chained-modules).
+
+        when {
+            process {
+                """
+                // TODO nf-core: define inputs of the process here. Example:
+                
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assertAll(
+                { assert snapshot(
+                    process.out,
+                    path(process.out.versions[0]).yaml
+                ).match() }
+                //TODO nf-core: Add all required assertions to verify the test output.
+                // See https://nf-co.re/docs/contributing/tutorials/nf-test_assertions for more information and examples.
+            )
+        }
+
+    }
+```
+
+If possible, name the test indicating where the nature test-data (humna, bacterial, viral...), as well as the format.
+
+Now we are going to edit the blocks inside the test definition. The first block is the `when` block, where the input test data is set:
+
+```groovy
+    test("sarscov2 - fatq") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test', single_end:false ], // meta map
+                    [
+                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ]
+                input[1] = 50
+                """
+            }
+        }
+```
+
+Our module inputs paired-end reads, this we need paired end data. To make things easier, we can check a module that uses paired-end data, and use the same input test data. Here, the [`BWA_MEM` module](https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/mem/tests/main.nf.test) was used to get the input test data, for example. We also had another input, the kamersize, which we randomly set to `50`. Note that to define the inputs we use and index system, instead of the tuple definition used in the module.
+
+The next block is the assertion block. This is where we are going to assert the test outputs, which are the same as the process outputs. The way to accesss and asset the outputs is using `process.out`:
+
+```groovy
+        then {
+            assert process.success // T
+            assertAll(
+                { assert snapshot(
+                    process.out.contigs,
+                    process.out.scaffolds,
+                    process.out.stats,
+                    process.out.log
+                ).match() }
+            )
+        }
+```
+
+This will create a snapshot the first time the module is test. Everytime the test is run, the assertions will compare the output files against this snapshot.
+
+Repeat the process for the `-stub` test:
+
+```groovy
+    test("sarscov2 - bam - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test', single_end:false ], // meta map
+                    [
+                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ]
+                input[1] = 50
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assertAll(
+                { assert snapshot(
+                    process.out.contigs,
+                    process.out.scaffolds,
+                    process.out.stats,
+                    process.out.log
+                ).match() }
+            )
+        }
+
+    }
+```
+
+<!--
 
 ### Creating an nf-core local Module
 
 If you want to add a module to your pipeline that runs a tool that is not available in the [nf-core modules page]().
+
+-->
