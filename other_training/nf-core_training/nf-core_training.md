@@ -5,7 +5,7 @@ Pre-requisites:
 - nf-core tools >= 3.5.1
 - GitHub account
  
-Install conda and nf-core tools if not yet installed
+Install **conda** and **nf-core tools** if not yet installed
  
 If conda not installed yet, download and install from [here](https://www.anaconda.com/download). Once conda is installed, install nf-core tools with the next command:
  
@@ -14,33 +14,34 @@ conda create -n nf-core -c bioconda nf-core=3.5.1
 ```
 
 This will create a new conda environment with the latest nf-core tools version.
- 
-If people do not manage to install conda or nf-core, don’t worry! We will it create in situ and have a template ready on the Eco-Flow GitHub site that they can edit later using Codespaces. For now, it’s not strictly necessary that they follow along.
 
 ## nf-core Pipelines
 
 ### Create an nf-core Pipeline
 
-Create pipeline using nf-core tools
+Create pipeline using nf-core tools:
  
 ```
 nf-core pipelines create
 ```
+
 Follow the visual prompt instructions:
 
 <img src="./Screenshot 2026-02-23 at 11.50.20.png"/>
 
-Choose "nf-core" as "pipeline type", even if you are not sure it's going to become an official nf-core pipeline:
+Choose **"nf-core"** as **"pipeline type"**, even if it's not certain it'll become an official nf-core pipeline:
 
 <img src="./Screenshot 2026-02-23 at 11.50.46.png"/>
+
+The main difference between chosing **"nf-core"** and **"Custom"** are the CI checks when pushing changes to GitHub and opening a PR the **"nf-cre"** option includes, which makes later migrating the pipleine to the **official nf-core repo** easier.
 
 Choose a name for the pipeline, add a brief description and the athor/s name:
 
 <img src="./Screenshot 2026-02-23 at 11.51.54.png"/>
 
-Don't worry about not being able to change the "nf-core" GitHub organisation. You will still be able to push the pipeline to your GitHub account or your own organisation's.
+Don't worry about not being able to change the "nf-core" GitHub organisation. You will still be able to push the pipeline to your or your organisation GitHub account.
 
-Select components and modules according to what you think are and will be your pipeline necessities. We recommend to keep at least nf-core schema and multiqc for every pipeline:
+Select components and modules your pipeline might need. We recommend to keep at least the **nf-core schema** and **multiqc** components for every pipeline:
 
 <img src="./Screenshot 2026-02-23 at 11.52.04.png"/>
 
@@ -52,21 +53,21 @@ The pipeline contents will be store inside a folder called `nf-core-<your_pipeli
 
 <img src="./Screenshot 2026-02-23 at 11.53.16.png"/>
 
-Finally, select "Finish without creating a repo":
+Finally, select **"Finish without creating a repo"**:
 
 <img src="Screenshot 2026-02-23 at 11.53.25.png"/>
 
-If the pipeline has been proposed and accepted as an nf-core pipeline in slack, the nf-core team will set up the pipeline repository. For more information, refer to the [nf-core page]().
+If the pipeline has been proposed and accepted as an nf-core pipeline in slack, the nf-core team will set up the pipeline repository. For more information, refer to the [nf-core page](https://nf-co.re/docs/tutorials/adding_a_pipeline/creating_a_pipeline).
 
-If the pipeline has not been proposed or accepted yet, or you are unsure it'll become an official nf-core pipeline, you can create a new repository in your GitHub personal page or organisation, and push the pipeline there:
+If the pipeline has not been proposed or accepted yet, or you are unsure it'll become an official nf-core pipeline, instead you can create a new repository in your **GitHub personal page or organisation**, and push the pipeline there:
 
 
  
 Follow GitHub’s instructions:
- 
 
 
-Then, in the command line where our pipeline is located locally do:
+
+Then, back in the command line, where our pipeline is located, do:
  
 ```
 git remote add origin https://github.com/Eco-Flow/training_remove.git
@@ -74,9 +75,9 @@ git branch -M main
 git push -u origin main
 ```
 
-Go back to the GitHub repository, it should be filled with the nf-core template and a README.md.
+Go back to the GitHub repository and refresh the page. It should be filled with the nf-core template and a `README.md`.
 
-Instead of continuing with the repository we just created, we are going to fork an existing repository in the Eco-Flow GitHub page. The purpose of this is to show attendees the procedure for contributing to an already existing pipeline, which is what most of them will do during the hackathon.
+Instead of continuing with the repository we just created, we are going to fork an existing repository in the Eco-Flow GitHub page. Forking repositories is the stadard way to edit and make contributions to pipeline in collaborative environments.
 
 ### The nf-core template
 
@@ -87,22 +88,20 @@ Open Codespaces in the fork and explain the workings of the pipeline starting fr
 This what the Codespace should look like:
 
 
-The main.nf file:
-- Runs a validation subworkflow: Input validation using the input schema (prepare input channel)
-- Runs the main workflow
-- Runs a competition subworkflow (competition hooks)
- 
-The first workflow (the one before the main workflow) is not really necessary, we could remove it to show that the pipeline still works without it (as it might be better to explain what main.nf does), and then we could explain that this should not be removed as it’s probably there for some reason (honestly, I don’t know why).
- 
-Create a new branch
+The `main.nf` file:
+- Runs a validation subworkflow: Input validation using the input schema (prepares input channel).
+- Runs the main workflow.
+- Runs a completition subworkflow (completition hooks).
 
-Either use Codespaces or the command line. I find it easier from the command line:
+Note the first workflow (the one before the main workflow) is not actually necessary, we could remove it the pipeline will still work. You should not change edit the `main.nf`, as it is written using nf-core standards and only serves a as pipeline switch.
+ 
+Create a new branch using Codespaces or the command line. I find it easier from the command line:
 
 ```
 git branch switch -c new_branch
 ```
  
- Go to workflow/training.nf:
+Go to `workflow/training.nf`:
  
 Explain the logic behind the main workflow (import modules, call modules, multiqc and version channels preparation…)
  
@@ -820,7 +819,7 @@ This will create a snapshot the first time the module is test. Everytime the tes
 Repeat the process for the `-stub` test:
 
 ```groovy
-    test("sarscov2 - bam - stub") {
+    test("sarscov2 - fastq - stub") {
 
         options "-stub"
 
