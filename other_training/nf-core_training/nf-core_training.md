@@ -59,95 +59,406 @@ Finally, select **"Finish without creating a repo"**:
 
 If the pipeline has been proposed and accepted as an nf-core pipeline in slack, the nf-core team will set up the pipeline repository. For more information, refer to the [nf-core page](https://nf-co.re/docs/tutorials/adding_a_pipeline/creating_a_pipeline).
 
-If the pipeline has not been proposed or accepted yet, or you are unsure it'll become an official nf-core pipeline, instead you can create a new repository in your **GitHub personal page or organisation**, and push the pipeline there:
+If the pipeline has not been proposed or accepted yet, or you are unsure it'll become an official nf-core pipeline, you can create a new repository in your **GitHub personal page or organisation**, and push the pipeline there:
 
+<img src="Screenshot 2026-03-04 at 13.32.32.png"/>
 
- 
-Follow GitHub’s instructions:
+Change only the **General** fields. Use the pipeline's name as the repository name, and add a brief description, and choose whether you want the repo to be 'public' or 'private'. **Don't change the other fileds**:
 
-
+<img src="Screenshot 2026-03-04 at 13.35.51.png"/>
 
 Then, back in the command line, where our pipeline is located, do:
  
 ```
-git remote add origin https://github.com/Eco-Flow/training_remove.git
+git remote add origin https://github.com/your_github/your_repo.git
 git branch -M main
-git push -u origin main
+git push --all origin # Push all changes
 ```
 
 Go back to the GitHub repository and refresh the page. It should be filled with the nf-core template and a `README.md`.
 
-Instead of continuing with the repository we just created, we are going to fork an existing repository in the Eco-Flow GitHub page. Forking repositories is the stadard way to edit and make contributions to pipeline in collaborative environments.
+Instead of continuing with the repository we just created, we are going to fork an existing repository in the Eco-Flow GitHub page. Forking repositories is the stadard way to edit and make contributions to pipeline in collaborative environments:
 
-### The nf-core template
+<img src="Screenshot 2026-03-04 at 19.33.15.png"/>
 
-Open Codespaces in the fork and explain the workings of the pipeline starting from the `main.nf` file:
+Fork into your own GitHub or your organisation's account:
 
+<img src="Screenshot 2026-03-04 at 19.33.15.png"/>
 
+Fork all branches.
 
-This what the Codespace should look like:
+### The nf-core pipeline
 
+Once we forged the repo, we can open it in a cloud development environment called **Codespaces**. Every nf-core pipeline comes with a `.devcontainer` folder that has the necessary configuration to run **nextflow**, **docker**, **nf-core tools**:
 
-The `main.nf` file:
-- Runs a validation subworkflow: Input validation using the input schema (prepares input channel).
-- Runs the main workflow.
-- Runs a completition subworkflow (completition hooks).
+Before continuing, change the docker API version typing this in the command line: `export DOCKER_API_VERSION=1.43`.
 
-Note the first workflow (the one before the main workflow) is not actually necessary, we could remove it the pipeline will still work. You should not change edit the `main.nf`, as it is written using nf-core standards and only serves a as pipeline switch.
- 
-Create a new branch using Codespaces or the command line. I find it easier from the command line:
+We don't want to work on our `dev` branch, even if we are on our own fork. So create a new branch:
 
 ```
-git branch switch -c new_branch
+git switch -c new_branch
 ```
+
+Now we can start making changes to our pipeline. Here, we are going to focus on the skeleton of our pipeline, which is our **main workflow**. But first let's inspect the `main.nf` file:
+
+- **Runs a validation subworkflow**: Input validation using the input schema (prepares the input channel).
+- **Runs the main workflow**.
+- **Runs a completition subworkflow** (completition hooks).
+
+```groovy
+#!/usr/bin/env nextflow
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    nf-core/training
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Github : https://github.com/nf-core/training
+    Website: https://nf-co.re/training
+    Slack  : https://nfcore.slack.com/channels/training
+----------------------------------------------------------------------------------------
+*/
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { TRAINING  } from './workflows/training'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_training_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_training_pipeline'
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// WORKFLOW: Run main analysis pipeline depending on type of input
+//
+workflow NFCORE_TRAINING {
+
+    take:
+    samplesheet // channel: samplesheet read in from --input
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    TRAINING (
+        samplesheet
+    )
+    emit:
+    multiqc_report = TRAINING.out.multiqc_report // channel: /path/to/multiqc_report.html
+}
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+workflow {
+
+    main:
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden
+    )
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    NFCORE_TRAINING (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        NFCORE_TRAINING.out.multiqc_report
+    )
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    THE END
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+```
+
+Note the first workflow `NFCORE_TRAINING` definition is not actually necessary, we could remove it the pipeline will still work. You should not change edit the `main.nf`, as it is written using nf-core standards and only serves a as pipeline switch.
  
-Go to `workflow/training.nf`:
- 
-Explain the logic behind the main workflow (import modules, call modules, multiqc and version channels preparation…)
- 
-Install example module:
+#### The `workflow/training.nf`:
+
+```groovy
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_training_pipeline'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+workflow TRAINING {
+
+    take:
+    ch_samplesheet // channel: samplesheet read in from --input
+    main:
+
+    ch_versions = channel.empty()
+    ch_multiqc_files = channel.empty()
+
+    //
+    // Collate and save software versions
+    //
+    def topic_versions = Channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
+
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
+
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name: 'nf_core_'  +  'training_software_'  + 'mqc_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
+
+
+    //
+    // MODULE: MultiQC
+    //
+    ch_multiqc_config        = channel.fromPath(
+        "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+    ch_multiqc_custom_config = params.multiqc_config ?
+        channel.fromPath(params.multiqc_config, checkIfExists: true) :
+        channel.empty()
+    ch_multiqc_logo          = params.multiqc_logo ?
+        channel.fromPath(params.multiqc_logo, checkIfExists: true) :
+        channel.empty()
+
+    summary_params      = paramsSummaryMap(
+        workflow, parameters_schema: "nextflow_schema.json")
+    ch_workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
+    ch_multiqc_files = ch_multiqc_files.mix(
+        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
+        file(params.multiqc_methods_description, checkIfExists: true) :
+        file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+    ch_methods_description                = channel.value(
+        methodsDescriptionText(ch_multiqc_custom_methods_description))
+
+    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
+    ch_multiqc_files = ch_multiqc_files.mix(
+        ch_methods_description.collectFile(
+            name: 'methods_description_mqc.yaml',
+            sort: true
+        )
+    )
+
+    MULTIQC (
+        ch_multiqc_files.collect(),
+        ch_multiqc_config.toList(),
+        ch_multiqc_custom_config.toList(),
+        ch_multiqc_logo.toList(),
+        [],
+        []
+    )
+
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    THE END
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+```
+
+You can see that some modules and components are imported by default. Again, these are plugins that serve the purpose of collecting the versions of modules, run summaries, etc. We can dismiss them as they work straight away.
+
+We see a workflow defition as usual, with the input definiton (`take:`), the `main:` where modules are other workflows are coalled, and the output definition (`emit:`), that helps us access the modules/subworklow outputs.
+
+The `ch_samplesheet` channel comes from the **input samplesheet**. To see an example of how the input samplesheet looks like, check the `assets/samplesheet.csv` file. This samplesheet is parsed by the **input validation plugin** -localted inside `subworkflows/local/utils_nfcore_training_pipeline/main.nf` in every nf-core pipepline-, using the `input_schema.json`, and tranformed into a channel. This is where this happens:
+
+```groovy
+    channel
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .map {
+            meta, fastq_1, fastq_2 ->
+                if (!fastq_2) {
+                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+                } else {
+                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+                }
+        }
+        .groupTuple()
+        .map { samplesheet ->
+            validateInputSamplesheet(samplesheet)
+        }
+        .map {
+            meta, fastqs ->
+                return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_samplesheet }
+```
+
+In this case a function is also applied to the channel to set the channels as **single-end** or **paired-end** depending on whether both FASTQs are input or just one.
+
+Once the samplesheet is parsed, we get an input channel with a struture (the tuple `[ meta, reads ]`) that is usable as the input for most modules that have FASTQs as inputs. In other words, **this is the standard channel structure** for nf-core modules that process read data.
+
+Now, let's intall the `FASTP` module for read filtering using nf-core tools:
  
 ```
 nf-core modules install fastp
 ```
  
-Call module inside workflow/training.nf:
- 
-- Import module
-- Call module
- 
- Do the same thing but with subworkflows:
- 
-- Quality control subworkflow
-- Processing subworkflow
- 
- Explain --input and how validation is done using:
- 
-- Input_schema.json
-- Validation plugin inside subworkflows
- 
-Push changes:
+Let's install the `FASTQ` module to check the quality of the processed reads:
 
-In the directory where the main.nf is:
 ```
-git add changed_files
-git commit -m ‘New changes’
-git push origin branch_name
+nf-core modules install fastqc
 ```
 
-Open Pull Request in github:
+Once both modules have been installed, import the modules inside `workflows/training.nf`:
 
-
-
-Create pipeline using nf-core tools
- 
+```groovy
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+include { FASTP } from '../modules/nf-core/fastp/main'
+include { FASTQC                 } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_training_pipeline'
 ```
-nf-core modules create
+
+Now we are going to call the modules in the `main:` block. Like it was mentioned before, the tuple `[ meta, reads ]` is the standard channel structure for most nf-core modules, and our channel already follows this structure, so we can probably use `ch_samplesheet` channel straight away without any modifications:
+
+```groovy
+    FASTP(
+        ch_samplesheet
+    )
 ```
 
+Run the pipeline using the `test` profile:
 
+```
+nextflow run main.nf -profile test,docker --outdir results -resume -bg > log
+```
 
+We get an error:
 
+```
+Process `NFCORE_TRAINING:TRAINING:FASTP` declares 4 inputs but was called with 1 argument
+```
+
+Let's inspect the `input:` block of the module. Looks like we will have to change the channel structure a it requires a tuple with three elements (from `[ meta, reads, adapter ]` -> `[ meta, reads, adapter ]`), and there are also other 3 aditional inputs besides the reads input channel. The `adapter` and the 3 aditional inputs are optional (I know becuase I looked into the module before), but, because of how Nextflow is built, these values need to be **explicitly set** and can't just be ignore. So instead, we are going to input them as empty values. Let's change the structure using the `.map` operator and input the empty values:
+
+```groovy
+    //
+    // MODULE: Run FASTP
+    //
+
+    ch_samplesheet = ch_samplesheet.map { meta, reads -> [ meta, reads, [] ] }
+
+    FASTP(
+        ch_samplesheet,
+        [],
+        [],
+        []
+    )
+```
+
+Now we can run the pipeline successfully.
+
+The next step is to chain modules, which is the basis of a nextflow/nf-core pipeline. We are going to use the output of `FASTP` as the input of `FASTQC`. For this, we will have to inspect the `output:` block of `FASTP`:
+
+```groovy
+    output:
+    tuple val(meta), path('*.fastp.fastq.gz') , optional:true, emit: reads
+    tuple val(meta), path('*.json')           , emit: json
+    tuple val(meta), path('*.html')           , emit: html
+    tuple val(meta), path('*.log')            , emit: log
+    tuple val(meta), path('*.fail.fastq.gz')  , optional:true, emit: reads_fail
+    tuple val(meta), path('*.merged.fastq.gz'), optional:true, emit: reads_merged
+    tuple val("${task.process}"), val('fastp'), eval('fastp --version 2>&1 | sed -e "s/fastp //g"'), emit: versions_fastp, topic: versions
+```
+
+We only cared about the process reads, which is the first output channel, emited as `reads`. The `emit:` option allow us to easily access the outputs of modules.
+
+We can see the the output channel follows the convention `[ meta, reads ]`, which means we can porbably use it as the input of `FASTQ`:
+
+```groovy
+    //
+    // MODULE: Run FASTP
+    //
+
+    ch_samplesheet = ch_samplesheet.map { meta, reads -> [ meta, reads, [] ] }
+
+    FASTP(
+        ch_samplesheet,
+        [],
+        [],
+        []
+    )
+
+    //
+    // MODULE: Run FastQC
+    //
+    FASTQC (
+        FASTP.out.reads
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+```
+
+And run the pipeline again using the `test` profile. We can see the pipeline is working as expected, and the output of the processed reads are used as the input of `FASTQC`.
+
+<!--
 
 Structure of the nf-core template
 
@@ -313,7 +624,7 @@ workflow PREPROCESSING {
 
 
 
-Run the pipeline again. Done!
+Run the pipeline again. Done! -->
 
 ## nf-core Modules
 
