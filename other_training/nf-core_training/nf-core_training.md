@@ -458,6 +458,25 @@ We can see the the output channel follows the convention `[ meta, reads ]`, whic
 
 And run the pipeline again using the `test` profile. We can see the pipeline is working as expected, and the output of the processed reads are used as the input of `FASTQC`.
 
+#### Open Pull Request
+
+Once changes have been made to the pipeline, is time to push our changes to our fork, and open a Pull Reques. You can use the command line to push your changes:
+
+```
+# First remove the log file as we don't want to push it
+rm log
+# Add all files using the "*" wildcard
+git add *
+# Commit changes
+git commit -m "Added read processing"
+# Push changes
+git push origin new_branch
+```
+
+Now go to your fork and open a Pull Request:
+
+<img src="Screenshot 2026-03-05 at 00.44.11.png"/>
+
 <!--
 
 Structure of the nf-core template
