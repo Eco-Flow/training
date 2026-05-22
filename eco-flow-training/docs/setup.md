@@ -17,19 +17,19 @@ Please follow the instructions, it should take less than 15 minutes.
 
 ## Setup of training environment
 
-Next, you will need to test whether you can log-in to the Gitpod VS code training environment. 
-This is a free coding environment (10 hours per month, or more if you link your LinkedIn to the account), for testing and developing code, but also for training. It has all the code installed and files you need to complete the course.
+Next, you will need to test whether you can log-in to the Codespaces VS code training environment. 
+This is a free coding environment (though with limited per month usage), for testing and developing code, but also for training. 
 
-To access Gitpod you may need to use your phone to verify who you are.
+It has all the code installed and files you need to complete the course.
 
-Click the following link:
+Follow the following link:
 
-(https://gitpod.io/?autostart=true#https://github.com/Eco-Flow/training/tree/main) 
+(https://github.com/Eco-Flow/training/tree/main) 
 
-and follow the instructions.
+and click on the code button, and then codespaces, then "Create codespaces on main".
 
-<img width="464" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/926164f1-903c-44e2-8ed2-918f8025e59b">
-<img width="315" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/d00c1003-7d3c-4e81-b2ab-e5fe28daf771">
+<img width="800" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/926164f1-903c-44e2-8ed2-918f8025e59b">
+
 
 Choose Login with Github and enter your credentials.
 
@@ -38,7 +38,7 @@ If you see the following screen you know you are into Gitpod. You are now ready 
 
 If you have failed to get to this point, please shout out to the tutor!
 
-If you are on our VSCode Gitpod training environment, spend 10 minutes getting to know the environment.
+If you are on our VSCode Codespaces training environment, spend 10 minutes getting to know the environment.
 Go to the VSCode website to learn about what you can do in VSCode: https://code.visualstudio.com/docs/getstarted/userinterface
 
 Remember to close the browser window when you are done, but remember that this will end your session, so make sure to save anything you wish before you close the browser.
