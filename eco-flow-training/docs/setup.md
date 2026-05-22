@@ -28,7 +28,7 @@ Follow the following link:
 
 and click on the code button, and then codespaces, then "Create codespaces on main".
 
-<img width="800" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/926164f1-903c-44e2-8ed2-918f8025e59b">
+<img width="800" alt="image" src="[https://github.com/Eco-Flow/training/eco-flow-training/docs/img/codespaces.png]">
 
 
 Choose Login with Github and enter your credentials.
