@@ -1,0 +1,21 @@
+{
+    "name": "Eco-Flow Training",
+    "image": "quay.io/ecoflowucl/training:v4",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "postCreateCommand": "printf 'unset JAVA_TOOL_OPTIONS\\n' >> $HOME/.bashrc",
+    "postStartCommand": "docker pull -q nf-core/rnaseq || true",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "codezombiech.gitignore",
+                "cssho.vscode-svgviewer",
+                "esbenp.prettier-vscode",
+                "EditorConfig.EditorConfig",
+                "Gruntfuggly.todo-tree",
+                "nextflow.nextflow",
+                "streetsidesoftware.code-spell-checker",
+                "ms-vscode.live-server"
+            ]
+        }
+    }
+}

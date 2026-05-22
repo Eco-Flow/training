@@ -28,12 +28,12 @@ Follow the following link:
 
 and click on the code button, and then codespaces, then "Create codespaces on main".
 
-<img width="800" alt="image" src="[https://github.com/Eco-Flow/training/eco-flow-training/docs/img/codespaces.png]">
+<img width="800" alt="image" src="img/codespaces.png">
 
 
 Choose Login with Github and enter your credentials.
 
-If you see the following screen you know you are into Gitpod. You are now ready to move to [Step 1 command line basics](../docs/commandline.md).
+If you see the following screen you know you are into Codespaces. You are now ready to move to [Step 1 command line basics](../docs/commandline.md).
 <img width="1018" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/6c742b50-3d51-4ae7-90b7-d6c2bca42879">
 
 If you have failed to get to this point, please shout out to the tutor!
