@@ -128,12 +128,12 @@ Choose whichever name for the sample as you wish, and choose auto for the strand
 
 ```
 sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357070_2.fastq.gz,auto
-CONTROL_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357071_2.fastq.gz,auto
-CONTROL_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspace/gitpod/eco-flow-training/data/SRR6357072_2.fastq.gz,auto
-MANIPULATED_REP1,/workspace/gitpod/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto
-MANIPULATED_REP2,/workspace/gitpod/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto
-MANIPULATED_REP3,/workspace/gitpod/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto
+CONTROL_REP1,/workspaces/training/eco-flow-training/data/SRR6357070_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR6357070_2.fastq.gz,auto
+CONTROL_REP2,/workspaces/training/eco-flow-training/data/SRR6357071_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR6357071_2.fastq.gz,auto
+CONTROL_REP3,/workspaces/training/eco-flow-training/data/SRR6357072_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR6357072_2.fastq.gz,auto
+MANIPULATED_REP1,/workspaces/training/eco-flow-training/data/SRR6357073_1.fastq.gz,,auto
+MANIPULATED_REP2,/workspaces/training/eco-flow-training/data/SRR6357074_1.fastq.gz,,auto
+MANIPULATED_REP3,/workspaces/training/eco-flow-training/data/SRR6357075_1.fastq.gz,,auto
 
 ```
 <br/>
@@ -169,9 +169,9 @@ You should use the `--fasta /path/to/genome.fasta`,  `--gff /path/to/genes.gff.g
 
 **PLUS**: you need to use the flag `--profile docker` . This is to ensure you are running from docker containers to pull all the programs you need to run nf-core rnaseq. Otherwise you woud have to install all the software manually. In addition, there are other profiles for other container engines (e.g. `--singularity` or `--apptainer`, used when on an HPC, contact your HPC team for help).
 
-**PLUS**: on gitpod we are restricted to 60GB memory, so you need to add a special config file:
+**PLUS**: in Codespaces we have limited memory available, so you need to add a special config file:
 
-`-c /workspace/gitpod/eco-flow-training/gitpod.config`
+`-c /workspaces/training/eco-flow-training/codespaces.config`
 
 <br/>
 <br/>
@@ -183,10 +183,10 @@ You command should look like:
 ```
 nextflow run nf-core/rnaseq \
 -profile docker \
--c /workspace/gitpod/eco-flow-training/gitpod.config \
---input /workspace/gitpod/eco-flow-training/samplesheet.csv \
---gff /workspace/gitpod/eco-flow-training/genes.gff.gz \
---fasta /workspace/gitpod/eco-flow-training/genome.fasta \
+-c /workspaces/training/eco-flow-training/codespaces.config \
+--input /workspaces/training/eco-flow-training/samplesheet.csv \
+--gff /workspaces/training/eco-flow-training/genes.gff.gz \
+--fasta /workspaces/training/eco-flow-training/genome.fasta \
 --outdir my_results 
 ```
 </details>
@@ -204,7 +204,7 @@ e.g.
 ```
 
 OR you did not provide full paths to the genome/annotation 
-(provide the path : /workspace/gitpod/eco-flow-training/genes.gff.gz):
+(provide the path : /workspaces/training/eco-flow-training/genes.gff.gz):
 
 e.g.
 ```
@@ -272,10 +272,10 @@ In the documents, you should be able to see that you can choose to change the ab
 ```
 nextflow run nf-core/rnaseq \
 -profile docker \
--c /workspace/gitpod/eco-flow-training/gitpod.config \
---input /workspace/gitpod/eco-flow-training/samplesheet.csv \
---gff /workspace/gitpod/eco-flow-training/genes.gff.gz \
---fasta /workspace/gitpod/eco-flow-training/genome.fasta \
+-c /workspaces/training/eco-flow-training/codespaces.config \
+--input /workspaces/training/eco-flow-training/samplesheet.csv \
+--gff /workspaces/training/eco-flow-training/genes.gff.gz \
+--fasta /workspaces/training/eco-flow-training/genome.fasta \
 --outdir my_results
 --aligner star_rsem
 ```

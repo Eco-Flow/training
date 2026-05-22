@@ -177,7 +177,7 @@ We read a file, then sort the output, and find the uniq lines, and save to a new
 
 ## Paths
 
-A full path start with `/`  e.g. `/workspace/gitpod/eco-flow-training`
+A full path start with `/`  e.g. `/workspaces/training/eco-flow-training`
 
 
 A relative path starts with `.` or `~` e.g. `./data/SRR6357070_1.fastq.gz`
@@ -197,13 +197,13 @@ USER – Find out your user name
 
 Try `echo` -ing all of the above variables (e.g. `echo $PATH`). 
 
-`$PATH` shows all the locations on you machine (or gitpod environment in our case) that executable files can be found. 
+`$PATH` shows all the locations on your machine (or Codespaces environment in our case) that executable files can be found. 
 
 If you put executable files in one of these directories, then you don't need to put the full path to the script.
 
 You can add directories to the $PATH using the command `export` as follows:
 
-`export PATH=$PATH:/workspace/gitpod/eco-flow-training`
+`export PATH=$PATH:/workspaces/training/eco-flow-training`
 
 The above would add the eco-flow-training directory to the `$PATH` environmental variable, so any script here will be visible no matter what directory you are in.
 
@@ -238,7 +238,7 @@ You can make new directories using the VS code environment by going to the explo
 
 First, check the location you are in the command line using `pwd`, which prints the working directory. Where you are right now. 
 
-You can see we are in:<br> `/workspace/gitpod/eco-flow-training`. 
+You can see we are in:<br> `/workspaces/training/eco-flow-training`. 
 
 Use the `ls` command to check what current file and folders we already have in this directory. 
 Or use the `tree` command to see the directory structure.
@@ -260,7 +260,7 @@ cd command_practice
 
 <br>
 
-Now go back one directory to be in `/workspace/gitpod/eco-flow-training`
+Now go back one directory to be in `/workspaces/training/eco-flow-training`
 
 <details>
 <summary>Cheat sheet</summary>
@@ -368,16 +368,16 @@ We can check which directories are executable by typing:
 
 which should give you:
 
-`/ide/bin/remote-cli:/opt/conda/bin:/home/gitpod/.local/bin:/usr/games:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
+`/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
 
 $PATH is a special environmental variable that stores the executable directories. Any script in any of these paths, will be found no matter what directory you are currently in. BUT it will take the first copy of a script that it finds. 
 
-So now `mv` the copy of nextflow to `/ide/bin/remote-cli/nextflow`. Then check where the default nextflow script is using `which`. Finally type `nextflow info` to see the version of Nextflow you have downloaded. 
+So now `mv` the copy of nextflow to `/usr/local/bin/nextflow`. Then check where the default nextflow script is using `which`. Finally type `nextflow info` to see the version of Nextflow you have downloaded. 
 
 <details>
 <summary>Cheat sheet</summary>
 <br>
-mv nextflow /ide/bin/remote-cli/nextflow
+mv nextflow /usr/local/bin/nextflow
 which nextflow
 nextflow info
 </details>
@@ -429,7 +429,7 @@ In unix you can often have to use the same commands again and again, and this is
 
 `alias` is used by assigning another command or set of commands to a single word.
 
-These commands are saved in a file called the `.bash_profile` which is normally in your home directory. On gitpod, it is in `/workspace/gitpod/.bash_profile`
+These commands are saved in a file called the `.bash_profile` which is in your home directory (`~/.bash_profile`).
 
 These are a couple of examples, that reside in your `.bash_profile` already:
 
@@ -445,14 +445,13 @@ Now make your own command to print the last 5 commands you used from `history`
 <details>
 <summary>Cheat sheet</summary>
 <br>
-Save the following line in :<br>
-/workspace/gitpod/.bash_profile:<br>
+Save the following line in `~/.bash_profile`:<br>
 
 `alias hist5='history | tail -n 5`<br>
 
-Then us the command `source` on the `/workspace/gitpod/.bash_profile` file to tell unix to add this alias to the command line:
+Then use the command `source` on the `~/.bash_profile` file to tell unix to add this alias to the command line:
 
-`source /workspace/gitpod/.bash_profile file`
+`source ~/.bash_profile`
 
 "hist5" was the name I used, but you can call it whatever command you wish, as long as it doesn't already exist.
 </details>

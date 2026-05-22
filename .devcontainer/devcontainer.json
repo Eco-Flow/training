@@ -2,7 +2,7 @@
     "name": "Eco-Flow Training",
     "image": "quay.io/ecoflowucl/training:v4",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "postCreateCommand": "printf 'unset JAVA_TOOL_OPTIONS\\n' >> $HOME/.bashrc",
+    "postCreateCommand": "printf 'unset JAVA_TOOL_OPTIONS\\n' >> $HOME/.bashrc && cat /workspaces/training/.bash_profile >> $HOME/.bash_profile",
     "postStartCommand": "docker pull -q nf-core/rnaseq || true",
     "customizations": {
         "vscode": {
