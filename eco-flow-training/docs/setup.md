@@ -34,7 +34,7 @@ and click on the code button, and then codespaces, then "Create codespaces on ma
 Choose Login with Github and enter your credentials.
 
 If you see the following screen you know you are into Codespaces. You are now ready to move to [Step 1 command line basics](../docs/commandline.md).
-<img width="1018" alt="image" src="https://github.com/Eco-Flow/training/assets/9978862/6c742b50-3d51-4ae7-90b7-d6c2bca42879">
+<img width="800" alt="image" src="img/codespaceopen.png">
 
 If you have failed to get to this point, please shout out to the tutor!
 
