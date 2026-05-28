@@ -22,17 +22,17 @@ RUN apt-get update && apt-get install -y \
     openjdk-${JAVA_VERSION}-jdk \
     && rm -rf /var/lib/apt/lists/*
 
-USER vscode
-
 # Install nextflow
 RUN curl -s https://get.nextflow.io | bash && \
     chmod +x nextflow && \
-    sudo mv nextflow /usr/local/bin/nextflow
+    mv nextflow /usr/local/bin/nextflow
 
 # Install nf-test
 RUN curl -fsSL https://code.askimed.com/install/nf-test | bash && \
-    sudo mv nf-test /usr/local/bin/nf-test
+    mv nf-test /usr/local/bin/nf-test
 
-RUN sudo Rscript -e "install.packages(c('BiocManager'))"
+RUN Rscript -e "install.packages(c('BiocManager'))"
 
-RUN sudo Rscript -e "BiocManager::install('DESeq2')"
+RUN Rscript -e "BiocManager::install('DESeq2')"
+
+USER vscode
