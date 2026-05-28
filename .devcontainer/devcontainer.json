@@ -1,6 +1,6 @@
 {
     "name": "Eco-Flow Training",
-    "image": "quay.io/ecoflowucl/training:v5",
+    "image": "quay.io/ecoflowucl/training:v6",
     "remoteUser": "vscode",
     "postCreateCommand": "printf 'unset JAVA_TOOL_OPTIONS\\n' >> $HOME/.bashrc && cat ${containerWorkspaceFolder}/.bash_profile >> $HOME/.bash_profile",
     "postStartCommand": "docker pull -q nf-core/rnaseq || true",
