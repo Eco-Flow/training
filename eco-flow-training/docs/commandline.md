@@ -78,7 +78,7 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > `ls` lists what's inside it — you should see the course folders, including `data`, `docs` and `exercise`:
 >
 > ```
-> condition.tsv  data  docs  exercise  hello-nextflow  README.md
+> README.md  codespaces.config  condition.tsv  data  docs  exercise  hello-nextflow
 > ```
 >
 > (Your exact list may vary slightly depending on the environment.)
