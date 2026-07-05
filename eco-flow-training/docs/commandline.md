@@ -1,5 +1,9 @@
 # Basics of the command line
 
+🧭 [◀️ Part 0 · Setup](./setup.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 2 · Pipelines ▶️](./pipelines.md)
+
+---
+
 ⏱ **Estimated time:** ~45 minutes &nbsp;•&nbsp; 🟢 Beginner &nbsp;•&nbsp; No prior experience needed
 
 This section gives you a short, hands-on introduction to the command line — the tool you'll use to run a **Nextflow** pipeline later in the course.
@@ -702,3 +706,7 @@ Tick these off — if you can do them all, you're ready for the pipeline lecture
 Head back to the menu → [click here](../README.md)
 
 Head to Part 2 → [click here](./pipelines.md)
+
+---
+
+🧭 [◀️ Part 0 · Setup](./setup.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 2 · Pipelines ▶️](./pipelines.md)

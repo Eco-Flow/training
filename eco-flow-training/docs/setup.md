@@ -1,5 +1,9 @@
 # Setup
 
+🧭 [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 1 · Command line ▶️](./commandline.md)
+
+---
+
 ⏱ **Estimated time:** ~20 minutes &nbsp;•&nbsp; 🟢 No coding required yet
 
 Welcome! This page gets your working environment ready and gives you a quick tour of it. By the end you'll have the course open in VS Code and know your way around.
@@ -147,3 +151,7 @@ You're set up! On to the command line.
 Head back to the menu → [click here](../README.md)
 
 Head to Part 1 → [click here](./commandline.md)
+
+---
+
+🧭 [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 1 · Command line ▶️](./commandline.md)

@@ -1,5 +1,9 @@
 # Pipeline information
 
+🧭 [◀️ Part 1 · Command line](./commandline.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 3 · nf-core RNA-Seq ▶️](./nfcore_rnaseq.md)
+
+---
+
 <img src="img/pipe.jpeg" alt="drawing" width="200"/>
 
 This section is presented as a lecture. A video link will be added after the course.
@@ -78,4 +82,8 @@ or
 
 Head back to menu   -> [click here](../README.md)
 <br/>
+
+---
+
+🧭 [◀️ Part 1 · Command line](./commandline.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 3 · nf-core RNA-Seq ▶️](./nfcore_rnaseq.md)
 
