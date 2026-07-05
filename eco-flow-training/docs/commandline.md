@@ -59,6 +59,8 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 - `cd -` — jump **back** to the previous directory
 - `cd` (on its own) — go to your **home** directory
 
+> 📍 **Where should I be?** For every exercise you should be inside the **`eco-flow-training`** folder. In the Codespaces environment your terminal opens there automatically and the full path is `/workspaces/training/eco-flow-training`. If you're running the course from a local clone the path will look different (e.g. `/Users/you/training/eco-flow-training`) — what matters is that it **ends in `eco-flow-training`**. If it doesn't, run `cd` into it before continuing.
+
 > ▶️ **Try it — where am I and what's here?**
 >
 > ```bash
@@ -69,11 +71,13 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > <details>
 > <summary>✅ Expected output</summary>
 >
-> `pwd` prints the folder you're in:
+> `pwd` prints the folder you're in. In Codespaces that's:
 >
 > ```
 > /workspaces/training/eco-flow-training
 > ```
+>
+> (Locally the start of the path differs, but it should still end in `eco-flow-training`.)
 >
 > `ls` lists what's inside it — you should see the course folders, including `data`, `docs` and `exercise`:
 >
@@ -496,7 +500,7 @@ Work through the steps. Each has a hidden **Cheat sheet** if you get stuck — b
 Make sure you're in the course root, then create the folder you'll use for the RNA-seq run later.
 
 ```bash
-pwd            # confirm you are in /workspaces/training/eco-flow-training
+pwd            # the path should end in eco-flow-training
 mkdir rnaseq_experiment
 ```
 
@@ -504,7 +508,8 @@ mkdir rnaseq_experiment
 <summary>Cheat sheet</summary>
 
 ```bash
-cd /workspaces/training/eco-flow-training   # if you weren't already here
+# In Codespaces the course folder is /workspaces/training/eco-flow-training.
+# If pwd shows you're somewhere else, cd into eco-flow-training first, then:
 mkdir rnaseq_experiment
 ls                                          # you should now see rnaseq_experiment
 ```
