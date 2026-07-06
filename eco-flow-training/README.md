@@ -29,6 +29,8 @@ Work through it top to bottom — or jump to whatever you need.
 
 > 🚧 **Coming soon — Part 4 · [Differential expression](./docs/differential.md)** (Practical · R): analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. *(Draft — still in progress.)*
 
+> 🟣 **Bonus — [Running a pipeline on an HPC](./docs/hpc.md)** (optional): how to configure and run the pipeline on a Slurm/SGE cluster. Most learners can skip this.
+
 ---
 
 ## 🚀 Get started
