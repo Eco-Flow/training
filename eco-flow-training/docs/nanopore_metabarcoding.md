@@ -8,7 +8,7 @@
 
 In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-Flow ([`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)) — from raw Nanopore reads all the way to a taxonomically-annotated ASV table and a community matrix.
 
-> ℹ️ **Not an official nf-core pipeline.** nanoporemetabarcoding was scaffolded with the [nf-core](https://nf-co.re) template and follows its conventions (module structure, config profiles, `-profile docker`, etc.), which is why some of the tooling will feel familiar from Part 3 of other tracks. But it isn't part of the official nf-core pipeline collection, isn't listed on nf-co.re, and has no tagged release yet — you'll pull it straight from GitHub.
+> ℹ️ **Not an official nf-core pipeline.** nanoporemetabarcoding was scaffolded with the [nf-core](https://nf-co.re) template and follows its conventions (module structure, config profiles, `-profile docker`, etc.), which is why some of the tooling will feel familiar from Part 3 of other tracks. But it isn't part of the official nf-core pipeline collection, isn't listed on nf-co.re, and has no tagged release yet - you'll pull it straight from GitHub.
 
 ### What you'll do
 
@@ -20,16 +20,18 @@ In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-
 - Explore the results — quality reports, BLAST hits, taxonomy, and a community matrix
 - Learn to **`-resume`** a run and change pipeline options
 
+<!--
 > ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training`** folder. Check with:
 > ```bash
 > pwd     # should end in eco-flow-training
 > ```
+-->
 
 ### The experiment
 
 We'll use a case study to motivate the design steps: **DNA barcoding of parasitoid wasps reared from field-collected caterpillars.**
 
-Caterpillars were collected at two sites and reared in the lab. Any parasitoid wasp that emerged was individually DNA-barcoded (COI, `WaspEx` primers) to identify the wasp species. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, PCR-level tag.
+Caterpillars were collected at two sites and taken to the lab. DNA of Parasitoid wasps were individually DNA-barcoded using wasp exclusion primer and primers [fill something here] to profile the wasp to profile wasp diet. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, PCR-level tag.
 
 | Site | Description | Plate / ONT barcode |
 | --- | --- | --- |
@@ -38,15 +40,13 @@ Caterpillars were collected at two sites and reared in the lab. Any parasitoid w
 
 Within each plate, three forward tags (`F1`–`F3`) and two reverse tags (`R1`–`R2`) are combined pairwise to label individual wells — giving each wasp (and each control) a unique forward+reverse tag combination.
 
-> 📎 If you have the accompanying `experiment_design_example.xlsx` workbook, it has this scenario fully worked out (`README`, `samplesheet`, `metadata`, `sample_context`, `primers_f`, `primers_r` tabs) — Steps 3–4 below ask you to reproduce it by hand first.
-
-We'll **design** the samplesheet/metadata for this scenario ourselves in Steps 3–4, then **run** the pipeline for real in Step 5 using the small dataset bundled with the pipeline (so the run finishes in minutes rather than needing an actual sequencing run).
+We'll **design** the samplesheet/metadata for this scenario ourselves in Steps 3–4, then **run** the pipeline for real in Step 5 using the small dummy dataset.
 
 ---
 
 ## Step 0 — Understand nanopore metabarcoding
 
-Metabarcoding sequences a short, taxonomically-informative marker gene (here, COI) from many samples/individuals at once, then compares each sequence against a reference database to assign it to a species (or best-available taxonomic rank).
+Metabarcoding sequences a short, taxonomically-informative marker gene (here, COI) (not sure this is true) from many samples/individuals at once, then compares each sequence against a reference database to assign it to a species (or best-available taxonomic rank).
 
 With Nanopore sequencing, an entire multi-well PCR plate is typically pooled into **one** sequencing run/barcode — so a second layer of "tags" (short index sequences stuck onto the primers during PCR) is needed to work out which read came from which well. Demultiplexing happens in **two steps**:
 
@@ -55,9 +55,9 @@ With Nanopore sequencing, an entire multi-well PCR plate is typically pooled int
 
 <details>
 <summary>📚 Good background resources</summary>
-
+<!--
 - [Nanopore sequencing — how it works (Oxford Nanopore)](https://nanoporetech.com/how-it-works)
-- [DNA metabarcoding — a beginner's guide (Nature Ecology & Evolution primer)](https://www.nature.com/articles/s41559-019-0951-3)
+- [DNA metabarcoding — a beginner's guide (Nature Ecology & Evolution primer)](https://www.nature.com/articles/s41559-019-0951-3) -->
 - [Cutadapt documentation](https://cutadapt.readthedocs.io/) — the demultiplexing tool this pipeline uses
 </details>
 
@@ -65,7 +65,7 @@ With Nanopore sequencing, an entire multi-well PCR plate is typically pooled int
 
 ## Step 1 — Inspect the raw data
 
-The pipeline ships with a small built-in test dataset. Clone the pipeline repository first:
+The pipeline ships with a small built-in test dataset (this is not representative of the experiment above, will have to change it later). Clone the pipeline repository first:
 
 ```bash
 git clone https://github.com/Eco-Flow/nanoporemetabarcoding.git
@@ -140,9 +140,9 @@ The **samplesheet** links each Nanopore barcode (one plate) to its FASTQ. It has
 | `fastq` | Path to that plate's single, merged FASTQ file |
 
 > ▶️ **Try it — design `samplesheet.csv` for the wasp experiment**
->
+<!-- >
 > Using the table in [The experiment](#the-experiment) (2 sites → 2 plates → 2 barcodes), write out what the samplesheet should look like.
-
+-->
 <details>
 <summary>Cheat sheet — samplesheet.csv for the wasp scenario</summary>
 
@@ -152,7 +152,7 @@ plate01,barcode01/plate1_combined.fastq.gz
 plate02,barcode02/plate2_combined.fastq.gz
 ```
 
-One row per ONT barcode/plate. `fastq` must point to a single, existing `.fastq.gz` file — if your sequencer produced several chunk files per barcode, merge them (e.g. `cat`) before writing the samplesheet.
+One row per ONT barcode/plate. `fastq` must point to a single, existing `.fastq.gz` file — if your sequencer produced several chunk files per barcode, merge them (e.g. `cat`) before writing the samplesheet (maybe should explain this in more detail).
 </details>
 
 ---
