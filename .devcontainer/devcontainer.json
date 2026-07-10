@@ -1,0 +1,21 @@
+{
+    "name": "Eco-Flow Training",
+    "image": "ghcr.io/chriswyatt1/training:v6",
+    "remoteUser": "vscode",
+    "postCreateCommand": "printf 'unset JAVA_TOOL_OPTIONS\\ncd /workspaces/training/eco-flow-training\\n' >> $HOME/.bashrc && cat ${containerWorkspaceFolder}/.bash_profile >> $HOME/.bash_profile",
+    "postStartCommand": "docker pull -q nf-core/rnaseq || true",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "codezombiech.gitignore",
+                "cssho.vscode-svgviewer",
+                "esbenp.prettier-vscode",
+                "EditorConfig.EditorConfig",
+                "Gruntfuggly.todo-tree",
+                "nextflow.nextflow",
+                "streetsidesoftware.code-spell-checker",
+                "ms-vscode.live-server"
+            ]
+        }
+    }
+}

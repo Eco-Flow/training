@@ -1,5 +1,9 @@
 # Differential gene expression
 
+🧭 [◀️ Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+
+---
+
 Now that we have run the nf-core RNA-Seq pipeline, we have the raw counts needed to run differential expression using DESeq2.
 
 ## Prerequisites
@@ -96,3 +100,7 @@ write.table(res, "Deseq_results_table.csv", sep="\t", quote=F)
 ```
 
 Now in the R variable `res`, we should have our results, which we save to a file called "Deseq_results_table.csv".
+
+---
+
+🧭 [◀️ Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
