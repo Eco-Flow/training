@@ -26,10 +26,10 @@ Work through it top to bottom — or jump to whatever you need.
 | **1** | [Command line basics](./docs/commandline.md) | Practical · optional | A gentle introduction to the command line. Skip this part if you're already comfortable in a terminal. |
 | **2** | [Pipelines with Nextflow](./docs/pipelines.md) | Lecture | What Nextflow and nf-core are, and why pipelines matter for reproducible, scalable science. |
 | **3** | [Run an nf-core RNA-Seq pipeline](./docs/nfcore_rnaseq.md) | Practical | Hands-on — run a real nf-core/rnaseq analysis end to end, from raw reads to results. |
+| **4** | [Differential expression](./docs/differential.md) | Practical · R · 🚧 draft | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
+| **★** | [Running a pipeline on an HPC](./docs/hpc.md) | Bonus · optional | Configure and run the pipeline on a Slurm/SGE cluster — talk to your admin, adapt a config, and test it. |
 
-> 🚧 **Coming soon — Part 4 · [Differential expression](./docs/differential.md)** (Practical · R): analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. *(Draft — still in progress.)*
-
-> 🟣 **Bonus — [Running a pipeline on an HPC](./docs/hpc.md)** (optional): how to configure and run the pipeline on a Slurm/SGE cluster. Most learners can skip this.
+> 🚧 **Part 4** is still a draft, and the **★ HPC bonus** is optional reference material — most learners can skip it.
 
 ---
 
