@@ -2,6 +2,8 @@
 
 🧭 [◀️ Part 2 · Pipelines](./pipelines.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 4 · Differential expression ▶️](./differential.md)
 
+🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training)
+
 ---
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
