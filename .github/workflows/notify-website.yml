@@ -1,0 +1,22 @@
+name: Notify website
+on:
+  push:
+    branches: [main]
+    paths:
+      - "eco-flow-training/docs/**"   # only when lesson content changes
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger website training sync
+        env:
+          TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
+        run: |
+          curl -sf -X POST \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/Eco-Flow/Eco-Flow.github.io/dispatches \
+            -d '{"event_type":"training-updated"}'

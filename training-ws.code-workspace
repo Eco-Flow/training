@@ -3,7 +3,6 @@
         { "path": "./eco-flow-training" },
     ],
     "settings": {
-        "typescript.tsdk": "gitpod/node_modules/typescript/lib",
         "[javascript]": {
             "editor.defaultFormatter": "esbenp.prettier-vscode",
             "editor.formatOnSave": true,
