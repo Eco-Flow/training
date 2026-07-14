@@ -6,19 +6,22 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
-In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-Flow ([`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)) — from raw Nanopore reads all the way to a taxonomically-annotated ASV table and a community matrix.
+In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-Flow ([`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)) — from raw Nanopore reads all the way to a taxonomically-annotated ASV table.
 
-> ℹ️ **Not an official nf-core pipeline.** nanoporemetabarcoding was scaffolded with the [nf-core](https://nf-co.re) template and follows its conventions (module structure, config profiles, `-profile docker`, etc.), which is why some of the tooling will feel familiar from Part 3 of other tracks. But it isn't part of the official nf-core pipeline collection, isn't listed on nf-co.re, and has no tagged release yet - you'll pull it straight from GitHub.
+> ℹ️ **Not an official nf-core pipeline.** nanoporemetabarcoding was scaffolded with the [nf-core](https://nf-co.re) template and follows its conventions (module structure, config profiles, `-profile docker`, etc.), which is why some of the tooling will feel familiar to Part 3 of this workshop. But it isn't part of the official nf-core pipeline collection, isn't listed on nf-co.re, and has no tagged release yet, as it is still in active development.
 
+<!--
+Disclaim
+-->
 ### What you'll do
 
-- Understand what nanopore metabarcoding is and how **primer-tag demultiplexing** works
+- Understand what our nanopore metabarcoding pipeline is and how it owrks
 - Inspect raw Nanopore reads
 - Work out what inputs the pipeline needs
 - **Design** a samplesheet and metadata sheet for a real experimental scenario
 - **Run** the pipeline on its built-in test data with Docker containers
 - Explore the results — quality reports, BLAST hits, taxonomy, and a community matrix
-- Learn to **`-resume`** a run and change pipeline options
+- Learn to **`-resume`** a run and change pipeline options (let's see...)
 
 <!--
 > ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training`** folder. Check with:
@@ -29,14 +32,16 @@ In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-
 
 ### The experiment
 
-We'll use a case study to motivate the design steps: **DNA barcoding of parasitoid wasps reared from field-collected caterpillars.**
+We'll use a case study to motivate the design steps: **DNA barcoding of adult wasps to identify their prey.**
 
-Caterpillars were collected at two sites and taken to the lab. DNA of Parasitoid wasps were individually DNA-barcoded using wasp exclusion primer and primers [fill something here] to profile the wasp to profile wasp diet. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, PCR-level tag.
+Adult wasps were collected at two sites: oak woodland and grassland. Each wasp was individually DNA-barcoded (COI) using a **wasp exclusion ** (`WaspExF_*` forward / `LuthienR_*` reverse) to profile its host's diet signature. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, PCR-level tag.
+
+> 💡 **What's an exclusion primer?** A wasp carries trace host DNA from its prey in the gut/cuticle residue, but its own DNA is far more abundant in the sample, so a plain universal COI primer pair would mostly just re-sequence the wasp itself. `WaspExF_*` primers — the same tagged primers used for demultiplexing — are designed to be less complementary to the wasp's own COI sequence than to other (host) DNA, so amplification of the wasp's own template is suppressed relative to that trace host signal. It's rarely perfect: some wasp DNA usually still gets through, which is one reason checking control wells for unexpected hits (see Step 6) matters.
 
 | Site | Description | Plate / ONT barcode |
 | --- | --- | --- |
-| Site A ("Woodland") | Caterpillars off oak/hazel | plate01 / barcode01 |
-| Site B ("Meadow") | Caterpillars off grasses/forbs | plate02 / barcode02 |
+| Site A ("Woodland") | Adult wasps collected in oak/hazel woodland | plate01 / barcode01 |
+| Site B ("Meadow") | Adult wasps collected in grassland/meadow | plate02 / barcode02 |
 
 Within each plate, three forward tags (`F1`–`F3`) and two reverse tags (`R1`–`R2`) are combined pairwise to label individual wells — giving each wasp (and each control) a unique forward+reverse tag combination.
 
@@ -46,12 +51,9 @@ We'll **design** the samplesheet/metadata for this scenario ourselves in Steps 3
 
 ## Step 0 — Understand nanopore metabarcoding
 
-Metabarcoding sequences a short, taxonomically-informative marker gene (here, COI) (not sure this is true) from many samples/individuals at once, then compares each sequence against a reference database to assign it to a species (or best-available taxonomic rank).
+Metabarcoding sequences a short, taxonomically-informative marker gene (here, COI) from many samples/individuals at once, then compares each sequence against a reference database to assign it to a species (or best-available taxonomic rank).
 
-With Nanopore sequencing, an entire multi-well PCR plate is typically pooled into **one** sequencing run/barcode — so a second layer of "tags" (short index sequences stuck onto the primers during PCR) is needed to work out which read came from which well. Demultiplexing happens in **two steps**:
-
-1. Split the plate's reads by their **forward** tag+primer.
-2. Split each of those files again by their **reverse** tag+primer. The forward+reverse combination identifies a single well.
+With Nanopore sequencing, an entire multi-well PCR plate is typically pooled into **one** sequencing run/barcode — so a second layer of "tags" (short index sequences stuck onto the primers during PCR) is needed to work out which read came from which well.
 
 <details>
 <summary>📚 Good background resources</summary>
@@ -65,14 +67,14 @@ With Nanopore sequencing, an entire multi-well PCR plate is typically pooled int
 
 ## Step 1 — Inspect the raw data
 
-The pipeline ships with a small built-in test dataset (this is not representative of the experiment above, will have to change it later). Clone the pipeline repository first:
+The pipeline ships with a small built-in test dataset, but we will use a custom one made for this training, following the case study above. Clone the pipeline repository first:
 
 ```bash
 git clone https://github.com/Eco-Flow/nanoporemetabarcoding.git
 cd nanoporemetabarcoding
 ```
 
-The raw reads live in `test_data/`. Nanopore FASTQs are gzipped, so peek at them with `zcat` (as in Part 1):
+The raw reads live in `wasp_test_data/`. Nanopore FASTQs are gzipped, so peek at them with `zcat` (as in Part 1):
 
 > ▶️ **Try it — peek at a raw FASTQ**
 >
@@ -101,12 +103,12 @@ The raw reads live in `test_data/`. Nanopore FASTQs are gzipped, so peek at them
 >
 > FASTQ uses **4 lines per read**, so divide the line count by 4 to get the number of reads. This file is deliberately tiny (a handful of reads per well) so the whole pipeline runs in minutes.
 
-Also look at the other files you'll need:
+Also inspect the other files you'll need:
 
 ```bash
-cat test_data/primers_f.fasta      # forward primer-tag sequences
-cat test_data/primers_r.fasta      # reverse primer-tag sequences
-cat test_data/metadata.csv         # which tag combination = which sample
+cat wasp_test_data/primers_f.fasta      # forward primer-tag sequences
+cat wasp_test_data/primers_r.fasta      # reverse primer-tag sequences
+cat wasp_test_data/metadata.csv         # which tag combination = which sample
 ```
 
 ---
@@ -136,7 +138,7 @@ The **samplesheet** links each Nanopore barcode (one plate) to its FASTQ. It has
 
 | Column | Meaning |
 | --- | --- |
-| `id` | A name you choose for the plate/barcode |
+| `id` | An identifier you choose for the plate/barcode (can be anyrhing, but cannot contain spaces or '_') |
 | `fastq` | Path to that plate's single, merged FASTQ file |
 
 > ▶️ **Try it — design `samplesheet.csv` for the wasp experiment**
@@ -152,7 +154,7 @@ plate01,barcode01/plate1_combined.fastq.gz
 plate02,barcode02/plate2_combined.fastq.gz
 ```
 
-One row per ONT barcode/plate. `fastq` must point to a single, existing `.fastq.gz` file — if your sequencer produced several chunk files per barcode, merge them (e.g. `cat`) before writing the samplesheet (maybe should explain this in more detail).
+One row per ONT barcode/plate. `fastq` must point to a single, existing `.fastq.gz` file — if your sequencer produced several chunk files per barcode, merge them (e.g. `cat`) before writing the samplesheet.
 </details>
 
 ---
@@ -171,7 +173,7 @@ The **metadata** sheet is what actually resolves each demultiplexed well down to
 
 > ▶️ **Try it — design the metadata for plate01**
 >
-> Plate01 has 3 forward tags (`F1_WaspExF_Tab1`, `F2_WaspExF_Tab2`, `F3_WaspExF_Tab3`) and 2 reverse tags (`R1_LuthienR_Tab29`, `R2_LuthienR_Tab54`), giving 6 wells: one extraction blank, one positive control, one PCR blank, and 3 wasps (2 from oak/hazel-reared caterpillars, 1 from a different caterpillar). Write out the FASTAs and the metadata rows.
+> Plate01 has 3 forward tags (`F1_WaspExF_Tab1`, `F2_WaspExF_Tab2`, `F3_WaspExF_Tab3`) and 2 reverse tags (`R1_LuthienR_Tab29`, `R2_LuthienR_Tab54`), giving 6 wells: one extraction blank, one positive control, one PCR blank, and 3 adult wasps netted in the Woodland site. Write out the FASTAs and the metadata rows.
 
 <details>
 <summary>Cheat sheet — primers_f.fasta / primers_r.fasta</summary>
@@ -230,14 +232,9 @@ nextflow run main.nf \
 --tags_f test_data/primers_f.fasta \
 --tags_r test_data/primers_r.fasta \
 --custom_db test_data/test_database.fasta \
---outdir my_results
+--outdir results
 ```
 
-Or, more simply, use the pipeline's bundled **test profile**, which wires up all of the above for you:
-
-```bash
-nextflow run main.nf -profile test,docker --outdir my_results
-```
 </details>
 
 > 👉 **Single vs double dashes matter!** A single dash (`-profile`, `-resume`) is a **Nextflow** core option. A double dash (`--input`, `--metadata`, `--outdir`) is a **pipeline** parameter defined by nanoporemetabarcoding.
@@ -268,10 +265,10 @@ You forgot **`-profile docker`**. Without it, Nextflow expects every tool (Cutad
 
 ## Step 6 — Explore the results
 
-Once you see `Pipeline completed successfully`, look inside `my_results/`:
+Once you see `Pipeline completed successfully`, look inside `results/`:
 
 ```bash
-ls my_results
+ls results
 ```
 
 <details>
