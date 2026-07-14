@@ -2,6 +2,8 @@
 
 🧭 [◀️ Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
 
+🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
+
 ---
 
 Now that we have run the nf-core RNA-Seq pipeline, we have the raw counts needed to run differential expression using DESeq2.

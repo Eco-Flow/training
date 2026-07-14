@@ -2,6 +2,8 @@
 
 🧭 [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 1 · Command line ▶️](./commandline.md)
 
+🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
+
 ---
 
 ⏱ **Estimated time:** ~20 minutes &nbsp;•&nbsp; 🟢 No coding required yet
@@ -48,6 +50,10 @@ The Codespace takes a minute or two to build the first time. When it's ready you
 <img width="800" alt="The Codespaces VS Code environment open in a browser" src="img/codespaceopen.png">
 
 ✅ **If you see this screen, you're in!** (Your file list may look slightly different — that's fine.) Spend a few minutes on the tour below before moving on.
+
+> ⏳ **Be patient on the first launch.** Building the Codespace takes **a couple of minutes** the first time (it's installing Nextflow, Java, Docker and pulling the pipeline containers). It isn't stuck — later launches are much faster.
+
+> 📖 **The course material comes with it.** These lesson pages are part of the repo, so they're right there in the Codespace under `eco-flow-training/docs/`. You can read them inside VS Code instead of switching between tabs — open a `.md` file and press `Ctrl + Shift + V` (`Cmd + Shift + V` on a Mac) for a formatted preview.
 
 > ❓ **Stuck?** If you can't reach this screen, shout out to a tutor.
 

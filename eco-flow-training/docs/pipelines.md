@@ -2,6 +2,8 @@
 
 🧭 [◀️ Part 1 · Command line](./commandline.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 3 · nf-core RNA-Seq ▶️](./nfcore_rnaseq.md)
 
+🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
+
 ---
 
 <img src="img/pipe.jpeg" alt="drawing" width="200"/>
