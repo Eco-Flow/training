@@ -114,6 +114,40 @@ cat wasp_test_data/primers_r.fasta      # reverse primer-tag sequences
 cat wasp_test_data/metadata.csv         # which tag combination = which sample
 ```
 
+<details>
+<summary>📋 Ground truth — what's actually in each plate</summary>
+
+Useful to check yourself against once you reach Step 6. Both plates share the same 6 tag combinations, but each well's simulated species content differs deliberately — Woodland is the more diverse site.
+
+**plate01 — Woodland (`barcode01`)**
+
+| Well | Sample | Composition | Reads |
+| --- | --- | --- | --- |
+| F1 × R1 | `EXT_NEG_F1_R1` | *(no template — junk)* | 2 |
+| F2 × R1 | `WD_wasp01` | *Operophtera brumata* (60) + *Tortrix viridana* (50) + *Thecla betulae* (40) | 150 |
+| F3 × R1 | `WD_wasp02` | *Tortrix viridana* (90) + *Colotois pennaria* (60) | 150 |
+| F1 × R2 | `WD_wasp03` | *Operophtera brumata* (90) + *Erannis defoliaria* (60) | 150 |
+| F2 × R2 | `POS_CON_F2_R2` | *Drosophila melanogaster* (150) | 150 |
+| F3 × R2 | `BLANK_F3_R2` | *(no template — junk)* | 2 |
+
+→ 5 real prey species total (*Operophtera brumata*, *Tortrix viridana*, *Thecla betulae*, *Colotois pennaria*, *Erannis defoliaria*), several wells mixing two or three species in one well.
+
+**plate02 — Meadow (`barcode02`)**
+
+| Well | Sample | Composition | Reads |
+| --- | --- | --- | --- |
+| F1 × R1 | `EXT_NEG_F1_R1` | *(no template — junk)* | 2 |
+| F2 × R1 | `MW_wasp01` | *Pieris brassicae* (110) + *Noctua pronuba* (40) | 150 |
+| F3 × R1 | `MW_wasp02` | *Pieris brassicae* (150) | 150 |
+| F1 × R2 | `MW_wasp03` | *Pieris brassicae* (110) + *Autographa gamma* (40) | 150 |
+| F2 × R2 | `POS_CON_F2_R2` | *Drosophila melanogaster* (150) | 150 |
+| F3 × R2 | `BLANK_F3_R2` | *(no template — junk)* | 2 |
+
+→ Only 3 real prey species (*Pieris brassicae*, *Noctua pronuba*, *Autographa gamma*), dominated almost entirely by *Pieris brassicae* — much lower richness/evenness than Woodland, on purpose.
+
+Both `EXT_NEG` and `BLANK` are genuinely empty (a couple of short, unclassifiable junk reads) — if your results show a real species hit there instead, that's contamination worth investigating, not expected behaviour.
+</details>
+
 ---
 
 ## Step 2 — Explore the pipeline's requirements
