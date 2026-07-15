@@ -318,8 +318,6 @@ You won't need all of these today, but they're worth knowing.
 | `cut` | Cut out selected columns/sections of a file |
 | `gzip` | Compress or decompress files to save space |
 
-</details>
-
 ---
 
 ## Block 6 — Pipes, redirection and wildcards
@@ -342,26 +340,6 @@ The classic example reads a file, sorts it, keeps unique lines, and saves the re
 ```bash
 cat file | sort | uniq > sorted_uniq_file
 ```
-
-> ▶️ **Try it — keep a record of what you did**
->
-> You can save your session `history` to a file:
->
-> ```bash
-> history > my_history.txt
-> ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> Nothing prints to the terminal — the output went into the file instead. Check it worked:
->
-> ```bash
-> cat my_history.txt
-> ```
->
-> You should see a numbered list of every command you've run this session.
-> </details>
 
 > ▶️ **Try it — count the reads in a FASTQ file with a pipe**
 >
@@ -403,7 +381,6 @@ cat file | sort | uniq > sorted_uniq_file
 > SRR6357072_1.fastq.gz
 > ...
 > ```
-
 > </details>
 
 > 🤔 **Predict, then check:** what's the difference between running the `ls ... > read1_files.txt` line twice with `>` versus `>>`? Try both and `cat` the file each time.
@@ -551,7 +528,61 @@ ls                                          # you should now see rnaseq_experime
 ```
 </details>
 
-### Step 2 — Download and install Nextflow
+### Step 2 — Write and run your own script
+
+Create a file `list.sh` containing the single line `ls -la`, using `nano`.
+
+<details>
+<summary>Cheat sheet — creating the file</summary>
+
+```bash
+nano list.sh
+# type:  ls -la
+# then Ctrl+X, y, Enter
+```
+</details>
+
+Now try to run it just by typing its name:
+
+```bash
+list.sh
+```
+
+> ❌ You'll see `bash: list.sh: command not found`. The shell only auto-finds programs on the `$PATH` (Block 7) — and your current folder isn't on it.
+
+So point at the file directly with `bash`:
+
+```bash
+bash ./list.sh
+```
+
+> ❌ Now you'll see `bash: ./list.sh: Permission denied`. The file isn't marked executable yet.
+
+Fix that with `chmod` (Block 6), then run it:
+
+```bash
+chmod u+x ./list.sh
+bash ./list.sh
+```
+
+<details>
+<summary>✅ Expected output</summary>
+
+The script runs `ls -la` and lists everything in the folder, including your new `list.sh` and `rnaseq_experiment`:
+
+```
+total 24
+drwxr-xr-x  ... .
+drwxr-xr-x  ... ..
+-rwxr--r--  ... list.sh
+drwxr-xr-x  ... rnaseq_experiment
+...
+```
+
+Notice the `x` in `-rwxr--r--` — that's the execute permission you just added.
+</details>
+
+### Step 3 — Download and install Nextflow
 
 Nextflow is already installed in this environment, but we'll download our own copy for practice. First check the Java prerequisite (already installed here as v17):
 
@@ -612,6 +643,46 @@ System: ...
 Runtime: ...
 ```
 </details>
+
+### Step 4 — Make an alias (optional 🟡)
+
+When you type the same command a lot, an **alias** turns it into a short word. Aliases live in `~/.bash_profile` (in your home directory). A couple already exist there:
+
+```bash
+alias lss='ls -al'      # lss = long listing incl. hidden files
+alias h1='head -n 1'    # h1  = show the first line of a file
+```
+
+Add your own alias that shows the last 5 commands you ran.
+
+<details>
+<summary>Cheat sheet</summary>
+
+Add this line to `~/.bash_profile` (e.g. with `nano ~/.bash_profile`):
+
+```bash
+alias hist5='history | tail -n 5'
+```
+
+Then reload the file so the shell knows about it:
+
+```bash
+source ~/.bash_profile
+hist5        # try it — and try lss and h1 too
+```
+
+You can name the alias anything, as long as it isn't already a command.
+</details>
+
+### Step 5 — Save your history (optional 🟡)
+
+It's good practice to keep a record of what you did. Save your session `history` to a file:
+
+```bash
+history > my_history.txt
+```
+
+Then, in the VS Code file panel on the left, right-click `my_history.txt` and choose **Download** to save it to your own machine.
 
 ---
 
