@@ -64,6 +64,8 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 - `cd ..` — go **up** one directory
 - `cd -` — jump **back** to the previous directory
 - `cd` (on its own) — go to your **home** directory
+- `cd /home/user/directory` - move *into* full path
+- `cd directory/up_directory` - move *into* folder called `directory` using relative path
 
 > 📍 **Where should I be?** For every exercise you should be inside the **`eco-flow-training`** folder. In the Codespaces environment your terminal opens there automatically and the full path is `/workspaces/training/eco-flow-training`. If you're running the course from a local clone the path will look different (e.g. `/Users/you/training/eco-flow-training`) — what matters is that it **ends in `eco-flow-training`**. If it doesn't, run `cd` into it before continuing.
 
@@ -133,6 +135,7 @@ Now that you can move around, let's make and manage files and folders.
 | Command | What it does |
 | --- | --- |
 | `mkdir` | **M**a**k**e a new **dir**ectory |
+| `touch` | Create a new empty file |
 | `cp` | **C**o**p**y a file/folder (keeps the original; add `-r` for a directory) |
 | `mv` | **M**o**v**e or rename a file/folder (the original name is gone) |
 | `rm` | **R**e**m**ove/delete a file (add `-r` for a directory — ⚠️ no undo!) |
@@ -193,12 +196,12 @@ You'll often want to peek inside a file without opening an editor. These command
 | Command | What it does |
 | --- | --- |
 | `cat` | Print **all** lines of a file (also joins/**cat**enates files together) |
-| `zcat` | Same as `cat`, but for gzipped (`.gz`) files |
 | `head` | Print the **top** lines of a file (`-n` sets how many) |
 | `tail` | Print the **bottom** lines of a file (`-n` sets how many) |
 | `wc` | **W**ord **c**ount — lines, words and characters (`-l` for lines only) |
 | `sort` | Sort lines |
 | `uniq` | Collapse **adjacent** duplicate lines into one |
+| `grep` | Print every line that contains a word/pattern |
 
 > 💡 `uniq` only removes duplicates that are **next to each other**, so you almost always `sort` first (you'll do exactly this in Block 5).
 
@@ -257,9 +260,8 @@ Reading a whole file is fine when it's short. When it's long, you want to **sear
 
 | Command | What it does |
 | --- | --- |
-| `grep` | Print every line that contains a word/pattern |
-| `echo` | Print text (or the contents of a variable) to the terminal |
 | `history` | Show the commands you've already run |
+| `zcat` | Same as `cat`, but for gzipped (`.gz`) files |
 
 Useful `grep` flags:
 
@@ -289,6 +291,32 @@ Useful `grep` flags:
 > </details>
 
 > 🤔 **Predict, then check:** what does `history | grep grep` do? Run it and see — it searches your own command history for every time you used `grep`.
+
+---
+
+## Block 5 — Other handy commands
+
+You won't need all of these today, but they're worth knowing.
+
+| Command | What it does |
+| --- | --- |
+| `history` | Show the commands you've already run |
+| `zcat` | Same as `cat`, but for gzipped (`.gz`) files |
+| `echo` | Print text (or the contents of a variable) to the terminal |
+
+<details>
+<summary>Extra commands (not needed for this course)</summary>
+
+| Command | What it does |
+| --- | --- |
+| `wget` | Download the contents of a URL (`-O` sets the output name) |
+| `curl` | Download the contents of a URL (`-o` sets the output name) |
+| `which` | Show the path to a program (e.g. `which perl`) |
+| `ssh` | Access a remote server/cluster |
+| `export` | Set an environment variable |
+| `open` | Open a file the "expected" way (e.g. a PDF) |
+| `cut` | Cut out selected columns/sections of a file |
+| `gzip` | Compress or decompress files to save space |
 
 ---
 
