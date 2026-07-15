@@ -4,6 +4,8 @@
 
 ---
 
+🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
+
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
 In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-Flow ([`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)) — from raw Nanopore reads all the way to a taxonomically-annotated ASV table.
@@ -15,12 +17,13 @@ Disclaim
 -->
 ### What you'll do
 
-- Understand what our nanopore metabarcoding pipeline is and how it owrks
+- Understand what the nanopore metabarcoding pipeline is and how it works
 - Inspect raw Nanopore reads
 - Work out what inputs the pipeline needs
 - **Design** a samplesheet and metadata sheet for a real experimental scenario
 - **Run** the pipeline on its built-in test data with Docker containers
 - Explore the results — quality reports, BLAST hits, taxonomy, and a community matrix
+- **Run** the pipeline on an HPC cluster, using UCL's Myriad as a worked example
 - Learn to **`-resume`** a run and change pipeline options (let's see...)
 
 <!--
@@ -34,7 +37,7 @@ Disclaim
 
 We'll use a case study to motivate the design steps: **DNA barcoding of adult wasps to identify their prey.**
 
-Adult wasps were collected at two sites: oak woodland and grassland. Each wasp was individually DNA-barcoded (COI) using a **wasp exclusion ** (`WaspExF_*` forward / `LuthienR_*` reverse) to profile its host's diet signature. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, PCR-level tag.
+Adult wasps were collected at two sites: oak woodland and grassland. Each wasp was individually DNA-barcoded (COI) using primers that target that region and prevents host DNA amplification (`WaspExF_*` forward / `LuthienR_*` reverse) to profile its host's diet signature. Each site's wasp PCR products were pooled onto one Nanopore barcode — i.e. **one plate = one ONT barcode = one FASTQ file**, but each *well* inside that plate is its own wasp, told apart later by a second, set of sort sequences used as 'tags'.
 
 > 💡 **What's an exclusion primer?** A wasp carries trace host DNA from its prey in the gut/cuticle residue, but its own DNA is far more abundant in the sample, so a plain universal COI primer pair would mostly just re-sequence the wasp itself. `WaspExF_*` primers — the same tagged primers used for demultiplexing — are designed to be less complementary to the wasp's own COI sequence than to other (host) DNA, so amplification of the wasp's own template is suppressed relative to that trace host signal. It's rarely perfect: some wasp DNA usually still gets through, which is one reason checking control wells for unexpected hits (see Step 6) matters.
 
@@ -293,7 +296,108 @@ nanoplot/  blast/  assign_taxa/  community_matrix/  mafft/  plots/  multiqc/  pi
 
 ---
 
-## Step 7 — Resuming a run and changing options
+## Step 7 — Running on an HPC (Myriad example)
+
+> 🎯 For the general concepts (talking to your HPC admin, writing a config from scratch, testing it) see the bonus **[Running a pipeline on an HPC](./hpc.md)** — this step is a concrete worked example on top of that, using UCL's **Myriad** cluster.
+
+Because nanoporemetabarcoding was scaffolded from the nf-core template (see the disclaimer at the top of this page), it inherits nf-core's **institutional config** mechanism — so if your institution already has a config, you don't write anything yourself. Browse **[nf-co.re/configs](https://nf-co.re/configs/)** (a searchable, human-friendly view over the [nf-core/configs](https://github.com/nf-core/configs) repo) to check — UCL's Myriad cluster is listed there.
+
+> ⚠️ **Before you run anything, follow the setup steps on your cluster's own config page** — e.g. for Myriad that's **[nf-co.re/configs/ucl_myriad](https://nf-co.re/configs/ucl_myriad/)**. Each institution's page documents cluster-specific prerequisites — for Myriad that means loading a specific Java module (`module load java/temurin-17/17.0.2_8`, added to your `.bashrc`) and installing Nextflow itself into your own `~/bin/`, since it's not preinstalled.
+```bash
+nextflow run main.nf -profile ucl_myriad --outdir results -resume -bg > log
+```
+
+`-profile ucl_myriad` downloads and applies [`ucl_myriad.config`](https://github.com/nf-core/configs/blob/master/conf/ucl_myriad.config) automatically — no `-c` flag, and no separate `-profile singularity` needed (the profile enables Singularity itself). It's worth reading the actual config to see what a real one looks like:
+
+<details>
+<summary>What's actually in ucl_myriad.config</summary>
+
+```groovy
+executor {
+    name = 'sge'
+    queueSize = 100
+    submitRateLimit = '10/1s'
+}
+
+process {
+    penv = 'smp'
+    clusterOptions = {
+        def mem = task.memory.mega
+        def cpus = task.cpus
+        def memoryPerCpu = mem/cpus
+        "-S /bin/bash -l mem=${memoryPerCpu}M "
+    }
+}
+
+singularity {
+    enabled  = true
+    cacheDir = "${System.getenv('HOME')}/Scratch/.apptainer/pull"
+}
+```
+
+Two things worth noticing, since they're easy to get wrong writing your own config:
+
+- **Myriad uses SGE**, whose `-l mem=` flag is **memory per core, not per job** — so the config computes `task.memory / task.cpus` on the fly for every process, rather than using a single fixed value.
+- The **Singularity cache** (`cacheDir`) is pointed at `~/Scratch`, not the home directory — home quotas on Myriad are small, and containers are large. Always check where your own cluster wants large/scratch data to live (Step 1 in [hpc.md](./hpc.md)). This is usally the case for most HPCs.
+</details>
+
+> ▶️ **Try it — test the config before a real run**
+>
+> ```bash
+> nextflow run main.nf -profile test_synth,my_hpc_config --outdir my_results
+> ```
+> Same idea as Step 6 of [hpc.md](./hpc.md): run the tiny test profile first and check the banner says `executor >  sge`, not `executor >  local` — that confirms jobs are actually going to the scheduler, not running on the login node.
+
+While jobs are running, watch them with `qstat` (Myriad/SGE) — the same command [hpc.md](./hpc.md) points to for Slurm's `squeue`. Both print a status column whose codes mean the same underlying thing but look different:
+
+| Meaning | `qstat` (SGE/Myriad) | `squeue` (Slurm) |
+| --- | --- | --- |
+| Running | `r` | `R` |
+| Queued, waiting for resources | `qw` | `PD` |
+| Held (won't start — e.g. a dependency isn't met) | `hqw` | `PD` *(reason shown separately, e.g. `Dependency`)* |
+| Finishing up / cleaning after the job ends | `t` (transferring) | `CG` (completing) |
+| Completed successfully | *(drops off `qstat` entirely — check with `qacct -j <jobid>`)* | `CD`, briefly, then drops — check history with `sacct -j <jobid>` |
+| Failed to start (config/resource error) | `Eqw` | `F` |
+| Hit its time limit | *(job is killed; check `qacct -j <jobid>`)* | `TO` |
+| Suspended | `s` / `S` | `S` |
+| Being cancelled/deleted | `dr` / `dt` | `CA` |
+
+> 🔍 **`Eqw` is the one you'll actually hit while debugging a config.** It means the job was rejected before it even started — almost always a bad `clusterOptions`/`penv`/queue name. Run `qstat -j <jobid>` (SGE) or `scontrol show job <jobid>` (Slurm) to see *why* it was rejected, rather than just that it was.
+
+In some HPCs, running Nextflow directly from the login node is not recommended (contact your HPC admin for more information). In that case, submit your Nextflow command it as its own SGE (or slurm, if that is your HPC scheduler) job rather than running it directly in your terminal:
+
+<details>
+<summary>Cheat sheet — <code>run_nanopore_myriad.sh</code> (submit with <code>qsub run_nanopore_myriad.sh</code>)</summary>
+
+```bash
+#!/bin/bash -l
+#$ -l h_rt=4:00:0
+#$ -l mem=4G
+#$ -N nanoporemetabarcoding
+
+module load java/temurin-17/17.0.2_8
+
+nextflow run main.nf \
+  -profile ucl_myriad \
+  --input wasp_test_data/samplesheet.csv \
+  --metadata wasp_test_data/metadata.csv \
+  --tags_f wasp_test_data/primers_f.fasta \
+  --tags_r wasp_test_data/primers_r.fasta \
+  --custom_db wasp_test_data/custom_db.fasta \
+  --outdir my_results \
+  -resume
+```
+
+The `-l mem=4G` / `-l h_rt=4:00:0` here are for the **driver job only** (Nextflow itself is light) — the actual pipeline steps get their own resources per-process from `ucl_myriad.config`, submitted as separate SGE jobs by Nextflow.
+</details>
+
+> 💡 **Other schedulers (Slurm, etc.):** the same institutional-profile trick applies wherever nf-core/configs has a listed cluster — check https://nf-co.re/configs first. If yours isn't listed, [hpc.md](./hpc.md) has side-by-side minimal config examples for both **SGE** and **Slurm**: the main differences are `executor.name` (`'sge'` vs `'slurm'`), how you request memory (SGE: per-core via `clusterOptions`; Slurm: per-job via `--mem`), and the queue/partition option name. A Slurm submission script for this same pipeline would look like `hpc.md`'s own Slurm example, swapping in nanoporemetabarcoding's `--input`/`--metadata`/`--tags_f`/`--tags_r`/`--custom_db` flags shown above.
+
+> 🙋 **No institutional config for your cluster?** Just get your HPC admin in touch with us at Eco-Flow and we will build one.
+
+---
+
+## Step 8 — Resuming a run and changing options
 
 ### Changing an option
 
@@ -326,7 +430,7 @@ Add **`-resume`** and Nextflow reuses cached results for any step whose inputs h
 
 - Adapt what you designed in Steps 3–4 to your **own** primer-tag scheme and run it on your own data.
 - Explore the full parameter list in [`nextflow.config`](https://github.com/Eco-Flow/nanoporemetabarcoding/blob/master/nextflow.config) — worth tuning per-rank identity thresholds (`--spident`/`--gpident`/`--fpident`/`--opident`) and `--tax_list` for your own taxonomic group.
-- Running on a cluster? See the bonus **[Running a pipeline on an HPC](./hpc.md)**.
+- Running on a cluster other than Myriad? Step 7 above covers the concrete example; the bonus **[Running a pipeline on an HPC](./hpc.md)** covers the general concepts (including a Slurm walkthrough).
 
 ---
 
