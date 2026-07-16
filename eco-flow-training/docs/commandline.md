@@ -126,6 +126,44 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 
 > 🤔 **Predict, then check:** before you run it, what do you think `cd data` followed by `pwd` will print? Try it, then use `cd -` to jump straight back.
 
+> ▶️ **Try it — relative vs absolute paths**
+>
+> A **relative path** depends on where you currently are; an **absolute path** (starting with `/`) always points to the same place, no matter where you run it from. See the difference for yourself:
+>
+> ```bash
+> cd data              # relative — works because you're inside eco-flow-training
+> pwd
+> cd ..
+> cd docs
+> cd data              # the *same* relative command, from a different starting point
+> ```
+>
+> <details>
+> <summary>✅ Expected output</summary>
+>
+> The first `cd data` works fine — you land in `.../eco-flow-training/data`. The second one, run from inside `docs`, fails instead:
+>
+> ```
+> -bash: cd: data: No such file or directory
+> ```
+>
+> There's no `data` folder *inside* `docs` — a relative path only ever means "a folder called `data` inside wherever I currently am," so the exact same command means something different (or nothing at all) depending on where you run it.
+> </details>
+>
+> Now, from wherever that left you, try the **absolute** path instead:
+>
+> ```bash
+> cd /workspaces/training/eco-flow-training/data
+> pwd
+> cd ../..                # back to eco-flow-training
+> ```
+>
+> <details>
+> <summary>✅ Expected output</summary>
+>
+> This works from anywhere — `pwd` prints `/workspaces/training/eco-flow-training/data` regardless of where you ran it from. (Locally, substitute your own absolute path — see the "Where should I be?" note above.) That's the whole difference: **absolute paths are location-independent, relative paths aren't.**
+> </details>
+
 ---
 
 ## Block 2 — Creating, moving and removing
@@ -228,41 +266,6 @@ You'll often want to peek inside a file without opening an editor. These command
 > (The three numbers are lines, words and characters, followed by the filename.)
 > </details>
 
-> ▶️ **Try it — peek inside a compressed FASTQ file**
->
-> Your sequencing data is gzipped, so plain `cat` would print garbage. Use `zcat` instead:
->
-> ```bash
-> cd ../data
-> zcat SRR6357070_1.fastq.gz | head -n 4
-> ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> The first **read** in a FASTQ file — four lines: an ID, the DNA sequence, a `+`, and quality scores:
->
-> ```
-> @SRR6357070.1 1/1
-> GATCGGAAGAGCACACGTCTGAACTCCAGTCAC...
-> +
-> AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEE...
-> ```
-> </details>
-
-> 🤔 **Predict, then check:** a FASTQ file uses 4 lines per read. If `zcat file | wc -l` prints `4000`, how many reads is that? (Scroll to Block 5 to actually count them with a pipe.)
-
----
-
-## Block 4 — Searching inside files
-
-Reading a whole file is fine when it's short. When it's long, you want to **search**.
-
-| Command | What it does |
-| --- | --- |
-| `history` | Show the commands you've already run |
-| `zcat` | Same as `cat`, but for gzipped (`.gz`) files |
-
 Useful `grep` flags:
 
 - `grep -c word file` — **count** matching lines instead of printing them
@@ -290,11 +293,9 @@ Useful `grep` flags:
 > ```
 > </details>
 
-> 🤔 **Predict, then check:** what does `history | grep grep` do? Run it and see — it searches your own command history for every time you used `grep`.
-
 ---
 
-## Block 5 — Other handy commands
+## Block 4 — Other handy commands
 
 You won't need all of these today, but they're worth knowing.
 
@@ -303,6 +304,30 @@ You won't need all of these today, but they're worth knowing.
 | `zcat` | Same as `cat`, but for gzipped (`.gz`) files |
 | `echo` | Print text (or the contents of a variable) to the terminal |
 | `history` | Show the commands you've already run |
+
+> ▶️ **Try it — peek inside a compressed FASTQ file**
+>
+> Your sequencing data is gzipped, so plain `cat` would print garbage. Use `zcat` instead:
+>
+> ```bash
+> cd ../data
+> zcat SRR6357070_1.fastq.gz | head -n 4
+> ```
+>
+> <details>
+> <summary>✅ Expected output</summary>
+>
+> The first **read** in a FASTQ file — four lines: an ID, the DNA sequence, a `+`, and quality scores:
+>
+> ```
+> @SRR6357070.1 1/1
+> GATCGGAAGAGCACACGTCTGAACTCCAGTCAC...
+> +
+> AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEE...
+> ```
+> </details>
+
+> 🤔 **Predict, then check:** a FASTQ file uses 4 lines per read. If `zcat file | wc -l` prints `4000`, how many reads is that? (Scroll to Block 5 to actually count them with a pipe.)
 
 <details>
 <summary>Extra commands (not needed for this course)</summary>
@@ -322,7 +347,7 @@ You won't need all of these today, but they're worth knowing.
 
 ---
 
-## Block 6 — Pipes, redirection and wildcards
+## Block 5 — Pipes, redirection and wildcards
 
 <img src="img/hieroglyph.jpeg" alt="drawing" width="300"/>
 
@@ -410,7 +435,7 @@ cat file | sort | uniq > sorted_uniq_file
 
 ---
 
-## Block 7 — Flags and file permissions
+## Block 6 — Flags and file permissions
 
 ### Flags change how a command behaves
 
@@ -459,7 +484,7 @@ For example, `chmod a+r file` lets **all** users **read** the file, and `chmod u
 
 ---
 
-## Block 8 — Variables and the `$PATH`
+## Block 7 — Variables and the `$PATH`
 
 Variables store information and are written with a `$` sign. **Environment variables** are available anywhere on the machine and are usually UPPERCASE:
 
