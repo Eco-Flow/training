@@ -638,6 +638,36 @@ Runtime: ...
 ```
 </details>
 
+### Step 3 — Make an alias (optional 🟡)
+
+When you type the same command a lot, an **alias** turns it into a short word. Aliases live in `~/.bash_profile` (in your home directory). A couple already exist there:
+
+```bash
+alias lss='ls -al'      # lss = long listing incl. hidden files
+alias h1='head -n 1'    # h1  = show the first line of a file
+```
+
+Add your own alias that shows the last 5 commands you ran.
+
+<details>
+<summary>Cheat sheet</summary>
+
+Add this line to `~/.bash_profile` (e.g. with `nano ~/.bash_profile`):
+
+```bash
+alias hist5='history | tail -n 5'
+```
+
+Then reload the file so the shell knows about it:
+
+```bash
+source ~/.bash_profile
+hist5        # try it — and try lss and h1 too
+```
+
+You can name the alias anything, as long as it isn't already a command.
+</details>
+
 ---
 
 ## ✅ Section checklist
