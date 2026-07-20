@@ -147,6 +147,7 @@ To run nanoporemetabarcoding you need:
 * a **metadata** sheet (`--metadata`) — one row per well, mapping a forward+reverse tag-primer combination to a sample name
 * a **forward tag-primer FASTA** (`--tags_f`) and a **reverse tag-primer FASTA** (`--tags_r`). This are needed for demultiplexing
 * a **reference database** for taxonomy — either `--blast_db` (pre-built) or `--custom_db` (a FASTA the pipeline will build a BLAST DB from). For this workshop we are going to use a custom one, as a BLAST database can be hundreads of gigabytes in size
+* a **taxonomy ID database** (`--sql_db`) — a separate `taxonomizr` SQLite file that maps each BLAST hit's accession to its full taxonomic lineage (domain → species). `--custom_db`/`--blast_db` only supply the sequences to search *against*; this is what turns the winning accession into an actual species name afterward
 
 ---
 
@@ -397,6 +398,7 @@ While jobs are running, watch them with `qstat` on SGE — the same command [hpc
 
 > 🔍 **`Eqw` is the one you'll actually hit while debugging a config.** It means the job was rejected before it even started — almost always a bad `clusterOptions`/`penv`/queue name. Run `qstat -j <jobid>` (SGE) or `scontrol show job <jobid>` (Slurm) to see *why* it was rejected, rather than just that it was.
 
+<!--
 In some HPCs, running Nextflow directly from the login node is not recommended (contact your HPC admin for more information). In that case, submit your Nextflow command it as its own SGE (or slurm, if that is your HPC scheduler) job rather than running it directly in your terminal:
 
 <details>
@@ -423,6 +425,7 @@ nextflow run main.nf \
 
 The `-l mem=4G` / `-l h_rt=4:00:0` here are for the **driver job only** (Nextflow itself is light) — the actual pipeline steps get their own resources per-process from `ucl_myriad.config`, submitted as separate SGE jobs by Nextflow.
 </details>
+-->
 
 > 💡 **Other schedulers (Slurm, etc.):** the same institutional-profile trick applies wherever nf-core/configs has a listed cluster — check https://nf-co.re/configs first. If yours isn't listed, [hpc.md](./hpc.md) has side-by-side minimal config examples for both **SGE** and **Slurm**: the main differences are `executor.name` (`'sge'` vs `'slurm'`), how you request memory (SGE: per-core via `clusterOptions`; Slurm: per-job via `--mem`), and the queue/partition option name. A Slurm submission script for this same pipeline would look like `hpc.md`'s own Slurm example, swapping in nanoporemetabarcoding's `--input`/`--metadata`/`--tags_f`/`--tags_r`/`--custom_db` flags shown above.
 
