@@ -28,6 +28,7 @@ Work through it top to bottom — or jump to whatever you need.
 | **3** | [Run an nf-core RNA-Seq pipeline](./docs/nfcore_rnaseq.md) | Practical | Hands-on — run a real nf-core/rnaseq analysis end to end, from raw reads to results. |
 | **4** | [Differential expression](./docs/differential.md) | Practical · R · 🚧 draft | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
 | **5** | [Run nanoporemetabarcoding pipeline](./docs/nanopore_metabarcoding.md) | Practical | Run the nanopore metabarcoding pipeline. |
+| **6** | [Interacting with code on GitHub](./docs/github_basics.md) | Practical | Issues, Pull Requests, READMEs and Claude Code — how to report, fix and contribute changes, using the nanopore pipeline as the example. |
 | **★** | [Running a pipeline on an HPC](./docs/hpc.md) | Bonus · optional | Configure and run the pipeline on a Slurm/SGE cluster — talk to your admin, adapt a config, and test it. |
 
 > 🚧 **Part 4** is still a draft, and the **★ HPC bonus** is optional reference material — most learners can skip it.
