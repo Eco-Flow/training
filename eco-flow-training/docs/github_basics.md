@@ -80,14 +80,14 @@ An **Issue** is a single tracked conversation about *one* thing that needs atten
 
 > 🎬 **Instructor-led demo.** Your tutor will walk through this live. Follow along — you'll do your own version in Step 6. If you're working solo, you can attempt each step yourself.
 
-Here's the full loop we'll demonstrate, using a small, realistic example: **the README is missing a note about a required input, or contains a typo.**
+Here's the full loop we'll demonstrate, using a small, mundane example: **fixing a typo in the README.** (It's deliberately low-stakes — the point is to see the *whole workflow* clearly, not to solve something hard.)
 
 **1. Open the issue.** On the Issues tab → **New issue**. For example:
 
-> **Title:** README does not mention that input FASTQ files must be gzipped
+> **Title:** Typo in README — "pipline" should be "pipeline"
 >
-> **Body:** When I followed the Quick Start with plain `.fastq` files, the pipeline failed at the first step. It looks like the pipeline expects `.fastq.gz`. The README Quick Start should say this so new users don't hit the same error.
-> *Steps to reproduce:* ran `nextflow run Eco-Flow/nanoporemetabarcoding -profile test,docker` with uncompressed inputs.
+> **Body:** The Introduction section of the README spells it "pipline" instead of "pipeline". Small thing, but worth fixing so it reads cleanly.
+> *Where:* README.md, Introduction section.
 
 **2. Bring in Claude Code.** [Claude Code](https://www.anthropic.com/claude-code) is an AI coding assistant that runs in your terminal (it's what powers the assistant in these Codespaces). You can point it straight at an issue and ask it to help:
 
@@ -95,9 +95,9 @@ Here's the full loop we'll demonstrate, using a small, realistic example: **the 
 - In the terminal, start Claude Code and describe the task, e.g.:
 
   ```
-  > Look at issue #<number> in this repo. Update the README Quick Start so it
-  > makes clear that input FASTQ files must be gzipped (.fastq.gz). Keep the
-  > existing style.
+  > Look at issue #<number> in this repo. Fix the typo it describes in the
+  > README ("pipline" → "pipeline"), and check the rest of the file for the
+  > same misspelling.
   ```
 
 - Claude Code reads the relevant files, proposes an edit to `README.md`, and you review it. **You are always in control** — nothing changes until you accept it.
@@ -160,7 +160,7 @@ Why this matters to you as a *user*:
 
 ## Step 6 — Your turn
 
-Now do it yourself. Use the list of README problems you noted in **Step 1** (or find a fresh one).
+Now do it yourself. Use the list of README problems you noted in **Step 1** (or find a fresh issue).
 
 > ▶️ **Exercise A — open an issue (everyone should do this).**
 >
