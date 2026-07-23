@@ -19,7 +19,8 @@
                 "Gruntfuggly.todo-tree",
                 "nextflow.nextflow",
                 "streetsidesoftware.code-spell-checker",
-                "ms-vscode.live-server"
+                "ms-vscode.live-server",
+                "tomoki1207.pdf"
             ]
         }
     }
