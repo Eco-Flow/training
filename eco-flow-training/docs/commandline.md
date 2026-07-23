@@ -75,26 +75,26 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > pwd
 > ls
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `pwd` prints the folder you're in. In Codespaces that's:
->
-> ```
-> /workspaces/training/eco-flow-training
-> ```
->
-> (Locally the start of the path differs, but it should still end in `eco-flow-training`.)
->
-> `ls` lists what's inside it — you should see the course folders, including `data`, `docs` and `exercise`:
->
-> ```
-> README.md  codespaces.config  data  docs  exercise  hello-nextflow
-> ```
->
-> (Your exact list may vary slightly depending on the environment.)
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+`pwd` prints the folder you're in. In Codespaces that's:
+
+```
+/workspaces/training/eco-flow-training
+```
+
+(Locally the start of the path differs, but it should still end in `eco-flow-training`.)
+
+`ls` lists what's inside it — you should see the course folders, including `data`, `docs` and `exercise`:
+
+```
+README.md  codespaces.config  data  docs  exercise  hello-nextflow
+```
+
+(Your exact list may vary slightly depending on the environment.)
+</details>
 
 > ▶️ **Try it — look inside a folder without moving into it, then see the whole tree**
 >
@@ -102,27 +102,27 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > ls data
 > tree
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `ls data` shows the FASTQ sequencing files you'll analyse later in the course:
->
-> ```
-> SRR6357070_1.fastq.gz  SRR6357070_2.fastq.gz  SRR6357071_1.fastq.gz  ...
-> ```
->
-> `tree` draws the same information as a branching structure:
->
-> ```
-> .
-> ├── data
-> │   ├── SRR6357070_1.fastq.gz
-> │   └── ...
-> ├── docs
-> └── exercise
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+`ls data` shows the FASTQ sequencing files you'll analyse later in the course:
+
+```
+SRR6357070_1.fastq.gz  SRR6357070_2.fastq.gz  SRR6357071_1.fastq.gz  ...
+```
+
+`tree` draws the same information as a branching structure:
+
+```
+.
+├── data
+│   ├── SRR6357070_1.fastq.gz
+│   └── ...
+├── docs
+└── exercise
+```
+</details>
 
 > 🤔 **Predict, then check:** before you run it, what do you think `cd data` followed by `pwd` will print? Try it, then use `cd -` to jump straight back.
 
@@ -137,18 +137,19 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > cd docs
 > cd data              # the *same* relative command, from a different starting point
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> The first `cd data` works fine — you land in `.../eco-flow-training/data`. The second one, run from inside `docs`, fails instead:
->
-> ```
-> -bash: cd: data: No such file or directory
-> ```
->
-> There's no `data` folder *inside* `docs` — a relative path only ever means "a folder called `data` inside wherever I currently am," so the exact same command means something different (or nothing at all) depending on where you run it.
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+The first `cd data` works fine — you land in `.../eco-flow-training/data`. The second one, run from inside `docs`, fails instead:
+
+```
+-bash: cd: data: No such file or directory
+```
+
+There's no `data` folder *inside* `docs` — a relative path only ever means "a folder called `data` inside wherever I currently am," so the exact same command means something different (or nothing at all) depending on where you run it.
+</details>
+
 >
 > Now, from wherever that left you, try the **absolute** path instead:
 >
@@ -157,12 +158,12 @@ Your first job is always to answer two questions: *where am I?* and *what's here
 > pwd
 > cd ../..                # back to eco-flow-training
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> This works from anywhere — `pwd` prints `/workspaces/training/eco-flow-training/data` regardless of where you ran it from. (Locally, substitute your own absolute path — see the "Where should I be?" note above.) That's the whole difference: **absolute paths are location-independent, relative paths aren't.**
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+This works from anywhere — `pwd` prints `/workspaces/training/eco-flow-training/data` regardless of where you ran it from. (Locally, substitute your own absolute path — see the "Where should I be?" note above.) That's the whole difference: **absolute paths are location-independent, relative paths aren't.**
+</details>
 
 ---
 
@@ -189,16 +190,16 @@ Now that you can move around, let's make and manage files and folders.
 > nano hello.txt      # type a line of text, then Ctrl+X, y, Enter
 > ls
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> After you save and quit `nano`, `ls` shows your new file:
->
-> ```
-> hello.txt
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+After you save and quit `nano`, `ls` shows your new file:
+
+```
+hello.txt
+```
+</details>
 
 > ▶️ **Try it — copy, rename, then clean up**
 >
@@ -210,18 +211,18 @@ Now that you can move around, let's make and manage files and folders.
 > rm goodbye.txt                  # delete the copy
 > ls
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> The listings change at each step:
->
-> ```
-> hello.txt  hello_backup.txt     # after cp
-> goodbye.txt  hello.txt          # after mv
-> hello.txt                       # after rm
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+The listings change at each step:
+
+```
+hello.txt  hello_backup.txt     # after cp
+goodbye.txt  hello.txt          # after mv
+hello.txt                       # after rm
+```
+</details>
 
 > 🤔 **Predict, then check:** you're now inside `practice`. Which command takes you back up to `eco-flow-training`? Run it and confirm with `pwd`.
 
@@ -253,18 +254,18 @@ You'll often want to peek inside a file without opening an editor. These command
 > tail -n 2 cancao_do_exilio
 > wc cancao_do_exilio
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `head -n 4` prints the first four lines of the poem, `tail -n 2` prints the last two, and `wc` reports three numbers — **lines, words, characters**:
->
-> ```
->       27     116     662 cancao_do_exilio
-> ```
->
-> (The three numbers are lines, words and characters, followed by the filename.)
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+`head -n 4` prints the first four lines of the poem, `tail -n 2` prints the last two, and `wc` reports three numbers — **lines, words, characters**:
+
+```
+      27     116     662 cancao_do_exilio
+```
+
+(The three numbers are lines, words and characters, followed by the filename.)
+</details>
 
 Useful `grep` flags:
 
@@ -280,18 +281,18 @@ Useful `grep` flags:
 > grep -c palmeiras cancao_do_exilio
 > grep -n Deus cancao_do_exilio
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `grep` prints each line containing *palmeiras*; `-c` collapses that to a count; `-n` prefixes each match with its line number:
->
-> ```
-> ... lines containing "palmeiras" ...
-> 4                                # from grep -c
-> 23:Não permita Deus que eu morra # from grep -n
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+`grep` prints each line containing *palmeiras*; `-c` collapses that to a count; `-n` prefixes each match with its line number:
+
+```
+... lines containing "palmeiras" ...
+4                                # from grep -c
+23:Não permita Deus que eu morra # from grep -n
+```
+</details>
 
 ---
 
@@ -313,19 +314,19 @@ You won't need all of these today, but they're worth knowing.
 > cd ../data
 > zcat SRR6357070_1.fastq.gz | head -n 4
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> The first **read** in a FASTQ file — four lines: an ID, the DNA sequence, a `+`, and quality scores:
->
-> ```
-> @SRR6357070.1 1/1
-> GATCGGAAGAGCACACGTCTGAACTCCAGTCAC...
-> +
-> AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEE...
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+The first **read** in a FASTQ file — four lines: an ID, the DNA sequence, a `+`, and quality scores:
+
+```
+@SRR6357070.1 1/1
+GATCGGAAGAGCACACGTCTGAACTCCAGTCAC...
++
+AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEE...
+```
+</details>
 
 > 🤔 **Predict, then check:** a FASTQ file uses 4 lines per read. If `zcat file | wc -l` prints `4000`, how many reads is that? (Scroll to Block 5 to actually count them with a pipe.)
 
@@ -375,18 +376,18 @@ cat file | sort | uniq > sorted_uniq_file
 > ```bash
 > history > my_history.txt
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> Nothing prints to the terminal — the output went into the file instead. Check it worked:
->
-> ```bash
-> cat my_history.txt
-> ```
->
-> You should see a numbered list of every command you've run this session.
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+Nothing prints to the terminal — the output went into the file instead. Check it worked:
+
+```bash
+cat my_history.txt
+```
+
+You should see a numbered list of every command you've run this session.
+</details>
 
 > ▶️ **Try it — count the reads in a FASTQ file with a pipe**
 >
@@ -396,18 +397,18 @@ cat file | sort | uniq > sorted_uniq_file
 > ```
 >
 > Remember: 4 lines per read, so divide the answer by 4.
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> A single number — the total number of lines in the uncompressed file:
->
-> ```
-> 200000
-> ```
->
-> That's `200000 / 4 = 50000` reads. Piping meant we never had to save an uncompressed copy to disk.
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+A single number — the total number of lines in the uncompressed file:
+
+```
+200000
+```
+
+That's `200000 / 4 = 50000` reads. Piping meant we never had to save an uncompressed copy to disk.
+</details>
 
 > ▶️ **Try it — use a wildcard and save the result to a file**
 >
@@ -416,20 +417,20 @@ cat file | sort | uniq > sorted_uniq_file
 > ls *_1.fastq.gz > read1_files.txt
 > cat read1_files.txt
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `ls *.gz` lists only the `.gz` files; the second command doesn't print anything (it went into the file instead); `cat` shows what was saved:
->
-> ```
-> SRR6357070_1.fastq.gz
-> SRR6357071_1.fastq.gz
-> SRR6357072_1.fastq.gz
-> ...
-> ```
 
-> </details>
+<details>
+<summary>✅ Expected output</summary>
+
+`ls *.gz` lists only the `.gz` files; the second command doesn't print anything (it went into the file instead); `cat` shows what was saved:
+
+```
+SRR6357070_1.fastq.gz
+SRR6357071_1.fastq.gz
+SRR6357072_1.fastq.gz
+...
+```
+
+</details>
 
 > 🤔 **Predict, then check:** what's the difference between running the `ls ... > read1_files.txt` line twice with `>` versus `>>`? Try both and `cat` the file each time.
 
@@ -458,19 +459,19 @@ You can combine flags: `ls -lah`. To see every flag a command supports, use `man
 > ls -lh
 > ls -lS      # largest first
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> Long format shows permissions, owner, size and date for each file:
->
-> ```
-> -rw-r--r--  1 user  group  2.2M May 22 09:34 SRR6357070_1.fastq.gz
-> ...
-> ```
->
-> The left-most column (`-rw-r--r--`) is the **permissions** — that's what we change next.
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+Long format shows permissions, owner, size and date for each file:
+
+```
+-rw-r--r--  1 user  group  2.2M May 22 09:34 SRR6357070_1.fastq.gz
+...
+```
+
+The left-most column (`-rw-r--r--`) is the **permissions** — that's what we change next.
+</details>
 
 ### Permissions decide who can do what
 
@@ -502,16 +503,16 @@ Variables store information and are written with a `$` sign. **Environment varia
 > echo $HOME
 > echo $PATH
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> `echo $PATH` prints a colon-separated list of directories the shell searches for programs:
->
-> ```
-> /opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-> ```
-> </details>
+
+<details>
+<summary>✅ Expected output</summary>
+
+`echo $PATH` prints a colon-separated list of directories the shell searches for programs:
+
+```
+/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+```
+</details>
 
 Why does `$PATH` matter? If a program lives in one of those directories, you can run it by name from **anywhere** — no full path needed. You add a directory to `$PATH` with `export`:
 
