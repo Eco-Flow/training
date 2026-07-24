@@ -20,7 +20,8 @@
                 "nextflow.nextflow",
                 "streetsidesoftware.code-spell-checker",
                 "ms-vscode.live-server",
-                "tomoki1207.pdf"
+                "tomoki1207.pdf",
+                "barnim.markdown-code-copy-button"
             ]
         }
     }
