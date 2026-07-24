@@ -16,13 +16,23 @@
                 "cssho.vscode-svgviewer",
                 "esbenp.prettier-vscode",
                 "EditorConfig.EditorConfig",
-                "Gruntfuggly.todo-tree",
                 "nextflow.nextflow",
                 "streetsidesoftware.code-spell-checker",
                 "ms-vscode.live-server",
                 "tomoki1207.pdf",
                 "barnim.markdown-code-copy-button"
-            ]
+            ],
+            "settings": {
+                // Don't prompt learners about extension telemetry mid-lesson.
+                "nextflow.telemetry.enabled": false,
+                "redhat.telemetry.enabled": false,
+                // Keep the workspace quiet on first open.
+                "workbench.secondarySideBar.defaultVisibility": "hidden",
+                "workbench.startupEditor": "none",
+                "chat.commandCenter.enabled": false,
+                "git.openRepositoryInParentFolders": "never",
+                "extensions.ignoreRecommendations": true
+            }
         }
     }
 }
