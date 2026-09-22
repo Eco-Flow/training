@@ -29,9 +29,11 @@ Work through it top to bottom — or jump to whatever you need.
 | **4** | [Differential gene expression](./eco-flow-training/docs/differential.md) | Practical · R | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
 | **5** | [Run the nanopore metabarcoding pipeline](./eco-flow-training/docs/nanopore_metabarcoding.md) | Practical | Go end to end, from raw Nanopore reads to a taxonomically-annotated community table. |
 | **6** | [Interacting with code on GitHub](./eco-flow-training/docs/github_basics.md) | Practical | Issues, pull requests, and how to contribute changes back to a pipeline repository. |
-| **★** | [Running a pipeline on an HPC](./eco-flow-training/docs/hpc.md) | Advanced | Write a config for your own Slurm/SGE cluster — talk to your admin, adapt a config, and test it. |
+| **7** | [Running a pipeline on an HPC](./eco-flow-training/docs/hpc.md) | Practical · optional | Run an nf-core pipeline on a Slurm/SGE cluster that's already set up — get the pipeline, submit and watch jobs, keep Nextflow alive, and avoid the common gotchas. Practise on a mini Slurm cluster in Codespaces. |
+| **8** | [Monitoring runs with Seqera Platform](./eco-flow-training/docs/seqera_platform.md) | Practical · optional | Follow your runs live in the browser with Seqera Platform, from Codespaces or your HPC, plus an overview of launching pipelines from it. |
+| **★** | [Advanced: setting up Nextflow for your HPC](./eco-flow-training/docs/hpc_config.md) | Advanced | Write a config for a Slurm/SGE cluster that doesn't have one yet — talk to your admin, adapt a config, and test it. |
 
-> ★ The **HPC** part is advanced material for people who need to run pipelines on their own cluster.
+> ★ The **Advanced HPC** part is for people setting up Nextflow on a cluster with no ready-made config. If you just want to run a pipeline on your cluster, start with **Part 7**.
 
 ---
 

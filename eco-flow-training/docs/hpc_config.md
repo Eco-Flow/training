@@ -1,14 +1,16 @@
-# Bonus · Running a pipeline on an HPC
+# Advanced · Setting up Nextflow for your institution's HPC
 
-🧭 [◀️ Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 7 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
 
 🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
 
 ---
 
-⏱ **Estimated time:** ~20 minutes reading &nbsp;•&nbsp; 🟣 Bonus / optional &nbsp;•&nbsp; Reference, not a hands-on run
+⏱ **Estimated time:** ~20 minutes reading &nbsp;•&nbsp; 🟣 Advanced / optional &nbsp;•&nbsp; Reference, not a hands-on run
 
-> 🎯 **Who is this for?** Only for those who expect to run pipelines on a **High-Performance Computing (HPC) cluster** at your institution. This is a *conceptual guide with pointers*, not a step-by-step you can run here (every cluster is different).
+> 👋 **Just want to run a pipeline on your cluster?** You probably want **[Part 7 · Running a pipeline on an HPC](./hpc.md)** instead. This page is only needed when your cluster doesn't have a working Nextflow config yet.
+
+> 🎯 **Who is this for?** The person *setting up* Nextflow on a **High-Performance Computing (HPC) cluster** that has no ready-made config: a researcher working with their HPC team, or the admin themselves. This is a *conceptual guide with pointers*, not a step-by-step you can run here (every cluster is different).
 
 ### What you'll learn
 
@@ -343,4 +345,4 @@ nextflow run nf-core/rnaseq -r 3.14.0 \
 
 ---
 
-🧭 [◀️ Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 7 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
