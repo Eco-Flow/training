@@ -248,7 +248,7 @@ ro-crate-metadata.json  subworkflows  tests  tower.yml  workflows
 ```
 </details>
 
-You'd then run it by giving Nextflow the **folder** instead of a name, e.g. `nextflow run ~/nf_practical/demo -profile test,docker --outdir demo_results`. This is how you ran the nanopore pipeline in [Part 5](./nanopore_metabarcoding.md) (`nextflow run main.nf`).
+With a clone, you point Nextflow at the **folder** rather than the pipeline name — that's what `nextflow run main.nf` did in [Part 5](./nanopore_metabarcoding.md). There's nothing to run here: Step 4 uses the copy from Way A.
 
 | | **Way A:** `nextflow run nf-core/demo -r 1.2.0` | **Way B:** `git clone` |
 | :--- | :--- | :--- |
