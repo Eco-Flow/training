@@ -8,7 +8,7 @@
 
 ⏱ **Estimated time:** ~30–40 minutes &nbsp;•&nbsp; 🟡 Practical · optional
 
-> 🎯 **Who is this for?** Anyone who wants to run an nf-core pipeline on their institution's **High-Performance Computing (HPC) cluster**, where Nextflow is already available or your cluster already has a ready-made config on [nf-co.re/configs](https://nf-co.re/configs). You **don't** need to write a cluster config for this page.
+> 🎯 **Who is this for?** Anyone who wants to run an nf-core pipeline on their institution's **High-Performance Computing (HPC) cluster**, where Nextflow is already available and your cluster already has a ready-made config on [nf-co.re/configs](https://nf-co.re/configs).
 >
 > - 🖥️ **No cluster?** You can still do most of this page in Codespaces, on a tiny practice Slurm "cluster" you start with one command.
 > - 🛠️ **Need to *build* a config for a cluster that doesn't have one yet?** That's the separate ★ [Advanced: setting up Nextflow for your HPC](./hpc_config.md) page.
@@ -21,12 +21,12 @@ Throughout this page, command blocks are marked:
 ### What you'll learn
 
 - How Nextflow runs differently on a cluster (login node, scheduler, compute nodes)
-- What to check before your first run, and where your files should live
+- What to check before your first run, and where your files should be
 - Two ways to get a pipeline: `nextflow run nf-core/…` vs `git clone`
 - How a pipeline decides what resources each step asks for
 - How to submit and watch jobs with a scheduler (Slurm, with SGE equivalents)
 - How to smoke-test a run, then keep a long run alive after you log out
-- The common gotchas, as a checklist
+- Common issues list
 
 ---
 
@@ -34,7 +34,7 @@ Throughout this page, command blocks are marked:
 
 In Codespaces, everything runs on one machine. A cluster is **many machines sharing one filesystem**. You log in to a shared **login node**, and a **scheduler** hands out time on the **compute nodes** to everyone's jobs.
 
-Nextflow fits this neatly. The `nextflow run` process you start (the **driver**) does no analysis itself. It sends every task to the scheduler as a **separate job**, then watches them. Remember the parallel tasks from [Part 2](./pipelines.md)? On a cluster they really can run on different machines at the same time.
+Nextflow can handle the scheduler for you, so you don't need to write submission scripts by hand. The `nextflow run` process you start (the **driver**) does no analysis itself: it sends every task to the scheduler as a **separate job**, then watches them. Remember the parallel tasks from [Part 2](./pipelines.md)? On a cluster they really can run on different machines at the same time.
 
 ```mermaid
 flowchart LR
@@ -75,20 +75,40 @@ singularity --version || apptainer --version
 ```
 
 - **No Nextflow module?** You can usually install it in your home directory by following the [official install guide](https://docs.seqera.io/nextflow/install).
-- **Singularity, not Docker.** Shared clusters almost never allow Docker, so on a cluster you'll use `-profile singularity` (or `apptainer`) where Codespaces used `-profile docker`. [Part 5](./nanopore_metabarcoding.md) (Step 6) explains why.
+- **Singularity, not Docker.** Docker needs a background service running with root privileges, which shared clusters can't hand out, so you'll use `-profile singularity` (or `apptainer`) where Codespaces used `-profile docker`. Both run the same containers.
 
-**Is your cluster on [nf-co.re/configs](https://nf-co.re/configs)?** If it is, a single `-profile <name>` gives Nextflow everything it needs to know about your cluster: the scheduler, container engine and limits. For example, `-profile ucl_myriad` in [Part 5](./nanopore_metabarcoding.md). Read your cluster's page there first; some list setup steps. If it isn't listed, ask colleagues or your HPC team whether someone already has a config. If nobody does, see ★ [Advanced: setting up Nextflow for your HPC](./hpc_config.md).
+### Is there already a config for your cluster?
 
-### Where your files should live
+This is the single most useful thing to check. The nf-core community keeps ready-made configs for around 160 institutions at **[nf-co.re/configs](https://nf-co.re/configs)**, each one describing that cluster's scheduler, container engine and limits. The page lists them by name — `cambridge`, `crick`, `eddie`, `imperial`, `sanger`, `ucl_myriad` and many more.
 
-| What | Default | On a cluster, put it on… | How |
+<!-- TODO: add a screenshot of the nf-co.re/configs profile list here -->
+
+If yours is listed, you add it to your run as a profile, and Nextflow knows how to talk to your cluster:
+
+```bash
+nextflow run nf-core/demo -r 1.2.0 -profile test,<your_cluster> --outdir demo_results
+```
+
+That's the `-profile ucl_myriad` you saw in [Part 5](./nanopore_metabarcoding.md). **Open your cluster's page first** — most list setup steps, such as which Java module to load.
+
+**Not listed?** In order:
+
+1. **Ask around your institution.** Someone in a neighbouring group often has a working config already.
+2. **Ask your HPC team.** They may not know Nextflow, but they can tell you the scheduler, queue names and limits, which is most of what a config needs.
+3. **Ask the community.** The [nf-core Slack](https://nf-co.re/join/slack) is friendly, and you can open an issue on [nf-core/configs](https://github.com/nf-core/configs/issues) describing your cluster — people there build configs regularly.
+4. **Ask us.** Email Eco-Flow at **ecoflow . ucl @ gmail . com** and we'll help you put one together, or talk to your HPC team with you.
+
+Writing one yourself is covered in ★ [Advanced: setting up Nextflow for your HPC](./hpc_config.md).
+
+### Where your files should be
+
+| What | Default | Where it should go | How |
 | :--- | :--- | :--- | :--- |
-| **Work directory**: every intermediate file, can be huge | `./work` | **Scratch** | `-w /scratch/$USER/work` *(path varies)* |
-| **Singularity images**: large, reused between runs | inside `work/` | a **shared cache** on scratch or project space | `export NXF_SINGULARITY_CACHEDIR=/path/to/cache` |
-| **Results** | `--outdir` | **Project / group storage** (backed up) | `--outdir /path/to/project/results` |
-| **Nextflow's own files**: downloaded pipelines, plugins | `~/.nextflow` | Home is fine (small) | nothing to do |
+| **Work directory**: every intermediate file, can be huge | `./work` | Wherever your cluster keeps large working data | `-w /path/with/space/work` |
+| **Results** | `--outdir` | Storage you can keep, ideally backed up | `--outdir /path/to/results` |
+| **Nextflow's own files**: downloaded pipelines, plugins | `~/.nextflow` | Home is usually fine (it's small) | nothing to do |
 
-> ⚠️ **Home directories are usually small, and scratch is usually temporary.** Scratch is fast and big, but often *not backed up*, and many clusters delete files you haven't touched for a few weeks. Copy your results somewhere safe. If `work/` gets deleted, `-resume` has nothing to resume from.
+> ⚠️ **Ask where large data should live — don't assume.** Many clusters have a "scratch" area for this, but not all do, and the rules differ: some aren't backed up, and some delete files you haven't touched for a few weeks. Your HPC team (or your cluster's page on nf-co.re/configs) will tell you. Two things to remember once you know: copy results somewhere safe, and if `work/` is deleted, `-resume` has nothing left to resume from.
 
 📋 The full list of questions worth asking your HPC team is in [Step 1 of the advanced page](./hpc_config.md).
 
@@ -98,7 +118,7 @@ singularity --version || apptainer --version
 
 There are two ways to get a pipeline onto a machine. Both work the same way in Codespaces and on a cluster, so try them here.
 
-We'll use **[nf-core/demo](https://nf-co.re/demo)**: a tiny nf-core pipeline (FastQC → trimming with seqtk → MultiQC) that runs in a couple of minutes but is built exactly like nf-core/rnaseq.
+We'll use **[nf-core/demo](https://nf-co.re/demo)**: a tiny nf-core pipeline (FastQC → trimming with seqtk → MultiQC) that runs in a couple of minutes.
 
 ### Way A — let Nextflow fetch it
 
@@ -139,7 +159,8 @@ This is what `nextflow run nf-core/demo` does automatically the first time: it d
 > ▶️ **Try it**
 >
 > ```bash
-> cd ~
+> mkdir -p ~/nf_practical      # a folder of its own, so it's easy to find and remove later
+> cd ~/nf_practical
 > git clone https://github.com/nf-core/demo.git
 > cd demo
 > git checkout 1.2.0
@@ -156,20 +177,22 @@ ro-crate-metadata.json  subworkflows  tests  tower.yml  workflows
 ```
 </details>
 
-You'd then run it by giving Nextflow the **folder** instead of a name, e.g. `nextflow run ~/demo -profile test,docker --outdir demo_results` (no need to run it now). This is how you ran the nanopore pipeline in [Part 5](./nanopore_metabarcoding.md) (`nextflow run main.nf`).
+You'd then run it by giving Nextflow the **folder** instead of a name, e.g. `nextflow run ~/nf_practical/demo -profile test,docker --outdir demo_results` (no need to run it now). This is how you ran the nanopore pipeline in [Part 5](./nanopore_metabarcoding.md) (`nextflow run main.nf`).
 
-| | **Way A:** `nextflow run nf-core/demo -r 1.2.0` | **Way B:** `git clone` + `nextflow run ~/demo` |
+| | **Way A:** `nextflow run nf-core/demo -r 1.2.0` | **Way B:** `git clone` + `nextflow run ~/nf_practical/demo` |
 | :--- | :--- | :--- |
 | **Best for** | Running a published pipeline as-is | Editing the code, pipelines not on nf-core, development branches |
 | **Where it lives** | `~/.nextflow/assets/` (managed for you) | Wherever you cloned it |
 | **Pin the version** | `-r 1.2.0` | `git checkout 1.2.0` (`-r` isn't used for a folder) |
-| **Update** | `nextflow pull nf-core/demo -r <new version>` | `git fetch` then `git checkout <new version>` |
+| **Update** | `nextflow pull nf-core/demo -r <new version>` | `git pull` for the latest code, or `git checkout <new version>` for a specific release |
 
 > ⚠️ **Always pin the version** (see [Part 3](./nfcore_rnaseq.md)). Nextflow itself also changes over time, and a very old pipeline release may not run on the newest Nextflow. If an old release stops with `Config parsing failed`, try a newer release of the pipeline.
 
 ### A quick look inside: who decides the CPUs and memory?
 
 On a cluster, every step asks the scheduler for CPUs, memory and time. Those numbers come from the pipeline itself: each step (a *process*) has a **label**, and the pipeline's `conf/base.config` turns labels into resources.
+
+Both files are in the copy of nf-core/demo you just cloned, so run these from inside `~/nf_practical/demo`:
 
 > ▶️ **Challenge — what does FastQC ask for?**
 >
@@ -230,6 +253,12 @@ Before moving on, go back to the course folder:
 cd /workspaces/training/eco-flow-training
 ```
 
+Once you're finished with the clone you can remove it. **Check the path before you press enter** — `rm -rf` deletes without asking:
+
+```bash
+rm -rf ~/nf_practical      # the folder you created above, nothing else
+```
+
 ---
 
 ## Step 3 — Practise on a mini-cluster in Codespaces 🖥️
@@ -256,10 +285,28 @@ codespace*    up   infinite      1   idle codespaces-abc123
 
 > ⚠️ **It's a pretend cluster:** one machine running the real Slurm software. The commands are exactly the ones you'd use on an HPC, but there's no extra computing power behind them. If your Codespace restarts, run `bash hpc/start_slurm.sh` again.
 
-> ▶️ **Try it — submit your first job**
+> ▶️ **Try it — write a job script and submit it**
+>
+> This is how work is normally sent to a cluster: a small shell script whose header says what it needs. Create `hello_job.sh` (`nano hello_job.sh`):
 >
 > ```bash
-> sbatch --wrap "hostname; sleep 30"
+> #!/bin/bash
+> #SBATCH --job-name=hello
+> #SBATCH --partition=codespace     # on a real cluster: one of your cluster's partitions
+> #SBATCH --cpus-per-task=1
+> #SBATCH --mem=1G
+> #SBATCH --time=00:05:00
+> #SBATCH --output=hello_%j.log     # %j is replaced by the job number
+>
+> echo "Running on $(hostname)"
+> sleep 30
+> echo "Finished"
+> ```
+>
+> Then submit it and watch it:
+>
+> ```bash
+> sbatch hello_job.sh
 > squeue
 > ```
 
@@ -269,43 +316,73 @@ codespace*    up   infinite      1   idle codespaces-abc123
 ```
 Submitted batch job 1
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-                 1 codespace     wrap   vscode  R       0:01      1 codespaces-abc123
+                 1 codespace    hello   vscode  R       0:01      1 codespaces-abc123
 ```
 
-- `--wrap` turns a one-line command into a job, so you don't need to write a script.
-- `ST` is the job's state: `R` = running, `PD` = pending (waiting for space).
-- After 30 seconds the job finishes and drops out of `squeue`. Whatever it printed is saved in **`slurm-<JOBID>.out`**: try `cat slurm-1.out`.
+- The `#SBATCH` lines are the **resource request**: how many CPUs, how much memory, how long, and which partition. The scheduler uses them to decide where and when the job runs.
+- `ST` is the job's state: `R` = running, `PD` = pending (waiting for resources).
+- After about 30 seconds the job finishes and drops off `squeue`. Its output is in the file named by `--output`: `cat hello_1.log`.
+</details>
+
+<details markdown="1">
+<summary>🟦 The same job on SGE</summary>
+
+SGE reads the same kind of header, with `#$` instead of `#SBATCH` and different option names:
+
+```bash
+#!/bin/bash
+#$ -N hello                # job name
+#$ -q all.q                # your queue
+#$ -l h_rt=00:05:00        # wall time
+#$ -l mem=1G               # memory per core (some clusters use h_vmem)
+#$ -cwd                    # run in the directory you submitted from
+#$ -j y                    # merge errors into the output file
+#$ -o hello.log
+
+echo "Running on $(hostname)"
+sleep 30
+echo "Finished"
+```
+
+Submit it with `qsub hello_job.sh`, watch it with `qstat`, and cancel it with `qdel <job id>`. The mini-cluster here is Slurm only, so you can't run this version in Codespaces — but if your cluster uses SGE, this is the file you'd write.
 </details>
 
 > ▶️ **Try it — cancel a job**
 >
+> Submit the same script again, and stop it while it's still running:
+>
 > ```bash
-> sbatch --wrap "sleep 300"
+> sbatch hello_job.sh
 > squeue
-> scancel <JOBID>      # use the number sbatch printed
+> scancel <JOBID>      # the number sbatch printed
 > squeue
 > ```
+>
+> The job disappears from the queue, and its log file stops where you interrupted it.
+
+**Remember this, because Step 4 is the punchline:** you've just written a job script by hand. When you run a pipeline, Nextflow writes one of these per task, for whichever scheduler your cluster uses, and submits them all for you.
 
 Every scheduler has the same handful of commands, just with different names:
 
 | To… | Slurm | SGE |
 | :--- | :--- | :--- |
 | Submit a job script | `sbatch run.sh` | `qsub run.sh` |
-| Submit a one-line command | `sbatch --wrap "cmd"` | `echo "cmd" \| qsub -cwd` |
 | List your jobs | `squeue -u $USER` | `qstat -u $USER` |
 | Cancel a job | `scancel <id>` | `qdel <id>` |
 | See the nodes / queues | `sinfo` | `qhost` or `qstat -g c` |
+| Why is my job not running? | `scontrol show job <id>` | `qstat -j <id>` |
 | Details of a finished job | `sacct -j <id>` | `qacct -j <id>` |
 
-📋 What the status codes mean (`R`, `PD`, `qw`, `Eqw`…) is in the table in [Part 5](./nanopore_metabarcoding.md), Step 6.
+And the job states you'll see most often:
 
-<details markdown="1">
-<summary>🔍 Optional — what does <code>start_slurm.sh</code> actually do?</summary>
+| Meaning | Slurm (`squeue`) | SGE (`qstat`) |
+| :--- | :--- | :--- |
+| Running | `R` | `r` |
+| Waiting for resources | `PD` | `qw` |
+| Finishing up | `CG` | `t` |
+| Rejected — usually a bad resource request | `F` | `Eqw` |
 
-It installs Slurm and **munge** (the service Slurm uses to check who's who), writes a config file (`/etc/slurm/slurm.conf`) describing one node (this Codespace) and one partition (`codespace`), then starts the two Slurm services: **`slurmctld`** (the controller that schedules jobs) and **`slurmd`** (the service on each compute node that runs them). A real cluster has the same pieces spread across hundreds of machines, looked after by your HPC team.
-
-One cheat: it tells Slurm the machine has twice as many CPUs as it really does, so a Nextflow driver job and a pipeline step can run side by side on a 2-core Codespace (you'll need that in Step 5).
-</details>
+📋 [Part 5](./nanopore_metabarcoding.md) has a longer version of this table, with the rarer states.
 
 ---
 
@@ -328,7 +405,21 @@ process {
 }
 ```
 
-`executor = 'slurm'` is the whole trick; `queue` says which partition to use. Now run nf-core/demo with it. The `test` profile supplies tiny example data, so you don't need any inputs of your own:
+`executor = 'slurm'` is the whole trick; `queue` says which partition to use. That one line replaces the `#SBATCH` header you wrote by hand in Step 3 — for every task in the pipeline.
+
+<details markdown="1">
+<summary>🟦 The same config for an SGE cluster</summary>
+
+```groovy
+process {
+    executor = 'sge'
+    queue    = 'all.q'        // your queue
+    penv     = 'smp'          // the parallel environment name — ask your HPC team
+}
+```
+
+You rarely need to write this yourself: if your cluster is on [nf-co.re/configs](https://nf-co.re/configs), its profile already contains it. Writing one from scratch is the ★ [advanced page](./hpc_config.md).
+</details> Now run nf-core/demo with it. The `test` profile supplies tiny example data, so you don't need any inputs of your own:
 
 ```bash
 nextflow run nf-core/demo -r 1.2.0 -profile test,docker -c hpc/slurm_codespaces.config --outdir demo_results
@@ -379,7 +470,7 @@ watch -n 2 squeue      # Ctrl+C to stop watching
 
 It asks for **2 CPUs (`-c 2`)**, but only **4 GB (`--mem 4096M`)** and **1 hour (`-t 01:00:00`)**. The `test` profile caps every step at 2 CPUs, 4 GB and 1 hour (a `resourceLimits` block in `conf/test.config`), so the test can run on almost any machine. In a real run on your cluster, the same job would ask for the full 12 GB and 4 hours. `-p codespace` comes from the `queue` line in our config.
 
-**You never write these lines yourself.** Nextflow turns each step's resources into the right flags for whichever scheduler you use.
+**You never write these lines yourself.** Nextflow turns each step's resources into the right flags for whichever scheduler you use — on an SGE cluster the same task would get a `.command.run` starting with `#$ -N …`, `#$ -l h_rt=…` instead, exactly like the SGE script in Step 3.
 </details>
 
 ### 🏢 On your cluster
@@ -436,7 +527,7 @@ Job 11 is the **driver** (`nf_driver`), and it submitted the pipeline steps (`nf
 > 2. Submit it again: `sbatch hpc/run_demo_slurm.sh` (the script already includes `-resume`).
 > 3. When it's finished, look for the steps that were reused: `grep -i cached nf_driver_<new JOBID>.log`
 
-The script also uses **`-w work_slurm`**, a work directory of its own. Otherwise Nextflow would find everything already done by your Step 4 run and have nothing to do! On a real cluster, `-w` is how you point the work directory at scratch.
+One line in `hpc/run_demo_slurm.sh` is worth a look: **`-w work_slurm`**. `-w` chooses where Nextflow keeps its working files, and here it gives this run a folder of its own — otherwise it would find everything already finished by your Step 4 run and have nothing left to do. On a real cluster you use the same flag for a different reason: those working files get very large, so you point `-w` at wherever your cluster wants big data to live (Step 1).
 
 ### 🏢 On your cluster: pick one of three options
 
@@ -465,7 +556,6 @@ tmux attach -t myrun
 #SBATCH --output=nf_driver_%j.log
 
 module load nextflow                  # if your cluster uses modules
-export NXF_SINGULARITY_CACHEDIR=/path/to/singularity_cache
 
 nextflow run nf-core/demo -r 1.2.0 \
   -profile singularity,<your_cluster> \
@@ -489,7 +579,6 @@ nextflow run nf-core/demo -r 1.2.0 \
 #$ -j y
 
 module load nextflow                  # if your cluster uses modules
-export NXF_SINGULARITY_CACHEDIR=/path/to/singularity_cache
 
 nextflow run nf-core/demo -r 1.2.0 \
   -profile singularity,<your_cluster> \
@@ -557,10 +646,9 @@ nf-core/rnaseq 3.26.0 needs **Nextflow 25.04.3 or newer** (`nextflow -version`).
 | **Run the `test` profile first** | It catches config mistakes in minutes, not hours |
 | **Check for `executor > slurm`/`sge`**, not `local` | `local` means everything is running on the login node |
 | **Keep the driver alive** (Step 5), and don't run heavy tools yourself on the login node | It's shared, and admins will stop long or heavy processes there |
-| **Pin the version with `-r`** | The same command gives the same result next year |
+| **Pin the version with `-r`** | You get the same version of the pipeline every time, so a rerun months later gives the same analysis |
 | **Use Singularity/Apptainer**, not Docker | Docker is almost never allowed on shared clusters |
-| **Put `work/` on scratch, and results somewhere backed up** | `work/` is huge; scratch is often cleaned out automatically |
-| **Set `NXF_SINGULARITY_CACHEDIR`** | Container images download once and are reused by every run |
+| **Put `work/` wherever your cluster keeps large data, and results somewhere you can keep** | `work/` gets very large, and temporary areas are often cleaned out automatically |
 | **Pre-download if compute nodes are offline** | Use `nextflow pull` or `nf-core pipelines download` on the login node |
 | **Add `-resume` after fixing a problem** | Finished steps are reused instead of recomputed |
 | **Read `<outdir>/pipeline_info/`** | nf-core writes an execution report, timeline and trace there, showing how much memory and time each step *really* used |
