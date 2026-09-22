@@ -16,13 +16,16 @@
 # On a real cluster you'd swap in your own partition, add any `module load`
 # lines, and use -profile singularity (or your institution's profile).
 #
+# -w work_slurm:   a work directory of its own, so this run doesn't reuse
+#                  (and skip) steps you already ran in the default ./work.
+#                  On a real cluster, this is where you'd point at scratch.
 # -ansi-log false: print plain lines instead of the live-updating display,
-# which is much easier to read in a log file.
+#                  which is much easier to read in a log file.
 
 nextflow run nf-core/demo -r 1.2.0 \
   -profile test,docker \
-  -c codespaces.config \
   -c hpc/slurm_codespaces.config \
   --outdir demo_results \
+  -w work_slurm \
   -ansi-log false \
   -resume

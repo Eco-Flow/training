@@ -19,7 +19,7 @@
 - Where to find **existing configs** you can reuse or adapt
 - How to sketch a minimal config (with optional **SGE** and **Slurm** examples)
 - How to **test** a config on a tiny pipeline before a real run
-- 🎁 A bonus section: once you have a config, how to actually launch a run
+- What to do once it works: share it, and run pipelines as in [Part 7](./hpc.md)
 
 ---
 
@@ -191,7 +191,7 @@ If the **compute nodes have no internet**, pre-fetch the pipeline and its contai
 Every nf-core pipeline ships with a built-in **`test`** profile that supplies tiny example data, so you don't need your own samplesheet or genome yet. Run a deliberately small pipeline with your config added:
 
 ```bash
-nextflow run nf-core/demo -profile test,singularity -c mycluster.config --outdir test_results
+nextflow run nf-core/demo -r 1.2.0 -profile test,singularity -c mycluster.config --outdir test_results
 ```
 
 (`nf-core/demo` is a minimal example pipeline; you could equally test with `-profile test` on `nf-core/rnaseq`.)
@@ -224,114 +224,22 @@ and leave a `test_results/` folder behind.
 
 > 🔍 **If a task fails**, Nextflow prints the failing command and a **work directory** path (e.g. `work/a1/b2c3…`). `cd` into it and read `.command.log`, `.command.err` and `.command.sh` — these show exactly what the scheduler ran and why it failed. On an HPC this is your best debugging friend.
 
-Once this tiny test passes, you can trust the config for the real run below.
-
----
-
-## 🎁 Bonus — actually running it, once you have a config
-
-> This last part is only useful **after** you've done Steps 1–6. 
-
-The run command is just your Part 3 command with two swaps: **`-profile singularity`** instead of `docker`, and **`-c mycluster.config`** for your cluster:
-
-```bash
-nextflow run nf-core/rnaseq -r 3.14.0 \
-  -profile singularity \
-  -c mycluster.config \
-  --input samplesheet.csv \
-  --fasta genome.fasta \
-  --gff genes.gff.gz \
-  --outdir my_results \
-  -resume
-```
-
-### Where does Nextflow itself run?
-
-Here's the part that trips people up. **Nextflow (the "head" or "driver" process) keeps running for the whole pipeline** — it's what submits and monitors all the individual jobs. So it must not be killed when you disconnect. Two common approaches:
-
-**Option A — run the driver in a terminal multiplexer** (simple, good for testing). On a login node, start [`tmux`](https://github.com/tmux/tmux/wiki) or `screen`, launch Nextflow inside it, then detach — it keeps running after you log out.
-
-```bash
-tmux new -s rnaseq     # start a session
-# ... run the nextflow command above ...
-# press Ctrl+b then d to detach; reattach later with: tmux attach -t rnaseq
-```
-
-**Option B — submit the driver as its own small job** (cleaner for long/production runs). Write a tiny submission script that requests modest resources (the driver itself is light) and runs the Nextflow command.
-
-<details markdown="1">
-<summary>🟨 Optional — a Slurm submission script (<code>run.sh</code> → <code>sbatch run.sh</code>)</summary>
-
-```bash
-#!/bin/bash
-#SBATCH --job-name=rnaseq_driver
-#SBATCH --partition=compute
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=4G
-#SBATCH --time=24:00:00
-
-module load nextflow singularity
-export NXF_SINGULARITY_CACHEDIR=/path/to/shared/singularity_cache
-
-nextflow run nf-core/rnaseq -r 3.14.0 \
-  -profile singularity \
-  -c mycluster.config \
-  --input samplesheet.csv \
-  --fasta genome.fasta \
-  --gff genes.gff.gz \
-  --outdir my_results \
-  -resume
-```
-
-Submit with `sbatch run.sh`.
-</details>
-
-<details markdown="1">
-<summary>🟦 Optional — an SGE submission script (<code>run.sh</code> → <code>qsub run.sh</code>)</summary>
-
-```bash
-#!/bin/bash
-#$ -N rnaseq_driver
-#$ -q all.q
-#$ -l h_vmem=4G
-#$ -l h_rt=24:00:00
-#$ -cwd
-
-module load nextflow singularity
-export NXF_SINGULARITY_CACHEDIR=/path/to/shared/singularity_cache
-
-nextflow run nf-core/rnaseq -r 3.14.0 \
-  -profile singularity \
-  -c mycluster.config \
-  --input samplesheet.csv \
-  --fasta genome.fasta \
-  --gff genes.gff.gz \
-  --outdir my_results \
-  -resume
-```
-
-Submit with `qsub run.sh`.
-</details>
-
-**Option C — background the driver with `-bg`.** Adding Nextflow's **`-bg`** flag runs the driver as a background process and streams its output to `.nextflow.log` instead of your screen, so you get your prompt back immediately:
-
-```bash
-nextflow run nf-core/rnaseq -r 3.14.0 \
-  -profile singularity -c mycluster.config \
-  --input samplesheet.csv --fasta genome.fasta --gff genes.gff.gz \
-  --outdir my_results -resume -bg
-```
-
-> ⚠️ **`-bg` on its own may not survive you logging out** of the login node — a disconnect can still kill it. For anything long-running, wrap it so it can't be hung up, e.g. `nohup nextflow run ... -bg &`, or simply start it inside a `tmux`/`screen` session (Option A). Follow progress any time with `tail -f .nextflow.log`.
-
-> 🧵 Whichever option you choose, the driver stays small and long-lived, while the **real work** (alignment, quantification…) is submitted by Nextflow as separate jobs across the cluster — exactly the parallelism from [Part 2](./pipelines.md), now spread over many compute nodes.
-
-### If something fails
+### If the test fails
 
 - **Jobs rejected / wrong resources** → your `queue`, `clusterOptions` or `penv` don't match the cluster. Back to Step 1 with your admin.
 - **`singularity: command not found` on compute nodes** → the container engine isn't loaded inside jobs; ask how to make it available (often a module load in the config's `beforeScript`).
 - **Containers fail to download on compute nodes** → no internet on nodes; pre-download on a login node (Step 5).
 - Add **`-resume`** so fixes don't re-run everything from scratch.
+
+Once this tiny test passes, you can trust the config for real runs.
+
+---
+
+## Next — running it for real
+
+With a working config, you run pipelines like any other user of your cluster: swap `-profile docker` for **`-profile singularity -c mycluster.config`**, and keep the Nextflow driver alive while the pipeline runs. How to do that (a driver job script for Slurm or SGE, `tmux`, or `-bg`) is covered in **[Part 7 · Running a pipeline on an HPC](./hpc.md)**, Step 5.
+
+> 🤝 **Share your config.** Once it works, consider adding it to [nf-core/configs](https://github.com/nf-core/configs), so everyone at your institution can simply use `-profile <your_cluster>`. That's a pull request, just like in [Part 6](./github_basics.md).
 
 ---
 
@@ -341,7 +249,7 @@ nextflow run nf-core/rnaseq -r 3.14.0 \
 - **Ask your admin** the scheduler, container engine, queues and limits (Step 1). And if they can help you build and test the config.
 - **Reuse** an nf-core/configs profile if one exists, or **adapt** a similar one.
 - **Test** it first with `-profile test,singularity` on a tiny pipeline and confirm the `executor > slurm/sge` line.
-- Run with **`-profile singularity -c mycluster.config`**, keeping the Nextflow driver alive in `tmux`, as a submitted job, or with `-bg`.
+- Then run with **`-profile singularity -c mycluster.config`**, keeping the Nextflow driver alive as in [Part 7](./hpc.md) (a driver job, `tmux`, or `-bg`).
 
 ---
 
