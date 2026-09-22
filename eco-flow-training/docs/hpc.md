@@ -185,8 +185,6 @@ echo "Finished"
 Submit with `qsub hello_job.sh`, watch with `qstat`, cancel with `qdel <job id>`. Your practice cluster here is Slurm, so you can't run this version — but if your cluster is SGE, this is the file you'd write.
 </details>
 
-📋 [Part 5](./nanopore_metabarcoding.md) has a longer table of SGE and Slurm job states.
-
 ---
 
 ## Step 3 — Get a pipeline, and see what it asks for
