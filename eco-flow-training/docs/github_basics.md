@@ -1,6 +1,6 @@
 # Interacting with code on GitHub (Issues, PRs, README & Claude Code)
 
-🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · HPC ▶️](./hpc.md)
 
 ---
 
@@ -193,4 +193,4 @@ Now do it yourself. Use the list of README problems you noted in **Step 1** (or 
 
 ---
 
-🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · HPC ▶️](./hpc.md)

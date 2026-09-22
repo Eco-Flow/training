@@ -19,3 +19,9 @@ my_out
 my_res
 .Rhistory
 .RData
+
+# Part 7 mini Slurm cluster outputs
+slurm-*.out
+nf_driver_*.log
+demo_results
+work_slurm
