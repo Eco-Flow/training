@@ -26,7 +26,7 @@ Work through it top to bottom — or jump to whatever you need.
 | **1** | [Command line basics](./eco-flow-training/docs/commandline.md) | Practical · optional | A gentle introduction to the command line. Skip this part if you're already comfortable in a terminal. |
 | **2** | [Pipelines with Nextflow](./eco-flow-training/docs/pipelines.md) | Lecture | What Nextflow and nf-core are, and why pipelines matter for reproducible, scalable science. |
 | **3** | [Run an nf-core RNA-Seq pipeline](./eco-flow-training/docs/nfcore_rnaseq.md) | Practical | Hands-on — run a real nf-core/rnaseq analysis end to end, from raw reads to results. |
-| **4** | [Differential expression](./eco-flow-training/docs/differential.md) | Practical · R · 🚧 draft | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
+| **4** | [Differential expression](./eco-flow-training/docs/differential.md) | Practical · R | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
 | **5** | [Run an nf-core ampliseq pipeline](./eco-flow-training/docs/nfcore_ampliseq.md) | Practical · 🚧 draft | Run a real nf-core/ampliseq analysis on amplicon sequencing data. |
 | **6** | [Run nanoporemetabarcoding pipeline](./eco-flow-training/docs/nanopore_metabarcoding.md) | Practical | Run the nanopore metabarcoding pipeline. |
 | **7** | [Interacting with code on GitHub](./eco-flow-training/docs/github_basics.md) | Practical | Issues, Pull Requests, READMEs and Claude Code — how to report, fix and contribute changes, using the nanopore pipeline as the example. |
@@ -34,7 +34,7 @@ Work through it top to bottom — or jump to whatever you need.
 | **9** | [Monitoring runs with Seqera Platform](./eco-flow-training/docs/seqera_platform.md) | Practical · optional | Follow your runs live in the browser with Seqera Platform, from Codespaces or your HPC, plus an overview of launching pipelines from it. |
 | **★** | [Advanced: setting up Nextflow for your HPC](./eco-flow-training/docs/hpc_config.md) | Advanced · optional | Write a config for a Slurm/SGE cluster that doesn't have one yet — talk to your admin, adapt a config, and test it. |
 
-> 🚧 **Part 4** is still a draft, and the **★ Advanced HPC** page is optional reference material for people setting up a cluster config — if you just want to run a pipeline on your cluster, start with **Part 8**.
+> 🚧 **Part 5** is still a draft, and the **★ Advanced HPC** page is optional reference material for people setting up a cluster config — if you just want to run a pipeline on your cluster, start with **Part 8**.
 
 ---
 
