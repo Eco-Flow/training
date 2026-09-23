@@ -8,13 +8,13 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
-In this practical you'll run the **nf-core RNA-Seq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a gene-count table and a quality report. **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
+In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a gene-count table and a quality report. **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
 
--  QC and primer trimming.
--  Amplicon denoising (error-correction). Via DADA2 or QIIME2.
--  Taxonomic classification. Using a reference database (e.g. SILVA, UNITE, GTB), via DADA2 or QIIME2
--  Downstream analysis. Diversity stats, plots, abundance tables.
--  Reporting. MultiQC summary plus QIIME2 visualizations (`.qzv` files).
+-  **QC** and **primer trimming**.
+-  **Amplicon denoising** (error-correction). Via DADA2 or QIIME2.
+-  **Taxonomic classification**. Using a reference database (e.g. SILVA, UNITE, GTB), via DADA2 or QIIME2
+-  **Downstream analysis**. Diversity stats, plots, abundance tables.
+-  **Reporting**. MultiQC summary plus QIIME2 visualizations (`.qzv` files).
 
 ![nf-core logo](https://github.com/Eco-Flow/training/assets/9978862/cdb59557-128d-48f8-8df1-0a6b548f89e9)
 
@@ -23,6 +23,7 @@ In this practical you'll run the **nf-core RNA-Seq pipeline** ([nf-core/ampliseq
 - Inspect the raw amplicon sequencing data
 - Work out what inputs the pipeline needs
 - Build a **samplesheet** describing your samples
+- Build a **sample metadata** for downstream analysis
 - Download a reference **database!!!?????**
 - **Run** the pipeline with Docker containers
 - Explore the **results** (quality reports and abundance tables)
@@ -36,7 +37,9 @@ In this practical you'll run the **nf-core RNA-Seq pipeline** ([nf-core/ampliseq
 
 ### The experiment
 
-We'll compare soil and river samples. DNA was extracted from both environments, and amplicon sequnced. There are 2 replicates of each environment. This is of course not a good experiment design, it's purpose it to give the sequences some context
+We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling. There are 2 replicates of each site:
+
+<img src="img/river_soil_microbe_zoom.png"/>
 
 | Sample | Habitat | Reads |
 | --- | --- | --- |
@@ -45,17 +48,21 @@ We'll compare soil and river samples. DNA was extracted from both environments, 
 | SRR10102392 | Soil | paired-end (`_1` + `_2`) |
 | SRR10102393 | Soil | paired-end (`_1` + `_2`) |
 
+This is of course not a good experiment design, its purpose is to give the sequences some context.
+
 ---
 
 ## Step 0 — Understand amplicon sequencing
 
 Before running the amplicon sequencing pipeline, it helps to understand what amplicon sequencing is. In short: amplicon sequencing is a targeted sequencing method that uses PCR to amplify specific genomic regions of interest (e.g., CO1, 16S/18S, ITS) instead of the entire genome.
 
+DNA extraction, target amplification, and target sequecing results in libraries of sequences stored in FASTQ format. Depending on the sequencing technology used, these can be single end (one FASTQ per sample) or paired end (two FASTQs per sample). We are going to explore and learn more about this format in the next section.
+
 ---
 
 ## Step 1 — Inspect the raw data
 
-It's always worth looking at your data by eye before running anything. The reads live in the `data` folder.
+It's always worth looking at your data by eye before running anything. The reads live in the `ampliseq_data` folder.
 
 The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't directly human-readable — plain `cat`/`head` would print gibberish (don't panic if you see `<��xT�r-�B7�...`, that's expected!). Instead, use **`zcat`** (from Part 1), which reads gzipped files.
 
@@ -71,16 +78,16 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 > Use these commands:
 >
 > ```bash
-> zcat data/SRR6357070_1.fastq.gz | wc -l
-> zcat data/SRR6357070_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
+> zcat ampliseq_data/SRR10070130_1.fastq.gz | wc -l
+> zcat ampliseq_data/SRR10070130_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
 > ```
 >
 > <details>
 > <summary>✅ Answer</summary>
 >
 > ```
-> 200000
-> 101
+> 12000
+> 250
 > ```
 >
 > The first command shows there are `200000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `50000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `102`. So the reads are `101` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
@@ -121,6 +128,7 @@ To run nf-core/ampliseq you need:
 
 * an **input samplesheet** (CSV) that links to your raw RNA-Seq FASTQ data - MANDATORY
 * an **input metadata** (CSV) wuth information about your samples - OPTIONAL
+* **Forward** and **Reverse** primers used during PCR amplification - OPTIONAL
 
 Samples are linked between the two files via the samplesheet's `sample` column and the metadata's `ID` column - their values must match.
 </details>
@@ -139,22 +147,7 @@ It has four columns:
 | `fastq_1` | Full path to the forward reads (R1) |
 | `fastq_2` | Full path to the reverse reads (R2) — **leave empty for single-end** samples |
 
-> ⚠️ **Paired vs single-end:** samples SRR6357070–072 are paired-end (fill both `fastq_1` and `fastq_2`); SRR6357073–075 are single-end (fill `fastq_1`, leave `fastq_2` blank — note the trailing comma).
-
-> 💡 **For larger projects:** if you had hundreds of samples, creating a samplesheet by hand would be tedious. nf-core/rnaseq includes a helper script, [fastq_dir_to_samplesheet.py](https://github.com/nf-core/rnaseq/blob/master/bin/fastq_dir_to_samplesheet.py), that can scan a folder of FASTQ files and generate a samplesheet automatically. In this example, you would point it at the folder containing the FASTQ files (for example the `data` directory), and it would infer sample names and pair files such as `_1` and `_2` together. You would still want to inspect the generated CSV to make sure the sample names and single-end/paired-end rows look correct before using it.
->
-> If you wanted to try it yourself, you could download the script and run it like this:
->
-> ```bash
-> curl -L https://raw.githubusercontent.com/nf-core/rnaseq/master/bin/fastq_dir_to_samplesheet.py -o fastq_dir_to_samplesheet.py
-> python3 fastq_dir_to_samplesheet.py \
->   /workspaces/training/eco-flow-training/data \
->   /workspaces/training/eco-flow-training/samplesheet.csv \
->   -r1 _1.fastq.gz \
->   -r2 _2.fastq.gz
-> ```
->
-> This scans the `data` directory, infers sample names from the FASTQ filenames, and writes a CSV that you can inspect and adjust before using it.
+> ⚠️ **Paired vs single-end:** all samples here a paired-end, but the samplesheet can also accepts single-end samples. If the sample is single-end, fill `fastq_1`, leave `fastq_2` blank — note the trailing comma.
 
 Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#sample-sheet-input) as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet.
 
@@ -176,7 +169,7 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 ## Step 4 - Build the sample metadata
 
-The **sample metadata** is a CSV file that gives the pipeline information about the samples for the downstream analysis (barplots, diversity indices, and differential abundance testing).  It has to follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
+The **sample metadata** is a CSV file that gives information about the samples for the downstream analysis (barplots, diversity indices, and differential abundance testing).  It has to follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
 Create a file called `metadata.csv` in the `eco-flow-training` folder (e.g. with `nano metadata.csv`).
 
