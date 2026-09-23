@@ -34,7 +34,7 @@ Work through it top to bottom — or jump to whatever you need.
 | **9** | [Monitoring runs with Seqera Platform](./docs/seqera_platform.md) | Practical · optional | Follow your runs live in the browser with Seqera Platform, from Codespaces or your HPC, plus an overview of launching pipelines from it. |
 | **★** | [Advanced: setting up Nextflow for your HPC](./docs/hpc_config.md) | Advanced · optional | Write a config for a Slurm/SGE cluster that doesn't have one yet — talk to your admin, adapt a config, and test it. |
 
-> 🚧 **Part 4** is still a draft, and the **★ Advanced HPC** page is optional reference material for people setting up a cluster config — if you just want to run a pipeline on your cluster, start with **Part 7**.
+> 🚧 **Part 4** is still a draft, and the **★ Advanced HPC** page is optional reference material for people setting up a cluster config — if you just want to run a pipeline on your cluster, start with **Part 8**.
 
 ---
 
