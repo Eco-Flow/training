@@ -6,7 +6,26 @@
 
 ---
 
-Now that we have run the nf-core RNA-Seq pipeline, we have the raw counts needed to run differential expression using DESeq2.
+⏱ **Estimated time:** ~45–60 minutes &nbsp;•&nbsp; 🟡 Practical
+
+In this practical you'll take the gene-count table produced by the RNA-Seq pipeline and use **DESeq2** in `R` to find genes that are differentially expressed between our two conditions — from raw counts, through normalisation and quality control, to an annotated results table and the classic RNA-Seq figures (PCA, MA, and volcano plots).
+
+### What you'll do
+
+- Load a raw gene-count table into `R` and build a `DESeq2` dataset
+- Describe your samples with a **condition sheet** and set the correct reference level
+- **Pre-filter** low-count genes and run the differential expression test
+- Run **quality control** (PCA and dispersion plots) to decide whether to trust the experiment
+- Read and interpret the **results table** — fold changes, p-values, and adjusted p-values
+- **Visualise** your results and hunt for a biologically-motivated gene of interest
+
+> 🔗 **This section continues from [Part 3 · nf-core RNA-Seq](./nfcore_rnaseq.md).** If you completed that practical, you already have the counts your run produced in `<outdir>/star_salmon/` — carry on with that (we'll pick the right file below).
+>
+> 🚀 **Didn't run the RNA-Seq pipeline, or want to jump straight in?** No problem — we've committed the exact counts table and condition sheet this section needs, so you can quick-start with pre-run data:
+> - Counts: [`data/differential/salmon.merged.gene_counts_length_scaled.tsv`](../data/differential/salmon.merged.gene_counts_length_scaled.tsv)
+> - Condition sheet: [`data/differential/condition.tsv`](../data/differential/condition.tsv)
+>
+> These are the real outputs from the chr-I yeast test dataset used in the previous section. Everywhere below that reads a counts or condition file, just point at these paths.
 
 ## Prerequisites
 
@@ -38,6 +57,39 @@ We need to account for:
 > 1. If Rap1 *activates* its targets, which direction (up or down) should a Rap1 target gene move when Rap1 is knocked **down**?
 > 2. **The challenge:** among the genes on chromosome I, one is a classic, textbook Rap1-activated **glycolytic** gene. Can you work out which one it is? (Hint: it encodes pyruvate kinase and is essential for growth on glucose.) Write down your guess — we'll return to it at the very end.
 
+## The two files you'll need
+
+Before starting R, make sure both of these are sitting in the folder you'll work from:
+
+1. **The counts table** — `salmon.merged.gene_counts_length_scaled.tsv`. Either the one your RNA-Seq run produced (in `<outdir>/star_salmon/`), or the pre-run copy at [`data/differential/salmon.merged.gene_counts_length_scaled.tsv`](../data/differential/salmon.merged.gene_counts_length_scaled.tsv). See [Which counts file?](#which-counts-file) below for why we use this one and not the plain `salmon.merged.gene_counts.tsv`.
+2. **A condition sheet** — `condition.tsv`. This is a small file *you* create; it tells DESeq2 which samples belong to which group. If you're quick-starting, we've already made one for you at [`data/differential/condition.tsv`](../data/differential/condition.tsv).
+
+If you need to make the condition sheet yourself, create a plain-text file called `condition.tsv` (a text editor, or `nano condition.tsv` in the terminal) containing exactly:
+
+```
+,condition,type
+CONTROL_REP1,wild,paired-end
+CONTROL_REP2,wild,paired-end
+CONTROL_REP3,wild,paired-end
+MANIPULATED_REP1,kd,single-read
+MANIPULATED_REP2,kd,single-read
+MANIPULATED_REP3,kd,single-read
+```
+
+> ⚠️ The names in the first column **must** match the sample column names in your counts table exactly (i.e. the sample names you chose in your nf-core samplesheet). If they don't match, DESeq2 will pair up the wrong samples.
+
+## Start R
+
+Everything from here on runs inside `R`, not the shell. From your terminal (make sure you're in the `eco-flow-training` folder), start an interactive R session by typing:
+
+```bash
+R
+```
+
+Your prompt changes from `$` to `>`, which means you're now in R and the commands below will work. To leave R later, type `quit()` (answer `n` when asked to save the workspace) and you'll be back at the shell.
+
+> 💡 Prefer RStudio? If you have it available, you can run all the R commands below there instead — just make sure your working directory points at the folder holding your counts and condition files (`setwd(...)` or **Session → Set Working Directory**).
+
 ## Load DESeq2
 
 If you have DESeq2 downloaded you simply need to call the library:
@@ -62,28 +114,78 @@ BiocManager::install("DESeq2")
 To get the data into R from nf-core RNA-Seq, we can use either the `load` function in R or `read.csv`.
 
 
-### Load from the raw counts
+### Which counts file?
 
-The raw counts that DESeq2 requires are here: `<outdir_name>/star_salmon/salmon.merged.gene_counts.tsv`. If you used the default settings in nf-core rnaseq, if you chose a different aligner (e.g. `--aligner star_rsem`), then you would look in `star_rsem/rsem.merged.gene_counts.tsv` .
+The nf-core `star_salmon/` folder contains several count tables, and it matters which one you pick:
 
-`cts <- read.csv("salmon.merged.gene_counts.tsv", h=T, row.names=1, sep="\t")`
-#Read in the tab separated file, with first line as header, and first row as row names.
+| File | Use it? |
+| --- | --- |
+| `salmon.merged.gene_counts.tsv` | ❌ **Raw estimated counts.** Fractional, and they ignore that genes differ in length. Don't build your DESeq2 dataset from these. |
+| `salmon.merged.gene_counts_length_scaled.tsv` | ✅ **Use this one.** Length-corrected counts (`tximport`'s `lengthScaledTPM`). Salmon can't give you plain integers — this is the file the `tximport` authors intend you to put straight into DESeq2. |
 
-Next you need to make a coldata sheet, this tells DESeq2 which samples are different or part of a group. For our data we would want this:
+> 🧠 **Why the length-scaled file?** Salmon quantifies expression *probabilistically*, so its counts are never whole numbers, and a raw count doesn't account for the fact that a longer transcript collects more reads at the same expression level. The length-scaled file corrects for both — it's the honest input for DESeq2, not a workaround. (Curious about the fully rigorous alternative? See the drop-down at the end of this step.)
 
-```
-,condition,type
-CONTROL_REP1,wild,paired-end
-CONTROL_REP2,wild,paired-end
-CONTROL_REP3,wild,paired-end
-MANIPULATED_REP1,kd,single-read
-MANIPULATED_REP2,kd,single-read
-MANIPULATED_REP3,kd,single-read
+Load it — it's a tab-separated file, first line as header, first column (`gene_id`) as row names:
+
+```R
+cts <- read.csv("salmon.merged.gene_counts_length_scaled.tsv", h=T, row.names=1, sep="\t")
 ```
 
-!Warning, you must make the names in column 1 exactly the same as what you chose when you wrote the samplesheet for nf-core rnaseq!
+> ✍️ **Your turn — look before you leap.** Before changing anything, inspect what you actually loaded:
+> ```R
+> head(cts)   # first few rows
+> ```
+> You should see your six sample columns — but also a `gene_name` column at the front. Spotting it here is exactly why we drop it in the next step.
 
-Save this to a R variable called `coldata`.
+> ⚠️ **Drop the `gene_name` column.** This counts table has *two* leading columns — `gene_id` (now your row names) and `gene_name`. The latter is text, and DESeq2 needs a purely numeric count matrix, so remove it before continuing:
+> ```R
+> cts <- cts[, -1]   # drop the gene_name column, leaving only the 6 sample columns
+> ```
+> (If you loaded a counts file with only one leading column, skip this.)
+
+> ⚠️ **Round the counts to integers.** Even the length-scaled counts are still fractional (e.g. `4.161`), and DESeq2 needs whole numbers — otherwise building the dataset fails with:
+> ```
+> Error in DESeqDataSet(se, design = design, ignoreRank) :
+>   some values in assay are not integers
+> ```
+> Rounding **length-scaled** counts is exactly what the `tximport` documentation recommends for the `DESeqDataSetFromMatrix` route, so this is a legitimate step, not a fudge:
+> ```R
+> cts <- round(cts)
+> ```
+
+<details markdown="1">
+<summary>💡 <b>Want to know more? The gold-standard route (offsets via <code>tximport</code>)</b></summary>
+
+Rounding length-scaled counts is a well-supported approximation, but the *most* rigorous way to bring Salmon output into DESeq2 doesn't round anything. Instead it imports Salmon's per-sample transcript estimates together with their average transcript lengths, and passes those lengths to DESeq2 as a **normalisation offset** — so each gene is corrected for length *per sample* inside the model, rather than once up front.
+
+nf-core already produced everything you need for this:
+
+- `salmon.merged.gene.SummarizedExperiment.rds` — a ready-made object holding counts, abundances **and** lengths
+- the per-sample `quant.sf` files plus `salmon.merged.tx2gene.tsv`, if you'd rather run `tximport` yourself
+
+Using the pre-made object:
+
+```R
+library(tximeta)   # or just readRDS
+se  <- readRDS("salmon.merged.gene.SummarizedExperiment.rds")
+dds <- DESeqDataSet(se, design = ~ condition)   # uses the length assay as an offset automatically
+```
+
+Or importing from scratch:
+
+```R
+library(tximport)
+tx2gene <- read.delim("salmon.merged.tx2gene.tsv", header = FALSE)
+files   <- file.path("star_salmon", coldata$sample, "quant.sf")
+txi     <- tximport(files, type = "salmon", tx2gene = tx2gene)
+dds     <- DESeqDataSetFromTximport(txi, colData = coldata, design = ~ condition)
+```
+
+Both apply a proper per-gene, per-sample length offset. For this small teaching dataset the difference in results is minimal, which is why we stick with the simpler length-scaled + `round()` approach above — but on a real study this is the method to reach for. See the [tximport vignette](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html) and the [DESeq2 vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#salmon).
+
+</details>
+
+Next, load the condition sheet (`condition.tsv`) you prepared earlier into a variable called `coldata` — this is what tells DESeq2 which samples belong to which group:
 
 
 ```R
@@ -153,11 +255,32 @@ First transform the counts so the variance is roughly constant across the range 
 vsd <- vst(dds, blind = TRUE)
 ```
 
+> ⚠️ **On this test dataset you'll hit an error here:**
+> ```
+> Error in vst(dds, blind = TRUE) : less than 'nsub' rows,
+>   it is recommended to use varianceStabilizingTransformation directly
+> ```
+> `vst()` is a *fast approximation* that fits the transform on a subsample of `nsub = 1000` genes — but our chr-I data only has ~80 genes left after filtering, so there aren't enough. The fix is to run the exact (unapproximated) transform instead, which the message itself points you to:
+> ```R
+> vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
+> ```
+> On a full-genome dataset with thousands of genes, `vst()` works fine and is preferred for speed — this only bites on small datasets like ours.
+
 Now make a PCA plot:
 
 ```R
 plotPCA(vsd, intgroup = "condition")
 ```
+
+> 💾 **Saving your plots (important if you're in a terminal / Codespace).** Running R from the command line, there's no pop-up plot window — you have to send each plot to a file. The pattern is: **open a graphics device → draw the plot → close the device with `dev.off()`.** The plot only appears in the file *after* `dev.off()`. For the PCA plot:
+> ```R
+> png("pca_plot.png", width = 800, height = 600)   # open a PNG device
+> plotPCA(vsd, intgroup = "condition")             # draw into it
+> dev.off()                                        # close it — file is written now
+> ```
+> Use `pdf("pca_plot.pdf")` instead if you'd prefer a vector file. The file lands in your working directory (`getwd()` to check). **In Codespaces, just click the file in the Explorer sidebar and it opens as a preview right inside the editor** — PNGs display natively, and a PDF viewer is pre-installed so `.pdf` files preview too. **Wrap every plot below in the same `png(...)` / `dev.off()` sandwich**, changing the filename each time (e.g. `dispersion.png`, `ma_plot.png`, `volcano.png`), otherwise you'll overwrite the previous one.
+>
+> ℹ️ `plotPCA` returns a **ggplot** object, so you can also save it with `ggsave("pca_plot.png")` after calling it. `plotDispEsts`, `plotMA` and `plotCounts` are base graphics, so they need the `png()` / `dev.off()` approach.
 
 > ✍️ **Your turn — interpret, don't just generate.** Look at your PCA plot and answer:
 > 1. Do the three wild-type samples cluster together, separate from the three knockdown samples?
@@ -169,7 +292,9 @@ plotPCA(vsd, intgroup = "condition")
 We can also check that the model fit the data well by looking at the dispersion estimates:
 
 ```R
+png("dispersion.png", width = 800, height = 600)
 plotDispEsts(dds)
+dev.off()
 ```
 
 You should see the fitted red line running through a cloud of points that shrink toward it — that's the model borrowing information across genes. If it looks wildly off, revisit your design.
@@ -204,6 +329,13 @@ Each row is a gene. The columns mean:
 > ```
 > How many did you get? Now change the threshold to `0.01` — how many survive? What does that tell you about how confident you can be?
 
+<details markdown="1">
+<summary>👀 <b>Reveal the answer (test dataset)</b></summary>
+
+Using the pre-run chr-I counts, you should get **6** genes at `padj < 0.05` and **4** at `padj < 0.01`. Tightening the threshold drops the count because you're demanding stronger evidence — a stricter false-discovery rate means fewer genes clear the bar, and the ones that survive are the calls you can be most confident in. (Your exact numbers may differ by one or two if you used your own RNA-Seq run rather than the committed file.)
+
+</details>
+
 ### Shrinking the fold changes
 
 For genes with low counts, the raw `log2FoldChange` is noisy and can look enormous by chance. Shrinking pulls unreliable estimates toward zero, giving fold changes you can actually rank and plot:
@@ -219,26 +351,32 @@ res_shrunk <- lfcShrink(dds, coef = "condition_kd_vs_wild", type = "apeglm")
 **MA plot** — fold change vs. mean expression, with significant genes highlighted:
 
 ```R
+png("ma_plot.png", width = 800, height = 600)
 plotMA(res_shrunk, ylim = c(-5, 5))
+dev.off()
 ```
 
 **Plot the counts for your top gene** — a great sanity check that a hit is real and not driven by one sample:
 
 ```R
 topGene <- rownames(res)[which.min(res$padj)]
+png("top_gene_counts.png", width = 800, height = 600)
 plotCounts(dds, gene = topGene, intgroup = "condition")
+dev.off()
 ```
 
 **Volcano plot** — significance vs. effect size, the classic RNA-seq figure:
 
 ```R
 res_df <- as.data.frame(res)
+png("volcano.png", width = 800, height = 600)
 with(res_df, plot(log2FoldChange, -log10(padj),
      pch = 20, main = "Volcano plot",
      xlab = "log2 fold change", ylab = "-log10 adjusted p-value"))
 # Highlight significant genes in red
 with(subset(res_df, padj < 0.05),
      points(log2FoldChange, -log10(padj), pch = 20, col = "red"))
+dev.off()
 ```
 
 > ✍️ **Your turn — close the loop.** Go back to the prediction you made at the very start. The Rap1 target gene on chromosome I is **CDC19** (pyruvate kinase; systematic name `YAL038W`, also known as PYK1).
@@ -250,7 +388,9 @@ with(subset(res_df, padj < 0.05),
 > 2. Rap1 *activates* CDC19, and our manipulated samples are a Rap1 **knockdown** — so did you correctly predict a **negative** log2FoldChange? Is it significant (`padj < 0.05`)?
 > 3. Look at the gene directly across the six samples:
 >    ```R
+>    png("cdc19_counts.png", width = 800, height = 600)
 >    plotCounts(dds, gene = "CDC19", intgroup = "condition")   # or "YAL038W"
+>    dev.off()
 >    ```
 >
 > 🧠 **Reflect.** Remember this is a small, largely synthetic test dataset with **only one chromosome** — so CDC19 may *not* actually come out significant, or may not move in the expected direction. That is itself the lesson: a biologically sensible hypothesis still has to be supported by data that has enough power to detect it. Write one sentence on what you found, and whether this dataset lets you draw any real conclusion about Rap1.

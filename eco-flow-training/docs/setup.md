@@ -85,6 +85,37 @@ If you don't see it, open a new one in any of these ways:
 
 > ▶️ **Try it:** open a terminal and type `pwd` then press Enter. In Codespaces it should print a path ending in **`eco-flow-training`** — that's where the course exercises expect you to be.
 
+### 📋 Copy and paste
+
+Throughout this course you'll copy commands from these pages into the terminal. Hover any code block and click the **Copy** button, then paste with **`Ctrl + V`** (**`Cmd + V`** on a Mac).
+
+**Annoyed at being asked for clipboard permission every time?** Here's how to stop it for good:
+
+<details markdown="1">
+<summary>🔧 Fix the repeating "wants to see text and images copied to the clipboard" prompt</summary>
+
+When you first paste into the terminal, your browser asks:
+
+> **`…github.dev` wants to** — See text and images copied to the clipboard — **Block / Allow**
+
+**Click Allow.** This is expected and safe — it's what lets you paste into the terminal. If you click Block, pasting will silently stop working.
+
+**Why it keeps coming back:** every Codespace gets its own random web address (like `upgraded-carnival-rjrgpj57q5cpgg5.github.dev`). Browser permissions are tied to the exact address, so allowing it once only covers *that* Codespace. Start a fresh one and you get a new address — and the prompt returns.
+
+**The permanent fix** — allow it once for *all* Codespaces:
+
+- **Chrome / Edge:** go to `chrome://settings/content/clipboard`, find **"Allowed to see text and images copied to the clipboard"**, click **Add**, and enter:
+  ```
+  [*.]github.dev
+  ```
+- **Firefox:** you shouldn't need this — Firefox handles pasting differently and won't nag you the same way.
+
+That one entry covers every Codespace you create from now on.
+
+> 💡 **Pasting into the terminal not working properly?** If characters go missing when you paste a long command, try **right-click → Paste** instead of the keyboard shortcut. Alternatively, use **VS Code Desktop** connected to your Codespace, which avoids browser clipboard restrictions entirely.
+
+</details>
+
 ### 📂 Open and edit a file
 
 Click any file in the **Explorer** to open it in the editor. Make a change, then **save** with **`Ctrl + S`** (**`Cmd + S`** on a Mac). Unsaved files show a dot ● on their tab.
@@ -108,6 +139,25 @@ Press **`Ctrl + Shift + P`** (**`Cmd + Shift + P`** on a Mac) to open the **Comm
 ### 💾 Saving your work and ending a session
 
 Your Codespace keeps your files between sessions, but **closing the browser tab ends the session**, so **save anything important first** (`Ctrl + S`). You can reopen or manage your Codespaces any time at https://github.com/codespaces.
+
+<a id="closing-a-codespace-and-starting-a-fresh-one"></a>
+
+### 🧹 Closing a Codespace and starting a fresh one
+
+Closing the browser tab only **stops** the Codespace — it stays around, and so does everything on its disk (`work/` directories, downloaded containers, results). Some parts of this course ask you to start again from a **clean** Codespace, which means **deleting** the old one first.
+
+**To delete a Codespace:**
+
+1. Go to https://github.com/codespaces — every Codespace you own is listed there.
+2. Find the one for the `Eco-Flow/training` repo.
+3. Click the **`···`** menu on its right-hand side.
+4. Choose **Delete**, then confirm.
+
+![alt text](img/codespacesdelete.png)
+
+> ⚠️ **Deleting is permanent.** Anything you haven't saved elsewhere goes with it — **download** any results or scripts you want to keep first (right-click → **Download**, see above).
+
+**To start a fresh one:** go back to the [Open in GitHub Codespaces](https://codespaces.new/Eco-Flow/training) link (or the green **`< > Code`** button → **Codespaces** tab → **Create codespace on main**) and launch it exactly as you did the first time. It'll take a couple of minutes to build again, and you'll get a brand-new, empty disk.
 
 ### ✅ Orientation checklist
 

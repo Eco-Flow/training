@@ -8,6 +8,28 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
+> ⚠️ **Coming straight from the RNA-Seq practical? Make space first.** A Codespace has a small disk, and Part 3 fills a lot of it with pipeline containers and `work/` directories. If you start this pipeline on top of that, you'll run out of disk part-way through and the run will fail. Pick **one** of the two options below before you go any further.
+>
+> **Option A — start a fresh Codespace (simplest).** **Delete** your current Codespace, then open a new one from the link above. Step-by-step instructions: [Setup · Closing a Codespace and starting a fresh one](./setup.md#closing-a-codespace-and-starting-a-fresh-one). Remember to **download anything you want to keep** from the RNA-Seq practical first — deleting is permanent.
+>
+> **Option B — clean up in place.** Keep the same Codespace, but throw away the leftovers from Part 3:
+>
+> ```bash
+> # from inside eco-flow-training — delete Nextflow's intermediate files
+> rm -rf work .nextflow .nextflow.log*
+>
+> # delete every Docker image that isn't currently in use
+> docker system prune -a -f
+> ```
+>
+> Then check you've actually got room — you want a few GB free under **Avail**:
+>
+> ```bash
+> df -h /workspaces
+> ```
+>
+> ⚠️ Option B removes your RNA-Seq `work/` directory, so anything you haven't copied out of it (or published to `results/`) is gone. The containers will simply be re-downloaded next time they're needed.
+
 In this practical you'll run **nanoporemetabarcoding**, a pipeline built by Eco-Flow ([`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)) — from raw Nanopore reads all the way to a taxonomically-annotated ASV table.
 
 > ℹ️ **Not an official nf-core pipeline.** nanoporemetabarcoding was scaffolded with the [nf-core](https://nf-co.re) template and follows its conventions (module structure, config profiles, `-profile docker`, etc.), which is why some of the tooling will feel familiar to Part 3 of this workshop. But it isn't part of the official nf-core pipeline collection, isn't listed on nf-co.re, and has no tagged release yet, as it is still in active development.
@@ -58,7 +80,7 @@ Before diving in, here's the whole journey from raw reads to results in one pict
 - **BLAST** → search each consensus against your reference database
 - **taxonomizr** → assign taxonomy from the best BLAST hit
 
-<details>
+<details markdown="1">
 <summary>📚 Good background resources</summary>
 
 - [Nanopore sequencing — how it works (Oxford Nanopore)](https://nanoporetech.com/how-it-works)
@@ -85,19 +107,19 @@ The raw reads live in `wasp_course_data/`. Nanopore FASTQs are gzipped, so peek 
 > ```bash
 > zcat wasp_course_data/barcode01/plate1_combined.fastq.gz | head -8
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> Groups of four lines per read, same FASTQ format as Illumina — but unlike the paired, fixed-length RNA-Seq reads from Part 3, Nanopore reads are **single, variable-length long reads** with no pair:
->
-> ```
-> @<read id> ...
-> ATGCGT...(a few hundred bp, length varies read to read)
-> +
-> !%'&&$#"...(quality string, same length as the sequence)
-> ```
-> </details>
+
+<details markdown="1">
+<summary>✅ Expected output</summary>
+
+Groups of four lines per read, same FASTQ format as Illumina — but unlike the paired, fixed-length RNA-Seq reads from Part 3, Nanopore reads are **single, variable-length long reads** with no pair:
+
+```
+@<read id> ...
+ATGCGT...(a few hundred bp, length varies read to read)
++
+!%'&&$#"...(quality string, same length as the sequence)
+```
+</details>
 
 > ▶️ **Try it — count the reads**
 >
@@ -139,7 +161,7 @@ The **samplesheet** links each FASTQ to an ID. It has just two columns:
 > ▶️ **Try it — design `samplesheet.csv` for the wasp experiment**
 > Using the table in [The experiment](#the-experiment) (2 sites → 2 plates → 2 barcodes), write out what the samplesheet should look like.
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — samplesheet.csv for the wasp scenario</summary>
 
 ```csv
@@ -178,7 +200,7 @@ The **metadata** sheet is optional — but it's what resolves each demultiplexed
 >
 > The woodland plate has 3 forward tags (`F1_WaspExF_Tab1`, `F2_WaspExF_Tab2`, `F3_WaspExF_Tab3`) and 2 reverse tags (`R1_LuthienR_Tab29`, `R2_LuthienR_Tab54`), giving 6 wells: one extraction blank, one positive control, one PCR blank, and 3 adult wasps netted in the Woodland site. Write out the FASTAs and the metadata rows.
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — tag-primer_f.fasta / tag-primer_r.fasta</summary>
 
 ```fasta
@@ -198,7 +220,7 @@ CGATGAGTTACTTCWGGRTGWCCAAARAAYCA
 ```
 </details>
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — metadata.csv for the woodland plate</summary>
 
 ```csv
@@ -234,7 +256,7 @@ Same mapping, laid out as a plate layout:
 > | `F2_WaspExF_Tab2` | `MW_wasp01` | `POS_CON_F2_R2` *(positive control)* |
 > | `F3_WaspExF_Tab3` | `MW_wasp02` | `BLANK_F3_R2` *(PCR blank)* |
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — metadata.csv for the grassland plate</summary>
 
 ```csv
@@ -258,7 +280,7 @@ Now put the theory aside and actually run the pipeline:
 
 Read the parameters block in [`nextflow.config`](https://github.com/Eco-Flow/nanoporemetabarcoding/blob/master/nextflow.config) for the full option list.
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — the full command</summary>
 
 ```bash
@@ -281,23 +303,25 @@ nextflow run main.nf \
 
 ### Troubleshooting Step 4
 
-<details>
+<details markdown="1">
 <summary>❌ <code>Missing required parameter: --input</code> / <code>--outdir</code></summary>
 
 Check every `--input`, `--metadata`, `--tags_f`, `--tags_r` and `--outdir` is present and spelled correctly.
 </details>
 
-<details>
+<details markdown="1">
 <summary>❌ A well/sample is missing from the final ASV table</summary>
 
 Almost always a `primer_comb` mismatch — the tag combination in `metadata.csv` doesn't exactly match `<tags_f header>_<tags_r header>`. Double-check spelling and case.
 </details>
 
-<details>
+<details markdown="1">
 <summary>❌ <code>.command.sh: ... command not found</code> (exit status 127)</summary>
 
 You forgot **`-profile docker`**. Without it, Nextflow expects every tool (Cutadapt, Medaka, BLAST, ...) to already be installed locally.
 </details>
+
+> 🔍 **Debugging any failure — the same recipe as before.** Every task runs in its own directory under `work/`, named after the hash Nextflow prints (`[a1/b2c3]`). When a task fails, Nextflow prints a `Work dir:` path — `cd` into it and read `.command.err` (the error), `.command.log` (all output) and `.command.sh` (the exact command that ran). Remember to use **`ls -a`**, since those files are hidden. This is covered in full in [RNA-Seq · Step 6 — Monitoring a run](./nfcore_rnaseq.md#step-6--monitoring-a-run-the-work-directory-and-command-files).
 
 ---
 
@@ -309,7 +333,7 @@ Once you see `Pipeline completed successfully`, look inside `results/`:
 ls results
 ```
 
-<details>
+<details markdown="1">
 <summary>✅ Roughly what you'll see</summary>
 
 ```
@@ -333,7 +357,7 @@ nanoplot/  blast/  assign_taxa/  community_matrix/  plots/  multiqc/  pipeline_i
 
 ## Step 6 — Running on an HPC (Myriad example)
 
-> 🎯 For the general concepts (talking to your HPC admin, writing a config from scratch, testing it) see the bonus **[Running a pipeline on an HPC](./hpc.md)** — this step is a concrete worked example on top of that, using UCL's **Myriad** cluster.
+> 🎯 For the general concepts see **[Part 7 · Running a pipeline on an HPC](./hpc.md)** (getting a pipeline, submitting and watching jobs, keeping Nextflow alive) and, if your cluster has no config yet, ★ **[Advanced: setting up Nextflow for your HPC](./hpc_config.md)** (talking to your HPC admin, writing a config from scratch, testing it). This step is a concrete worked example on top of those, using UCL's **Myriad** cluster.
 
 Because nanoporemetabarcoding was build from the nf-core template, it inherits nf-core's **institutional config** mechanism — so if your institution already has a config, you don't write anything yourself. Browse **[nf-co.re/configs](https://nf-co.re/configs/)** to check — UCL's Myriad cluster is listed there.
 
@@ -351,7 +375,7 @@ Myriad's cluster uses singulairty to manage dependecines. You can use conda inst
 
 `-profile ucl_myriad` downloads and applies [`ucl_myriad.config`](https://github.com/nf-core/configs/blob/master/conf/ucl_myriad.config) automatically — no `-c` flag, and no separate `-profile singularity` needed (the profile enables Singularity itself). It's worth reading the actual config to see what a real one looks like:
 
-<details>
+<details markdown="1">
 <summary>What's actually in ucl_myriad.config</summary>
 
 ```groovy
@@ -380,7 +404,7 @@ singularity {
 Two things worth noticing, since they're easy to get wrong writing your own config:
 
 - **Myriad uses SGE**, whose `-l mem=` flag is **memory per core, not per job** — so the config computes `task.memory / task.cpus` on the fly for every process, rather than using a single fixed value.
-- The **Singularity cache** (`cacheDir`) is pointed at `~/Scratch`, not the home directory — home quotas on Myriad are small, and containers are large. Always check where your own cluster wants large/scratch data to live (Step 1 in [hpc.md](./hpc.md)). This is usally the case for most HPCs.
+- The **Singularity cache** (`cacheDir`) is pointed at `~/Scratch`, not the home directory — home quotas on Myriad are small, and containers are large. Always check where your own cluster wants large/scratch data to live (Step 1 in [hpc_config.md](./hpc_config.md)). This is usally the case for most HPCs.
 </details>
 
 > ▶️ **Try it — test the config before a real run**
@@ -388,9 +412,9 @@ Two things worth noticing, since they're easy to get wrong writing your own conf
 > ```bash
 > nextflow run main.nf -profile test_synth,my_hpc_config --outdir results
 > ```
-> Same idea as Step 6 of [hpc.md](./hpc.md): run the tiny test profile first and check the banner says `executor >  sge`, not `executor >  local` — that confirms jobs are actually going to the scheduler, not running on the login node.
+> Same idea as Step 6 of [hpc_config.md](./hpc_config.md): run the tiny test profile first and check the banner says `executor >  sge`, not `executor >  local` — that confirms jobs are actually going to the scheduler, not running on the login node.
 
-While jobs are running, watch them with `qstat` on SGE — the same command [hpc.md](./hpc.md) points to for Slurm's `squeue`. Both print a status column whose codes mean the same underlying thing but look different:
+While jobs are running, watch them with `qstat` on SGE — the SGE equivalent of Slurm's `squeue` (both are covered in [Part 7](./hpc.md)). Both print a status column whose codes mean the same underlying thing but look different:
 
 | Meaning | `qstat` (SGE/Myriad) | `squeue` (Slurm) |
 | --- | --- | --- |
@@ -409,7 +433,7 @@ While jobs are running, watch them with `qstat` on SGE — the same command [hpc
 <!--
 In some HPCs, running Nextflow directly from the login node is not recommended (contact your HPC admin for more information). In that case, submit your Nextflow command it as its own SGE (or slurm, if that is your HPC scheduler) job rather than running it directly in your terminal:
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — <code>run_nanopore_myriad.sh</code> (submit with <code>qsub run_nanopore_myriad.sh</code>)</summary>
 
 ```bash
@@ -435,7 +459,7 @@ The `-l mem=4G` / `-l h_rt=4:00:0` here are for the **driver job only** (Nextflo
 </details>
 -->
 
-> 💡 **Other schedulers (Slurm, etc.):** the same institutional-profile trick applies wherever nf-core/configs has a listed cluster — check https://nf-co.re/configs first. If yours isn't listed, [hpc.md](./hpc.md) has side-by-side minimal config examples for both **SGE** and **Slurm**: the main differences are `executor.name` (`'sge'` vs `'slurm'`), how you request memory (SGE: per-core via `clusterOptions`; Slurm: per-job via `--mem`), and the queue/partition option name. A Slurm submission script for this same pipeline would look like `hpc.md`'s own Slurm example, swapping in nanoporemetabarcoding's `--input`/`--metadata`/`--tags_f`/`--tags_r`/`--custom_db` flags shown above.
+> 💡 **Other schedulers (Slurm, etc.):** the same institutional-profile trick applies wherever nf-core/configs has a listed cluster — check https://nf-co.re/configs first. If yours isn't listed, [hpc_config.md](./hpc_config.md) has side-by-side minimal config examples for both **SGE** and **Slurm**: the main differences are `executor.name` (`'sge'` vs `'slurm'`), how you request memory (SGE: per-core via `clusterOptions`; Slurm: per-job via `--mem`), and the queue/partition option name. A Slurm submission script for this same pipeline would look like the Slurm driver-job example in [Part 7](./hpc.md), swapping in nanoporemetabarcoding's `--input`/`--metadata`/`--tags_f`/`--tags_r`/`--custom_db` flags shown above.
 
 > 🙋 **No institutional config for your cluster?** Just get your HPC admin in touch with us at Eco-Flow and we will build one.
 
@@ -447,7 +471,7 @@ The `-l mem=4G` / `-l h_rt=4:00:0` here are for the **driver job only** (Nextflo
 
 Taxonomy assignment has adjustable identity thresholds per rank — e.g. `--spident` (species), `--gpident` (genus). Work out how you'd tighten the species-level threshold to 98% identity, but **don't run it yet**:
 
-<details>
+<details markdown="1">
 <summary>Answer — the modified command</summary>
 
 ```bash
@@ -473,8 +497,8 @@ Add **`-resume`** and Nextflow reuses cached results for any step whose inputs h
 **Next steps:**
 
 - Adapt what you designed in Steps 2–3 to your **own** primer-tag scheme and run it on your own data.
-- Explore the full parameter list in [`nextflow.config`](https://github.com/Eco-Flow/nanoporemetabarcoding/blob/master/nextflow.config) — worth tuning per-rank identity thresholds (`--spident`/`--gpident`/`--fpident`/`--opident`) and `--tax_list` for your own taxonomic group.
-- Running on a cluster other than Myriad? Step 6 above covers the concrete example; the bonus **[Running a pipeline on an HPC](./hpc.md)** covers the general concepts (including a Slurm walkthrough).
+- Explore the full parameter list in [`nextflow.config`](https://github.com/Eco-Flow/nanoporemetabarcoding/blob/dev/nextflow.config) — worth tuning per-rank identity thresholds (`--spident`/`--gpident`/`--fpident`/`--opident`) and `--tax_list` for your own taxonomic group.
+- Running on a cluster other than Myriad? Step 6 above covers the concrete example; **[Part 7 · Running a pipeline on an HPC](./hpc.md)** covers the general concepts (including Slurm and SGE examples), and ★ **[Advanced: setting up Nextflow for your HPC](./hpc_config.md)** covers writing a config if your cluster doesn't have one.
 
 ---
 

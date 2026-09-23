@@ -8,7 +8,7 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
-In this practical you'll run a real, published-standard **nf-core RNA-Seq pipeline** ([nf-core/rnaseq](https://nf-co.re/rnaseq/3.14.0)) on example data — from raw sequencing reads all the way to a gene-count table and a quality report.
+In this practical you'll run a real, published-standard **nf-core RNA-Seq pipeline** ([nf-core/rnaseq](https://nf-co.re/rnaseq/3.26.0)) on example data — from raw sequencing reads all the way to a gene-count table and a quality report.
 
 **nf-core** is a community that builds gold-standard, reproducible data pipelines that have become the industry standard.
 
@@ -23,6 +23,7 @@ In this practical you'll run a real, published-standard **nf-core RNA-Seq pipeli
 - Build a **samplesheet** describing your samples
 - Download a reference **genome** and **annotation**
 - **Run** the pipeline with Docker containers
+- **Monitor and debug** a run using the `work/` directory and `.command.*` files
 - Explore the **results** (quality reports and gene counts)
 - Learn to **`-resume`** a run and change pipeline options
 
@@ -53,7 +54,7 @@ We'll compare gene expression between **wild-type** yeast cells and cells with a
 
 Before running an RNA-Seq analysis, it helps to understand what it *is*. In short: RNA-Seq measures how much each gene is being **expressed** by sequencing the RNA in a sample, mapping those reads back to a reference genome, and counting how many land on each gene. This is covered in the lecture; the resources below go deeper.
 
-<details>
+<details markdown="1">
 <summary>📚 Great RNA-Seq learning resources</summary>
 
 - [Azenta — Quick-start guide to RNA-Seq data analysis](https://www.azenta.com/blog/quick-start-guide-rna-seq-data-analysis#step1)
@@ -84,17 +85,17 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 > zcat data/SRR6357070_1.fastq.gz | wc -l
 > zcat data/SRR6357070_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
 > ```
->
-> <details>
-> <summary>✅ Answer</summary>
->
-> ```
-> 200000
-> 101
-> ```
->
-> The first command shows there are `200000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `50000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `102`. So the reads are `101` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
-> </details>
+
+<details markdown="1">
+<summary>✅ Answer</summary>
+
+```
+200000
+101
+```
+
+The first command shows there are `200000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `50000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `102`. So the reads are `101` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
+</details>
 
 ### Structure of a typical FASTQ file
 
@@ -120,11 +121,11 @@ This layout is important because it lets the pipeline keep the sequence and its 
 
 ## Step 2 — Explore the pipeline's requirements
 
-Go to the nf-core/rnaseq page and read what the pipeline does and what inputs it expects: 👉 **https://nf-co.re/rnaseq/3.14.0**
+Go to the nf-core/rnaseq page and read what the pipeline does and what inputs it expects: 👉 **https://nf-co.re/rnaseq/3.26.0**
 
 <img src="img/image.png" alt="nf-core/rnaseq usage page" width="700"/>
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — what the pipeline needs</summary>
 
 To run nf-core/rnaseq you need three things:
@@ -168,9 +169,9 @@ It has four columns:
 >
 > This scans the `data` directory, infers sample names from the FASTQ filenames, and writes a CSV that you can inspect and adjust before using it. Because this example dataset mixes paired-end and single-end reads, it is worth checking the generated file carefully and renaming samples if you want to match the `CONTROL_REP*` / `MANIPULATED_REP*` names used later in the course.
 
-Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/rnaseq/3.14.0/docs/usage#samplesheet-input) as a guide to build the 3 wild type and 3 knock down samples, then compare with the cheat sheet.
+Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/rnaseq/3.26.0/docs/usage#samplesheet-input) as a guide to build the 3 wild type and 3 knock down samples, then compare with the cheat sheet.
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — full samplesheet.csv</summary>
 
 ```csv
@@ -204,19 +205,19 @@ wget -O genes.gff.gz https://raw.githubusercontent.com/nf-core/test-datasets/7f1
 > ```bash
 > ls -lh genome.fasta genes.gff.gz
 > ```
->
-> <details>
-> <summary>✅ Expected output</summary>
->
-> Both files should be listed with a non-zero size:
->
-> ```
-> -rw-r--r-- 1 user user  ...  genome.fasta
-> -rw-r--r-- 1 user user  ...  genes.gff.gz
-> ```
->
-> If a file is 0 bytes or missing, the download failed — check your internet connection and re-run the `wget`.
-> </details>
+
+<details markdown="1">
+<summary>✅ Expected output</summary>
+
+Both files should be listed with a non-zero size:
+
+```
+-rw-r--r-- 1 user user  ...  genome.fasta
+-rw-r--r-- 1 user user  ...  genes.gff.gz
+```
+
+If a file is 0 bytes or missing, the download failed — check your internet connection and re-run the `wget`.
+</details>
 
 > 💡 The `-O` flag names the downloaded file. The genome is the yeast reference sequence; the GFF lists where each gene sits on that sequence.
 
@@ -226,16 +227,18 @@ wget -O genes.gff.gz https://raw.githubusercontent.com/nf-core/test-datasets/7f1
 
 Now run nf-core/rnaseq, pointing it at your genome (`--fasta`), annotation (`--gff`), samplesheet (`--input`) and an output directory name (`--outdir`, choose anything).
 
-Read the official run instructions here: https://nf-co.re/rnaseq/3.14.0/docs/usage
+Read the official run instructions here: https://nf-co.re/rnaseq/3.26.0/docs/usage
 
 Two extra flags you **must** include in this environment:
 
 - **`-profile docker`** — runs every step inside its Docker container, so you don't have to install any of the underlying tools. (On an HPC you'd use `-profile singularity` or `apptainer` instead — ask your HPC team.)
 - **`-c .../codespaces.config`** — a small custom config that adapts the pipeline to the tiny Codespaces machine. Without it the run is likely to fail. See below for exactly what it does.
 
-We also pin the pipeline version with **`-r 3.14.0`** so you get exactly the version this course was written for.
+We also pin the pipeline version with **`-r 3.26.0`** so you get exactly the version this course was written for.
 
-> 💡 **Why pin the version?** Without `-r`, Nextflow runs the *latest* revision of the pipeline. Pipeline parameters change between releases (options get renamed or removed), so an un-pinned command can silently break over time. Pinning to `3.14.0` guarantees this exact command keeps working — pinning is the safe choice, not a risky one.
+> 💡 **Why pin the version?** Without `-r`, Nextflow runs the *latest* revision of the pipeline. Pipeline parameters change between releases (options get renamed or removed), so an un-pinned command can silently break over time. Pinning to `3.26.0` guarantees this exact command keeps working — pinning is the safe choice, not a risky one.
+>
+> ⚠️ **Pin to a release your Nextflow can actually run.** Nextflow itself evolves too. For nf-core/rnaseq, releases before `3.17` use an older config style that recent Nextflow versions refuse to read, stopping immediately with `Config parsing failed`. If you ever see that, move the `-r` up to a newer release of the pipeline.
 
 #### What is the `codespaces.config` and why do we need it?
 
@@ -260,12 +263,12 @@ params {
 
 > 📝 On your own laptop or an HPC you generally **wouldn't** need this file — you'd let the pipeline use its defaults, or write a config tuned to *your* machine. It exists purely to make the pipeline fit inside Codespaces.
 
-<details>
+<details markdown="1">
 <summary>Cheat sheet — the full command</summary>
 
 ```bash
 nextflow run nf-core/rnaseq \
--r 3.14.0 \
+-r 3.26.0 \
 -profile docker \
 -c /workspaces/training/eco-flow-training/codespaces.config \
 --input /workspaces/training/eco-flow-training/samplesheet.csv \
@@ -282,7 +285,7 @@ The `\` at the end of each line just lets one command span several lines for rea
 > ✅ **What success looks like:** Nextflow prints a banner and then a live list of processes as they run — something like:
 >
 > ```
->  N E X T F L O W   ~  version 24.x.x
+>  N E X T F L O W   ~  version 26.x.x
 >  Launching `https://github.com/nf-core/rnaseq` [gigantic_newton] ...
 >  executor >  local
 >  [a1/b2c3d4] NFCORE_RNASEQ:...:FASTQC (CONTROL_REP1)   [100%] 6 of 6 ✔
@@ -296,19 +299,19 @@ The `\` at the end of each line just lets one command span several lines for rea
 
 If the run stops with an error, it's almost always one of these:
 
-<details>
+<details markdown="1">
 <summary>❌ <code>Missing required parameter: --input</code> / <code>--outdir</code></summary>
 
 You didn't supply one of the required parameters. Check every `--input`, `--fasta`, `--gff` and `--outdir` is present and spelled correctly.
 </details>
 
-<details>
+<details markdown="1">
 <summary>❌ <code>Not a valid path value: 'genes.gff.gz'</code></summary>
 
 A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/genes.gff.gz`, and confirm the file exists with `ls -l`.
 </details>
 
-<details>
+<details markdown="1">
 <summary>❌ <code>.command.sh: line 7: fastqc: command not found</code> (exit status 127)</summary>
 
 You forgot **`-profile docker`**. Without it, Nextflow looks for the tools installed locally — but they aren't. Adding `-profile docker` makes each step run inside a container that already has the tool.
@@ -318,7 +321,103 @@ If you get a different error, grab a tutor.
 
 ---
 
-## Step 6 — Explore the results
+## Step 6 — Monitoring a run: the `work/` directory and `.command.*` files
+
+While the pipeline runs (or after it fails), it helps to know **where Nextflow actually does the work** — this is the single most useful debugging skill in Nextflow, and it works the same for every pipeline you'll ever run.
+
+### The `work/` directory
+
+Nextflow doesn't run tools in your current folder. It creates a fresh, isolated directory for **every single task** under `work/`, stages that task's input files into it, and runs the command there. Only the files a pipeline chooses to *publish* get copied out to your `--outdir`.
+
+That's what the hash at the start of each line in the console output is:
+
+```
+[a1/b2c3d4] NFCORE_RNASEQ:...:FASTQC (CONTROL_REP1)   [100%] 1 of 1 ✔
+```
+
+`a1/b2c3d4` is the **task directory** — `work/a1/b2c3d4.../`. (Nextflow shortens it on screen; the real directory name is longer.)
+
+> ▶️ **Look inside a task directory**
+>
+> ```bash
+> ls work
+> ls -a work/a1/b2c3d4*/     # use a hash from *your* own output
+> ```
+
+<details markdown="1">
+<summary>✅ Roughly what you'll see</summary>
+
+```
+.command.begin  .command.err  .command.log  .command.out
+.command.run    .command.sh   .exitcode
+CONTROL_REP1_1.fastq.gz -> /workspaces/training/.../SRR6357070_1.fastq.gz
+CONTROL_REP1_fastqc.html
+```
+
+The input files are **symlinks** back to their original location (that's why the work dir doesn't duplicate your data), and the outputs sit alongside them.
+</details>
+
+Note the leading `.` — these are hidden files, so plain `ls` won't show them. Use **`ls -a`**.
+
+### The `.command.*` files
+
+| File | What it holds |
+| :--- | :--- |
+| `.command.sh` | **The exact script that was run** for this task, with all parameters filled in. Read this first. |
+| `.command.out` | Whatever the tool printed to standard output. |
+| `.command.err` | Whatever the tool printed to standard error — **error messages usually live here**. |
+| `.command.log` | Both of the above combined. |
+| `.command.run` | The wrapper Nextflow built around your script (container/module setup, scheduler directives). Rarely needed, but this is where you check what Docker or Slurm was actually asked to do. |
+| `.exitcode` | The exit status. `0` = success; anything else = failure. |
+
+> ▶️ **Try it — see exactly what a step ran**
+>
+> ```bash
+> cat work/a1/b2c3d4*/.command.sh
+> ```
+>
+> You can even re-run that script by hand inside the directory, which is the fastest way to test a fix.
+
+### When a task fails
+
+Nextflow prints a block like this and stops:
+
+```
+ERROR ~ Error executing process > 'NFCORE_RNASEQ:...:STAR_ALIGN (CONTROL_REP1)'
+
+Caused by:
+  Process ... terminated with an error exit status (137)
+
+Command executed: [ ... ]
+Command exit status: 137
+Work dir:
+  /workspaces/training/work/e5/f6a7b89c0d1e2f...
+```
+
+The recipe is always the same:
+
+1. Copy the **`Work dir:`** path.
+2. `cd` into it.
+3. `cat .command.err` (and `.command.log`) to see the real error message.
+4. `cat .command.sh` to see what was run, and check the input symlinks with `ls -a`.
+
+> 💡 **Common exit codes:** `127` = command not found (usually a missing `-profile docker`), `137` = killed for using too much memory (raise the memory or lower `resourceLimits`), `1` = the tool itself reported an error — read `.command.err`.
+
+### Watching progress and cleaning up
+
+- **`.nextflow.log`** — the driver's own log, in the directory you launched from. If you ran with `-bg` (no output on screen), follow it with `tail -f .nextflow.log`.
+- **`nextflow log`** — lists your previous runs and their run names.
+- **`work/` grows fast.** It holds every intermediate file of every task, and can easily be many times the size of your results. Delete it only once you're happy with your results, and remember that deleting it also destroys the cache that `-resume` (Step 8) depends on:
+
+  ```bash
+  du -sh work          # how big has it got?
+  nextflow clean -f    # remove work data from previous runs
+  rm -rf work          # or just delete the lot
+  ```
+
+---
+
+## Step 7 — Explore the results
 
 Once the pipeline finishes (`Pipeline completed successfully`), look inside your `--outdir` folder (`my_results`).
 
@@ -327,18 +426,18 @@ Once the pipeline finishes (`Pipeline completed successfully`), look inside your
 > ```bash
 > ls my_results
 > ```
->
-> <details>
-> <summary>✅ Roughly what you'll see</summary>
->
-> ```
-> fastqc  multiqc  pipeline_info  star_salmon  trimgalore  ...
-> ```
->
-> Each folder holds the output of one stage of the pipeline.
-> </details>
 
-The full catalogue of outputs is documented here: https://nf-co.re/rnaseq/3.14.0/docs/output — spend ~10 minutes skimming it while the run finishes.
+<details markdown="1">
+<summary>✅ Roughly what you'll see</summary>
+
+```
+fastqc  multiqc  pipeline_info  star_salmon  trimgalore  ...
+```
+
+Each folder holds the output of one stage of the pipeline.
+</details>
+
+The full catalogue of outputs is documented here: https://nf-co.re/rnaseq/3.26.0/docs/output — spend ~10 minutes skimming it while the run finishes.
 
 **The two things to look at first:**
 
@@ -354,20 +453,20 @@ We'll discuss the reports together in class.
 
 ---
 
-## Step 7 — Resuming a run and changing options
+## Step 8 — Resuming a run and changing options
 
 Real analyses are rarely run just once — you tweak options and re-run. Two things make that painless.
 
 ### Changing an option
 
-The pipeline has many options. For example, you can switch the alignment/quantification tools to STAR + RSEM with `--aligner star_rsem` (see the [alignment options docs](https://nf-co.re/rnaseq/3.14.0/docs/usage#alignment-options)). Work out how you'd modify your command — **but don't run it yet:**
+The pipeline has many options. For example, you can switch the alignment/quantification tools to STAR + RSEM with `--aligner star_rsem` (see the [alignment options docs](https://nf-co.re/rnaseq/3.26.0/docs/usage#alignment-options)). Work out how you'd modify your command — **but don't run it yet:**
 
-<details>
+<details markdown="1">
 <summary>Answer — the modified command</summary>
 
 ```bash
 nextflow run nf-core/rnaseq \
--r 3.14.0 \
+-r 3.26.0 \
 -profile docker \
 -c /workspaces/training/eco-flow-training/codespaces.config \
 --input /workspaces/training/eco-flow-training/samplesheet.csv \
@@ -401,7 +500,7 @@ Add **`-resume`** and Nextflow will reuse the **cached** results of any steps th
 **Next steps:**
 
 - Continue to **[Part 4 · Differential expression ▶️](./differential.md)** to analyse the gene counts you just produced.
-- Running on a cluster? See the bonus **[Running a pipeline on an HPC](./hpc.md)**.
+- Running on a cluster? See **[Part 7 · Running a pipeline on an HPC](./hpc.md)**.
 - Learn to **write** your own Nextflow: the excellent [Seqera training](https://training.nextflow.io/).
 - Eco-Flow will be providing more foundational Nextflow courses soon — email us to join the mailing list: **ecoflow . ucl @ gmail . com**
 

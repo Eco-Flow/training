@@ -30,9 +30,11 @@ Work through it top to bottom — or jump to whatever you need.
 | **5** | [Run an nf-core ampliseq pipeline](./docs/nfcore_ampliseq.md) | Practical · 🚧 draft | Run a real nf-core/ampliseq analysis on amplicon sequencing data. |
 | **6** | [Run nanoporemetabarcoding pipeline](./docs/nanopore_metabarcoding.md) | Practical | Run the nanopore metabarcoding pipeline. |
 | **7** | [Interacting with code on GitHub](./docs/github_basics.md) | Practical | Issues, Pull Requests, READMEs and Claude Code — how to report, fix and contribute changes, using the nanopore pipeline as the example. |
-| **★** | [Running a pipeline on an HPC](./docs/hpc.md) | Bonus · optional | Configure and run the pipeline on a Slurm/SGE cluster — talk to your admin, adapt a config, and test it. |
+| **8** | [Running a pipeline on an HPC](./docs/hpc.md) | Practical · optional | Turn your Codespace into a working Slurm cluster and run an nf-core pipeline through it — submit and watch jobs, let Nextflow do the submitting, keep a run alive, then see what changes on your own cluster. No HPC account needed. |
+| **9** | [Monitoring runs with Seqera Platform](./docs/seqera_platform.md) | Practical · optional | Follow your runs live in the browser with Seqera Platform, from Codespaces or your HPC, plus an overview of launching pipelines from it. |
+| **★** | [Advanced: setting up Nextflow for your HPC](./docs/hpc_config.md) | Advanced · optional | Write a config for a Slurm/SGE cluster that doesn't have one yet — talk to your admin, adapt a config, and test it. |
 
-> 🚧 **Parts 4 and 5** are still drafts, and the **★ HPC bonus** is optional reference material — most learners can skip it.
+> 🚧 **Part 4** is still a draft, and the **★ Advanced HPC** page is optional reference material for people setting up a cluster config — if you just want to run a pipeline on your cluster, start with **Part 7**.
 
 ---
 
