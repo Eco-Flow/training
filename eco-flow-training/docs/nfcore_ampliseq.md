@@ -38,8 +38,6 @@ In this practical you'll run the **nf-core RNA-Seq pipeline** ([nf-core/ampliseq
 
 We'll compare soil and river samples. DNA was extracted from both environments, and amplicon sequnced. There are 2 replicates of each environment. This is of course not a good experiment design, it's purpose it to give the sequences some context
 
-<img width="400" alt="Experiment overview" src="https://github.com/Eco-Flow/training/assets/9978862/d51a00c6-4184-4805-b823-3d6248bb2fde">
-
 | Sample | Habitat | Reads |
 | --- | --- | --- |
 | SRR10070130 | River water | paired-end (`_1` + `_2`) |

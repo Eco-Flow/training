@@ -1,6 +1,6 @@
 # Advanced · Setting up Nextflow for your institution's HPC
 
-🧭 [◀️ Part 7 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 8 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
 
 🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
 
@@ -253,4 +253,4 @@ With a working config, you run pipelines like any other user of your cluster: sw
 
 ---
 
-🧭 [◀️ Part 7 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 8 · Running on an HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
