@@ -56,13 +56,13 @@ This is of course not a good experiment design, its purpose is to give the seque
 
 Before running the amplicon sequencing pipeline, it helps to understand what amplicon sequencing is. In short: amplicon sequencing is a targeted sequencing method that uses PCR to amplify specific genomic regions of interest (e.g., CO1, 16S/18S, ITS) instead of the entire genome.
 
-DNA extraction, target amplification, and target sequecing results in libraries of sequences stored in FASTQ format. Depending on the sequencing technology used, these can be single end (one FASTQ per sample) or paired end (two FASTQs per sample). We are going to explore and learn more about this format in the next section.
+It results in libraries of sequences called **reads**, stored in **FASTQ format**. Depending on the sequencing technology used, reads can be single-end (one FASTQ per sample) or paired-end (two FASTQs per sample). We are going to explore and learn more about this format in the next section.
 
 ---
 
 ## Step 1 — Inspect the raw data
 
-It's always worth looking at your data by eye before running anything. The reads live in the `ampliseq_data` folder.
+It's always worth looking at your data before running anything. The reads in FASTQ format live in the `ampliseq_data` folder.
 
 The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't directly human-readable — plain `cat`/`head` would print gibberish (don't panic if you see `<��xT�r-�B7�...`, that's expected!). Instead, use **`zcat`** (from Part 1), which reads gzipped files.
 
@@ -169,7 +169,7 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 ## Step 4 - Build the sample metadata
 
-The **sample metadata** is a CSV file that gives information about the samples for the downstream analysis (barplots, diversity indices, and differential abundance testing).  It has to follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
+The **sample metadata** is a CSV file that gives information about the samples for the downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
 Create a file called `metadata.csv` in the `eco-flow-training` folder (e.g. with `nano metadata.csv`).
 
