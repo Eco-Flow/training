@@ -527,7 +527,9 @@ Writing one yourself is covered in ★ [Advanced: setting up Nextflow for your H
 
 ### 4. Keeping the driver alive
 
-Step 5's approach — submitting the driver as a job — is the best option for long runs, and works on any cluster. Some clusters don't allow long-running processes on the login node at all, so check the local rules.
+There are two ways worth knowing, and you'll mostly use the first.
+
+**1. Submit the driver as a job** — Step 5's approach, and the right one for anything long. It works on every cluster, and on the ones that forbid long-running processes on the login node it's the only option. Write a small `run.sh` and submit it:
 
 <details markdown="1">
 <summary>🟨 Slurm — <code>run.sh</code>, submit with <code>sbatch run.sh</code></summary>
@@ -575,10 +577,27 @@ nextflow run nf-core/demo -r 1.2.0 \
 ```
 </details>
 
-Two alternatives, useful for shorter runs:
+**2. Run it in the background with `-bg`** — simpler, and fine for shorter runs on clusters that allow it. `-bg` hands you your prompt back and writes progress to `.nextflow.log`. On its own it may not survive you logging out, so pair it with `nohup`:
 
-- **`tmux` or `screen`** — start a session on the login node, run Nextflow inside it, then detach with `Ctrl+b` then `d`. It keeps running after you log out; reattach with `tmux attach -t myrun`.
-- **`-bg`** — Nextflow's own background flag, which writes progress to `.nextflow.log` (follow it with `tail -f .nextflow.log`). On its own it may not survive logging out, so wrap it: `nohup nextflow run … -bg > nextflow.out 2>&1`.
+```bash
+nohup nextflow run nf-core/demo -r 1.2.0 \
+  -profile singularity,<your_cluster> \
+  --outdir /path/to/results \
+  -w /path/with/space/work \
+  -resume -bg > nextflow.out 2>&1
+```
+
+Then follow it whenever you log back in:
+
+```bash
+tail -f .nextflow.log
+```
+
+<details markdown="1">
+<summary>🖥️ Prefer <code>tmux</code> or <code>screen</code>?</summary>
+
+Start a session on the login node (`tmux new -s myrun`), run Nextflow inside it normally, then detach with `Ctrl+b` then `d`. It keeps running after you log out, and `tmux attach -t myrun` puts you back in front of the live output.
+</details>
 
 <details markdown="1">
 <summary>🧬 Optional — rerun Part 3's RNA-Seq analysis on your cluster</summary>
