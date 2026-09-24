@@ -353,7 +353,7 @@ The `\` at the end of each line just lets one command span several lines for rea
 
 ### Other options
 
-We ran the pipeline with minimal input and with defualt parameters. The default parameters are hidden, but they are present in our run - and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
+We ran the pipeline with minimal input and with defualt parameters. The default parameters are hidden, but they are present in our run, and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
 
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
 -  `--min_frequency`. Filter out ASVs below this abundance treshold.
@@ -410,7 +410,7 @@ If you get a different error, grab a tutor.
 
 ## Step 6 — Explore the results
 
-Once the pipeline finishes (`Pipeline completed successfully`), look inside your `--outdir` folder (`my_results`).
+Once the pipeline finishes (`Pipeline completed successfully`), look inside your `--outdir` folder (`results`).
 
 > ▶️ **See what was produced**
 >
@@ -444,35 +444,13 @@ We'll discuss the reports together in class.
 
 ---
 
-## Step 7 — Resuming a run and changing options
+## Step 7 — Resuming a run
 
-Real analyses are rarely run just once — you tweak options and re-run. Two things make that painless.
-
-### Changing an option
-
-The pipeline has many options. For example, you can switch the alignment/quantification tools to STAR + RSEM with `--aligner star_rsem` (see the [alignment options docs](https://nf-co.re/rnaseq/3.14.0/docs/usage#alignment-options)). Work out how you'd modify your command — **but don't run it yet:**
-
-<details>
-<summary>Answer — the modified command</summary>
-
-```bash
-nextflow run nf-core/rnaseq \
--r 3.14.0 \
--profile docker \
--c /workspaces/training/eco-flow-training/codespaces.config \
---input /workspaces/training/eco-flow-training/samplesheet.csv \
---gff /workspaces/training/eco-flow-training/genes.gff.gz \
---fasta /workspaces/training/eco-flow-training/genome.fasta \
---outdir my_results \
---aligner star_rsem
-```
-
-(Note the `\` after `--outdir my_results` — every line except the last needs one, or the `--aligner` option would be dropped.)
-</details>
+Real analyses are rarely run just once — you tweak options and re-run.
 
 ### The `-resume` flag
 
-Add **`-resume`** and Nextflow will reuse the **cached** results of any steps that haven't changed, instead of recomputing them from scratch. If you re-run the command above with `-resume`, only the steps affected by the new `--aligner` option need to re-run — everything before that is pulled from the cache.
+Add **`-resume`** and Nextflow will reuse the **cached** results of any steps that haven't changed, instead of recomputing them from scratch.
 
 > ✅ **What you'll see with `-resume`:** unchanged processes are marked as cached, e.g.
 >
