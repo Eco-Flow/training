@@ -311,8 +311,8 @@ So FASTQC asks for **2 CPUs, 12 GB and 4 hours**, and on a cluster that becomes 
 `nextflow config` prints the configuration after all profiles and config files are merged. Compare these two and look at the `docker {` and `singularity {` blocks — switching the profile just flips which container engine is `enabled`:
 
 ```bash
-nextflow config ./nf_practical/demo -profile test,docker
-nextflow config ./nf_practical/demo -profile test,singularity
+nextflow config ./nf_practical/demo/main.nf -profile test,docker
+nextflow config ./nf_practical/demo/main.nf -profile test,singularity
 ```
 </details>
 
@@ -320,7 +320,31 @@ nextflow config ./nf_practical/demo -profile test,singularity
 
 ## Step 4 — Let Nextflow submit the jobs
 
-This is the whole point of the lesson. One small config file makes Nextflow write the `#SBATCH` header you wrote in Step 2 — for every task in a pipeline:
+Now let's try running a pipeline. Start the way you would on a laptop, with no cluster config at all — the same copy you cloned in Step 3, and the `test` profile for its tiny example data:
+
+```bash
+nextflow run ./nf_practical/demo/main.nf -profile test,docker --outdir demo_results
+```
+
+Watch the line near the top of the output:
+
+```
+executor >  local (3)
+```
+
+**`local` means Nextflow is running the tasks itself**, right here, and nothing has been sent to the scheduler. Check from a second terminal (the ➕ in the terminal panel):
+
+```bash
+squeue      # none of your jobs are listed
+```
+
+That one line was the whole point, so stop the run with **Ctrl+C**.
+
+> ⚠️ **On a real HPC this is the mistake to avoid.** You'd be logged in to the login node, so `executor > local` means every step of your pipeline runs *there* — on the machine everyone shares — and none of the cluster gets used. It's the first thing to check whenever a cluster run behaves oddly.
+
+### Now tell Nextflow about the scheduler
+
+One small config file changes that. It makes Nextflow write the `#SBATCH` header you wrote in Step 2 — for every task in the pipeline:
 
 ```bash
 cat hpc/slurm_codespaces.config
@@ -335,10 +359,10 @@ process {
 
 `executor = 'slurm'` is the whole trick; `queue` says which partition to use.
 
-Now run the pipeline with it — the same copy you cloned and read in Step 3, so you know exactly what's about to run. The `test` profile supplies tiny example data, so you need no inputs of your own:
+Run exactly the same command again, with the config added:
 
 ```bash
-nextflow run ./nf_practical/demo -profile test,docker -c hpc/slurm_codespaces.config --outdir demo_results
+nextflow run ./nf_practical/demo/main.nf -profile test,docker -c hpc/slurm_codespaces.config --outdir demo_results
 ```
 
 (No `-r` here: the clone is already fixed at release 1.2.0 by the `git checkout` you did. Running the downloaded copy instead — `nextflow run nf-core/demo -r 1.2.0 …` — does exactly the same thing.)
