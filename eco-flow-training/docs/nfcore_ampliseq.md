@@ -37,7 +37,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 
 ### The experiment
 
-We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling. There are 2 replicates of each site:
+We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling, and comparison between sites. There are 2 replicates of each site:
 
 <img src="img/river_soil_microbe_zoom.png"/>
 
@@ -47,6 +47,13 @@ We'll compare soil and river samples. DNA was extracted from both sites, and amp
 | SRR10070131 | River water | paired-end (`_1` + `_2`) |
 | SRR10102392 | Soil | paired-end (`_1` + `_2`) |
 | SRR10102393 | Soil | paired-end (`_1` + `_2`) |
+
+Like mentioned, the primers for this course target the 16S rRNA V4 region, using the standard Earth Microbiome Project primer pair:
+
+| Sequence | Target |
+| --- | --- |
+| `GTGYCAGCMGCCGCGGTAA` | 16S rRNA V4, forward (515F) |
+| `GGACTACNVGGGTWTCTAAT` | 16S rRNA V4, reverse (806R) |
 
 This is of course not a good experiment design, its purpose is to give the sequences some context.
 
@@ -198,7 +205,12 @@ The `ID` values are the raw SRR accessions — they must match the `sample` colu
 
 ## Step 5 — Run the pipeline
 
-Now run nf-core/ampliseq, samplesheet (`--input`), sample metadata (`--metadata`) and an output directory name (`--outdir`, choose anything).
+Now run nf-core/ampliseq using this pipeline specific flags:
+-  samplesheet (`--input`)
+-  sample metadata (`--metadata`)
+-  forward primers (`--FW_primer`)
+-  reverse primers (`--RV_primer`)
+-  output directory name (`--outdir`, choose anything).
 
 Read the official run instructions here: https://nf-co.re/ampliseq/2.18.0/docs/usage
 
@@ -343,7 +355,6 @@ The `\` at the end of each line just lets one command span several lines for rea
 
 We ran the pipeline with minimal input and with defualt parameters. The default parameters are hidden, but they are present in our run - and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
 
--  `--FW_primer` and `--RV_primer`. Forward and reverse primer sequences used for amplicon trimming.
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
 -  `--min_frequency`. Filter out ASVs below this abundance treshold.
 - `--min_samples`. Keep ASVs presemt it at least this numner of samples.
