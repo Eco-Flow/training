@@ -8,7 +8,7 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
-In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a gene-count table and a quality report. **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
+In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a taxonomy classification, downstream analysis, and a quality report. **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
 
 -  **QC** and **primer trimming**.
 -  **Amplicon denoising** (error-correction). Via DADA2 or QIIME2.
@@ -24,7 +24,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 - Work out what inputs the pipeline needs
 - Build a **samplesheet** describing your samples
 - Build a **sample metadata** for downstream analysis
-- Download a reference **database!!!?????**
+<!-- - Download a reference **database!!!?????** -->
 - **Run** the pipeline with Docker containers
 - Explore the **results** (quality reports and abundance tables)
 - Learn to **`-resume`** a run and change pipeline options
@@ -37,7 +37,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 
 ### The experiment
 
-We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling, and comparison between sites. There are 2 replicates of each site:
+We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling and comparison between sites. There are 2 replicates in each site:
 
 <img src="img/river_soil_microbe_zoom.png"/>
 
@@ -105,17 +105,17 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 Each read in a FASTQ file is stored as four lines:
 
 1. **Header line** — starts with `@` and contains the read identifier.
-2. **Sequence line** — the DNA or RNA bases for that read.
+2. **Sequence line** — the DNA bases for that read.
 3. **Separator line** — a single `+`, often followed by the same read identifier.
 4. **Quality line** — one character of quality score per base, usually in ASCII.
 
 For example:
 
 ```text
-@SRR6357070.1 1/1
-GATCGGAAGAGCACACGTCTGAACTCCAGTCAC...
+@SRR10070130.11 11/1
+GTGTCAGCAGCCGCGGTAATACGTAGGGTACA...
 +
-AAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEE...
+BBCCCFFFFFFCGGGGGGGGGGHHHGGGHHHG...
 ```
 
 This layout is important because it lets the pipeline keep the sequence and its quality information together for every read.
@@ -156,7 +156,7 @@ It has four columns:
 
 > ⚠️ **Paired vs single-end:** all samples here a paired-end, but the samplesheet can also accepts single-end samples. If the sample is single-end, fill `fastq_1`, leave `fastq_2` blank — note the trailing comma.
 
-Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#sample-sheet-input) as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet.
+Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#sample-sheet-input) and the table from the [**The experiment**](#the-experiment) section as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet.
 
 <details>
 <summary>Cheat sheet — full samplesheet.csv</summary>
@@ -176,7 +176,7 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 ## Step 4 - Build the sample metadata
 
-The **sample metadata** is a CSV file that gives information about the samples for the downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
+The **sample metadata** is a CSV file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
 Create a file called `metadata.csv` in the `eco-flow-training` folder (e.g. with `nano metadata.csv`).
 
@@ -187,7 +187,7 @@ It has four columns:
 | `ID` | A name you choose for the sample (must match the `sample` column from the `samplesheet.csv`) |
 | `any_other_columns` | Any name, any number. Used as grouping variables for downstream stats (barplots, diversity, differential abundance). For the current course, we are going to focus on a single column |
 
-Try to build the sample metadata yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#metadata) as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet. You can name the grouping column `habitat`, as we did in the table above.
+Try to build the sample metadata yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#metadata) and the table from [**The experiment**](#the-experiment) section as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet. You can name the grouping column `habitat`, as we did in the table above.
 
 <details>
 <summary>Cheat sheet — full metadata.csv</summary>
@@ -205,11 +205,11 @@ The `ID` values are the raw SRR accessions — they must match the `sample` colu
 
 ## Step 5 — Run the pipeline
 
-Now run nf-core/ampliseq using this pipeline specific flags:
+Now run let's **run nf-core/ampliseq** using these pipeline specific flags:
 -  samplesheet (`--input`)
 -  sample metadata (`--metadata`)
--  forward primers (`--FW_primer`)
--  reverse primers (`--RV_primer`)
+-  forward primers (`--FW_primer`) (check [**The experiment**](#the-experiment) section)
+-  reverse primers (`--RV_primer`) (check [**The experiment**](#the-experiment) section)
 -  output directory name (`--outdir`, choose anything).
 
 Read the official run instructions here: https://nf-co.re/ampliseq/2.18.0/docs/usage
@@ -255,6 +255,8 @@ nextflow run nf-core/ampliseq \
 -c /workspaces/training/eco-flow-training/codespaces.config \
 --input ./samplesheet.csv \
 --metadata ./metadata.csv \
+--FW_primer GTGYCAGCMGCCGCGGTAA \
+--RV_primer GGACTACNVGGGTWTCTAAT \
 --outdir results
 ```
 
@@ -266,9 +268,11 @@ The `\` at the end of each line just lets one command span several lines for rea
 > ✅ **What success looks like:** Nextflow prints a banner and then a live list of processes as they run — something like:
 >
 > ```
-> N E X T F L O W   ~  version 26.04.6
+> Nextflow 26.04.6 is available - Please consider updating your version to it
 >
-> Launching `main.nf` [nauseous_mendel] revision: be54f69b2e
+>  N E X T F L O W   ~  version 26.04.2
+>
+> Launching `https://github.com/nf-core/ampliseq` [silly_lavoisier] revision: 2723d4c298 [2.18.0]
 >
 >
 > ------------------------------------------------------
@@ -281,49 +285,28 @@ The `\` at the end of each line just lets one command span several lines for rea
 > ------------------------------------------------------
 >
 > Main arguments
->   input                     : /Users/fernando/work/repositories/pipelines/ampliseq/course/samplesheet.tsv
->   FW_primer                 : GTGYCAGCMGCCGCGGTAA
->   RV_primer                 : GGACTACNVGGGTWTCTAAT
->   metadata                  : /Users/fernando/work/repositories/pipelines/ampliseq/course/metadata.tsv
->   outdir                    : results
->
-> ASV post processing
->   filter_ssu                : bac
->   max_len_asv               : 255
->
-> Taxonomic assignment
->   dada_ref_taxonomy         : rdp=18
->   cut_dada_ref_taxonomy     : true
->
-> ASV filtering
->   min_frequency             : 10
->   min_samples               : 2
->
-> Downstream analysis
->   metadata_category_barplot : habitat
+>   input              : samplesheet.csv
+>   FW_primer          : GTGYCAGCMGCCGCGGTAA
+>   RV_primer          : GGACTACNVGGGTWTCTAAT
+>   metadata           : metadata.csv
+>   outdir             : results
 >
 > Differential abundance analysis
->   ancombc_effect_size       : 1
->
-> Skipping specific steps
->   skip_alpha_rarefaction    : true
+>   ancombc_effect_size: 1
 >
 > Generic options
->   trace_report_suffix       : 2026-09-23_14-49-20
->
-> Institutional config options
->   config_profile_name       : Fast replicated test profile
->   config_profile_description: Fast, replicated (n=2/habitat) subset of test_full for course use
+>   trace_report_suffix: 2026-09-24_14-17-19
 >
 > Core Nextflow options
->   runName                   : nauseous_mendel
->   containerEngine           : docker
->   launchDir                 : /Users/fernando/work/repositories/pipelines/ampliseq
->   workDir                   : /Users/fernando/work/repositories/pipelines/ampliseq/work
->   projectDir                : /Users/fernando/work/repositories/pipelines/ampliseq
->   userName                  : fernando
->   profile                   : test_fast_replicated,docker
->   configFiles               : /Users/fernando/work/repositories/pipelines/ampliseq/nextflow.config
+>   revision           : 2.18.0
+>   runName            : silly_lavoisier
+>   containerEngine    : docker
+>   launchDir          : /workspaces/training/eco-flow-training/ampliseq
+>   workDir            : /workspaces/training/eco-flow-training/ampliseq/work
+>   projectDir         : /home/vscode/.nextflow/assets/.repos/nf-core/ampliseq/clones/2723d4c298d48321594920d0324697e14d73ee94
+>   userName           : vscode
+>   profile            : docker
+>   configFiles        : /home/vscode/.nextflow/assets/.repos/nf-core/ampliseq/clones/2723d4c298d48321594920d0324697e14d73ee94/nextflow.config, /workspaces/training/eco-flow-training/ampliseq/codespaces.config
 >
 > !! Only displaying parameters that differ from the pipeline defaults !!
 > ------------------------------------------------------
@@ -343,10 +326,14 @@ The `\` at the end of each line just lets one command span several lines for rea
 > The cutoffs are chosen before any quality score-based read truncation (using `--truncq`) is performed.
 >
 > executor >  local (2)
-> [18/8debf1] NFCORE_AMPLISEQ:AMPLISEQ:RENAME_RAW_DATA_FILES (SRR10102393)                          [100%] 4 of 4, cached: 4 ✔
-> [5b/9f5ddc] NFCORE_AMPLISEQ:AMPLISEQ:FASTQC (SRR10102393)                                         [100%] 4 of 4, cached: 4 ✔
-> [69/a76bf4] NFCORE_AMPLISEQ:AMPLISEQ:CUTADAPT_WORKFLOW:CUTADAPT_BASIC (SRR10102393)               [100%] 4 of 4, cached: 4 ✔
->  ...
+> executor >  local (4)
+> executor >  local (4)
+> executor >  local (4)
+> executor >  local (4)
+> [a4/8e083f] NFCORE_AMPLISEQ:AMPLISEQ:RENAME_RAW_DATA_FILES (SRR10070130)       [ 50%] 2 of 4
+> executor >  local (4)
+> [40/1c5fc8] NFCORE_AMPLISEQ:AMPLISEQ:RENAME_RAW_DATA_FILES (SRR10102393)       [ 75%] 3 of 4
+> ...
 > ```
 >
 > This run takes roughly **20-30 minutes** on the small test data — leave it running. The first time, Nextflow also downloads the containers, which adds a few minutes.
@@ -356,8 +343,9 @@ The `\` at the end of each line just lets one command span several lines for rea
 We ran the pipeline with minimal input and with defualt parameters. The default parameters are hidden, but they are present in our run, and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
 
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
+-  `--ref_taxonomy_storage`. Local storage for DADA2 reference taxonomic database for taxonomic assignment.
 -  `--min_frequency`. Filter out ASVs below this abundance treshold.
-- `--min_samples`. Keep ASVs presemt it at least this numner of samples.
+-  `--min_samples`. Keep ASVs presemt it at least this numner of samples.
 
 Let's run the pipeline again chaning this parameters:
 
@@ -393,9 +381,9 @@ You didn't supply one of the required parameters. Check every `--input`, `--meta
 </details>
 
 <details>
-<summary>❌ <code>Not a valid path value: 'genes.gff.gz'</code></summary>
+<summary>❌ <code>Not a valid path value: 'metadata.csv'</code></summary>
 
-A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/genes.gff.gz`, and confirm the file exists with `ls -l`.
+A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/ampliseq/data/metadata.csv`, and confirm the file exists with `ls -l`.
 </details>
 
 <details>
@@ -403,8 +391,6 @@ A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/tr
 
 You forgot **`-profile docker`**. Without it, Nextflow looks for the tools installed locally — but they aren't. Adding `-profile docker` makes each step run inside a container that already has the tool.
 </details>
-
-If you get a different error, grab a tutor.
 
 ---
 
@@ -422,23 +408,19 @@ Once the pipeline finishes (`Pipeline completed successfully`), look inside your
 > <summary>✅ Roughly what you'll see</summary>
 >
 > ```
-> fastqc  multiqc  pipeline_info  star_salmon  trimgalore  ...
+> ... barrnap cutadapt  dada2  fastqc  input  multiqc ...
 > ```
 >
 > Each folder holds the output of one stage of the pipeline.
 > </details>
 
-The full catalogue of outputs is documented here: https://nf-co.re/rnaseq/3.14.0/docs/output — spend ~10 minutes skimming it while the run finishes.
+The full catalogue of outputs is documented here: https://nf-co.re/ampliseq/2.18.0/docs/output/ — spend ~10 minutes skimming it while the run finishes.
 
 **The two things to look at first:**
 
-1. **The MultiQC report** — `my_results/multiqc/star_salmon/multiqc_report.html`. This single HTML page summarises quality and alignment across *all* samples. To view it in Codespaces, right-click the file in the Explorer and choose **"Open with Live Server"** (the extension is pre-installed), or download it (right-click → Download) and open it in your browser.
+1. **The MultiQC report** — `results/multiqc/multiqc_report.html`. This single HTML page summarises quality across *all* samples. To view it in Codespaces, right-click the file in the Explorer and choose **"Open with Live Server"** (the extension is pre-installed), or download it (right-click → Download) and open it in your browser.
 
-2. **The FastQC results** — under `my_results/fastqc/`. Check whether the raw reads were good quality. This guide explains how to read the FastQC plots and quality scores: https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
-
-> 🧬 **The key file for Part 4:** the gene-count table lives at
-> `my_results/star_salmon/salmon.merged.gene_counts.tsv`.
-> You'll load this into R in the next section to find differentially expressed genes.
+2. **The FastQC results** — under `results/fastqc/`. Check whether the raw reads were good quality. This guide explains how to read the FastQC plots and quality scores: https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
 
 We'll discuss the reports together in class.
 
@@ -455,7 +437,7 @@ Add **`-resume`** and Nextflow will reuse the **cached** results of any steps th
 > ✅ **What you'll see with `-resume`:** unchanged processes are marked as cached, e.g.
 >
 > ```
-> [a1/b2c3d4] NFCORE_RNASEQ:...:FASTQC (CONTROL_REP1)  [100%] 6 of 6, cached: 6 ✔
+> [27/7e1c6d] NFCORE_AMPLISEQ:AMPLISEQ:RENAME_RAW_DATA_FILES (SRR10102392)                                      [100%] 4 of 4, cached: 4 ✔
 > ```
 >
 > The word **`cached`** tells you Nextflow skipped the real work and reused the previous result — a huge time-saver during development.
