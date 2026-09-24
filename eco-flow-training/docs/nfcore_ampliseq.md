@@ -29,11 +29,11 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 - Explore the **results** (quality reports and abundance tables)
 - Learn to **`-resume`** a run and change pipeline options
 
-> ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training`** folder. Check with:
+> ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training/ampliseq`** folder. Check with:
 > ```bash
-> pwd     # should end in eco-flow-training
+> pwd     # should end in eco-flow-training/ampliseq
 > ```
-> Everything below assumes you run commands from there. In Codespaces the full path is `/workspaces/training/eco-flow-training`; on a local machine substitute your own path (use `pwd` to see it).
+> Everything below assumes you run commands from there. In Codespaces the full path is `/workspaces/training/eco-flow-training/ampliseq`; on a local machine substitute your own path (use `pwd` to see it).
 
 ### The experiment
 
@@ -69,7 +69,7 @@ It results in libraries of sequences called **reads**, stored in **FASTQ format*
 
 ## Step 1 — Inspect the raw data
 
-It's always worth looking at your data before running anything. The reads in FASTQ format live in the `ampliseq_data` folder.
+It's always worth looking at your data before running anything. The reads in FASTQ format live in the `data` folder.
 
 The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't directly human-readable — plain `cat`/`head` would print gibberish (don't panic if you see `<��xT�r-�B7�...`, that's expected!). Instead, use **`zcat`** (from Part 1), which reads gzipped files.
 
@@ -85,8 +85,8 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 > Use these commands:
 >
 > ```bash
-> zcat ampliseq_data/SRR10070130_1.fastq.gz | wc -l
-> zcat ampliseq_data/SRR10070130_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
+> zcat data/SRR10070130_1.fastq.gz | wc -l
+> zcat data/SRR10070130_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
 > ```
 >
 > <details>
@@ -144,7 +144,7 @@ Samples are linked between the two files via the samplesheet's `sample` column a
 
 ## Step 3 — Build the samplesheet
 
-The **samplesheet** is a CSV file that tells the pipeline which files belong to which sample. Create a file called `samplesheet.csv` in the `eco-flow-training` folder (e.g. with `nano samplesheet.csv`).
+The **samplesheet** is a CSV file that tells the pipeline which files belong to which sample. Create a file called `samplesheet.csv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano samplesheet.csv`).
 
 It has four columns:
 
@@ -163,22 +163,22 @@ Try to build the samplesheet yourself using the [example on the nf-core page](ht
 
 ```csv
 sample,fastq_1,fastq_2
-SRR10070130,/workspaces/training/eco-flow-training/ampliseq_data/SRR10070130_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR10070130_2.fastq.gz
-SRR10070131,/workspaces/training/eco-flow-training/ampliseq_data/SRR10070131_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR10070131_2.fastq.gz
-SRR10102392,/workspaces/training/eco-flow-training/ampliseq_data/SRR10102392_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR10102392_2.fastq.gz
-SRR10102393,/workspaces/training/eco-flow-training/ampliseq_data/SRR10102393_1.fastq.gz,/workspaces/training/eco-flow-training/data/SRR10102393_2.fastq.gz
+SRR10070130,/workspaces/training/eco-flow-training/ampliseq/data/SRR10070130_1.fastq.gz,/workspaces/training/eco-flow-training/ampliseq/data/SRR10070130_2.fastq.gz
+SRR10070131,/workspaces/training/eco-flow-training/ampliseq/data/SRR10070131_1.fastq.gz,/workspaces/training/eco-flow-training/ampliseq/data/SRR10070131_2.fastq.gz
+SRR10102392,/workspaces/training/eco-flow-training/ampliseq/data/SRR10102392_1.fastq.gz,/workspaces/training/eco-flow-training/ampliseq/data/SRR10102392_2.fastq.gz
+SRR10102393,/workspaces/training/eco-flow-training/ampliseq/data/SRR10102393_1.fastq.gz,/workspaces/training/eco-flow-training/ampliseq/data/SRR10102393_2.fastq.gz
 ```
 
 The `sample` values are the raw SRR accessions, but they can be any other string, as long as they are unique per row and match the metadata file's `ID` column (Step 2).
 </details>
 
-> 💡 **Using absolute paths is highly recommended.** The paths above are the Codespaces location. On a local machine, replace `/workspaces/training/eco-flow-training` with the output of your own `pwd`.
+> 💡 **Using absolute paths is highly recommended.** The paths above are the Codespaces location. On a local machine, replace `/workspaces/training/eco-flow-training/ampliseq` with the output of your own `pwd`.
 
 ## Step 4 - Build the sample metadata
 
 The **sample metadata** is a CSV file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
-Create a file called `metadata.csv` in the `eco-flow-training` folder (e.g. with `nano metadata.csv`).
+Create a file called `metadata.csv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano metadata.csv`).
 
 It has four columns:
 
@@ -217,7 +217,7 @@ Read the official run instructions here: https://nf-co.re/ampliseq/2.18.0/docs/u
 Two extra flags you **must** include in this environment:
 
 - **`-profile docker`** — runs every step inside its Docker container, so you don't have to install any of the underlying tools. (On an HPC you'd use `-profile singularity` or `apptainer` instead — ask your HPC team.)
-- **`-c ../codespaces.config`** — a small custom config that adapts the pipeline to the tiny Codespaces machine. Without it the run is likely to fail. See below for exactly what it does.
+- **`-c codespaces.config`** — a small custom config that adapts the pipeline to the tiny Codespaces machine. Without it the run is likely to fail. See below for exactly what it does.
 
 We also pin the pipeline version with **`-r 2.18.0`** so you get exactly the version this course was written for. But you can choose any other version.
 
@@ -252,7 +252,7 @@ params {
 nextflow run nf-core/ampliseq \
 -r 2.18.0 \
 -profile docker \
--c /workspaces/training/eco-flow-training/codespaces.config \
+-c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
 --input ./samplesheet.csv \
 --metadata ./metadata.csv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
@@ -356,7 +356,7 @@ Let's run the pipeline again chaning this parameters:
 nextflow run nf-core/ampliseq \
 -r 2.18.0 \
 -profile docker \
--c /workspaces/training/eco-flow-training/codespaces.config \
+-c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
 --input ./samplesheet.csv \
 --metadata ./metadata.csv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
@@ -383,7 +383,7 @@ You didn't supply one of the required parameters. Check every `--input`, `--meta
 <details>
 <summary>❌ <code>Not a valid path value: 'metadata.csv'</code></summary>
 
-A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/ampliseq/data/metadata.csv`, and confirm the file exists with `ls -l`.
+A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/ampliseq/metadata.csv`, and confirm the file exists with `ls -l`.
 </details>
 
 <details>
