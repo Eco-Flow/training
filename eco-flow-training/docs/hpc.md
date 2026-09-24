@@ -229,7 +229,7 @@ That copy is Nextflow's to manage — it's filed away under a long path like `~/
 
 ### Way B — clone it yourself
 
-**Do this one too** — the exercise after it reads files from this copy.
+**Do this one too** — Step 4 runs this copy.
 
 > ▶️ **Try it**
 >
@@ -252,6 +252,12 @@ ro-crate-metadata.json  subworkflows  tests  tower.yml  workflows
 ```
 </details>
 
+Keep the clone — Step 4 runs it. For now, go back to the course folder, so everything below runs from one place:
+
+```bash
+cd /workspaces/training/eco-flow-training
+```
+
 With a clone, you point Nextflow at the **main.nf** rather than the pipeline name ("nf/core/demo").
 
 | | **Way A:** `nextflow run nf-core/demo -r 1.2.0` | **Way B:** `git clone` |
@@ -265,42 +271,29 @@ With a clone, you point Nextflow at the **main.nf** rather than the pipeline nam
 
 ### Who decides the CPUs and memory?
 
-Every step asks the scheduler for CPUs, memory and time. Those numbers come from the pipeline: each step (a **process**) has a **label**, and `conf/base.config` turns labels into resources.
+Every step asks the scheduler for CPUs, memory and time. Those numbers come from the pipeline itself, in two parts.
 
-These files come from the copy you cloned in Way B, and that's where Way B left you, so run these as they are:
+**First, each step carries a label.** Open a module in the clone you just made — `nf_practical/demo/modules/nf-core/fastqc/main.nf` — and the third line says:
 
-> ▶️ **Challenge — what does FastQC ask for?**
->
-> ```bash
-> pwd      # should end in nf_practical/demo
-> grep -n "label" modules/nf-core/fastqc/main.nf
-> grep -n -A4 "withLabel:process_low" conf/base.config
-> ```
->
-> (`No such file or directory`? You're somewhere else — go back with `cd /workspaces/training/eco-flow-training/nf_practical/demo`, or do Way B first if you skipped it.)
->
-> 1. How many CPUs, how much memory and how much time does the FASTQC step ask for?
-> 2. The numbers are multiplied by `task.attempt`, which is `1` on the first try and `2` on a retry. What does FASTQC ask for on its second try?
-
-<details markdown="1">
-<summary>✅ Answer</summary>
-
-```
-3:    label 'process_low'
-```
-```
-    withLabel:process_low {
-        cpus   = { 2     * task.attempt }
-        memory = { 12.GB * task.attempt }
-        time   = { 4.h   * task.attempt }
-    }
+```groovy
+process FASTQC {
+    tag "${meta.id}"
+    label 'process_low'
 ```
 
-1. **2 CPUs, 12 GB, 4 hours.**
-2. **4 CPUs, 24 GB, 8 hours.** Near the top of `conf/base.config`, the `errorStrategy` line says to **retry** a task that failed with an exit code between 130 and 145 — codes that usually mean the scheduler killed the job for using too much memory or time. So nf-core pipelines automatically try again with double the resources.
-</details>
+**Second, the pipeline's `conf/base.config` turns each label into a resource request:**
 
-On a cluster these numbers become the job's request: a job asking for 12 GB waits until a node with 12 GB free is available. You'll see the request Nextflow actually sends in the next step.
+```groovy
+withLabel:process_low {
+    cpus   = { 2     * task.attempt }
+    memory = { 12.GB * task.attempt }
+    time   = { 4.h   * task.attempt }
+}
+```
+
+So FASTQC asks for **2 CPUs, 12 GB and 4 hours**, and on a cluster that becomes the job's request: it waits until a node with 12 GB free is available. You'll see the request Nextflow actually sends in the next step.
+
+> 💡 **`task.attempt`** is `1` on the first try and `2` on a retry, so a step that gets killed for using too much memory automatically asks for double next time. (nf-core pipelines retry on exit codes 130–145 — the codes schedulers use when they kill a job.)
 
 <details markdown="1">
 <summary>🔍 Optional — a tour of the pipeline folder</summary>
@@ -318,16 +311,10 @@ On a cluster these numbers become the job's request: a job asking for 12 GB wait
 `nextflow config` prints the configuration after all profiles and config files are merged. Compare these two and look at the `docker {` and `singularity {` blocks — switching the profile just flips which container engine is `enabled`:
 
 ```bash
-nextflow config . -profile test,docker        # "." = the clone you're standing in
-nextflow config . -profile test,singularity
+nextflow config ./nf_practical/demo -profile test,docker
+nextflow config ./nf_practical/demo -profile test,singularity
 ```
 </details>
-
-Keep the clone — you'll run it in the next step. For now, go back to the course folder, so the run's working files land there:
-
-```bash
-cd /workspaces/training/eco-flow-training
-```
 
 ---
 
