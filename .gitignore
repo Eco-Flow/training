@@ -27,3 +27,5 @@ demo_results
 work_slurm
 hello_job.sh
 hello_*.log
+# The practice pipeline clone from Part 7
+nf_practical/
