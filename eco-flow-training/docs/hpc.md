@@ -577,17 +577,17 @@ nextflow run nf-core/demo -r 1.2.0 \
 ```
 </details>
 
-**2. Run it in the background with `-bg`** — simpler, and fine for shorter runs on clusters that allow it. `-bg` hands you your prompt back and writes progress to `.nextflow.log`. On its own it may not survive you logging out, so pair it with `nohup`:
+**2. Run it in the background with `-bg`** — simpler, and fine for shorter runs on clusters that allow them. Add the flag and Nextflow detaches itself: you get your prompt back, and you can close your terminal without stopping the run.
 
 ```bash
-nohup nextflow run nf-core/demo -r 1.2.0 \
+nextflow run nf-core/demo -r 1.2.0 \
   -profile singularity,<your_cluster> \
   --outdir /path/to/results \
   -w /path/with/space/work \
-  -resume -bg > nextflow.out 2>&1
+  -resume -bg
 ```
 
-Then follow it whenever you log back in:
+Progress goes to `.nextflow.log`, so check on it whenever you log back in:
 
 ```bash
 tail -f .nextflow.log
