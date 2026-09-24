@@ -25,3 +25,5 @@ slurm-*.out
 nf_driver_*.log
 demo_results
 work_slurm
+hello_job.sh
+hello_*.log
