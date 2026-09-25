@@ -39,7 +39,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 
 We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling and comparison between sites. There are 2 replicates in each site:
 
-<img src="img/river_soil_microbe_zoom.png"/>
+<img src="img/river_soil_microbe_zoom.png" width="380.8"/>
 
 | Sample | Habitat | Reads |
 | --- | --- | --- |
