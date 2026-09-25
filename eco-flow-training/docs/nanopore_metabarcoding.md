@@ -1,6 +1,6 @@
 # Running the nanopore metabarcoding pipeline
 
-🧭 [◀️ Part 2 · Pipelines](./pipelines.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 5 · nf-core Ampliseq](./nfcore_ampliseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · GitHub basics ▶️](./github_basics.md)
 
 ---
 
@@ -502,4 +502,4 @@ Add **`-resume`** and Nextflow reuses cached results for any step whose inputs h
 
 ---
 
-🧭 [◀️ Part 2 · Pipelines](./pipelines.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md)
+🧭 [◀️ Part 5 · nf-core Ampliseq](./nfcore_ampliseq.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · GitHub basics ▶️](./github_basics.md)

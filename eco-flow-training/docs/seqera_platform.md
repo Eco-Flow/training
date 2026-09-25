@@ -1,6 +1,6 @@
 # Monitoring and launching runs with Seqera Platform
 
-🧭 [◀️ Part 7 · HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [★ Advanced · HPC configs ▶️](./hpc_config.md)
+🧭 [◀️ Part 8 · HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [★ Advanced · HPC configs ▶️](./hpc_config.md)
 
 🚀 **Start now:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eco-Flow/training) — *first launch takes a couple of minutes to build.*
 
@@ -216,4 +216,4 @@ For an **HPC**, the interesting piece is the **[Agent](https://docs.seqera.io/pl
 
 ---
 
-🧭 [◀️ Part 7 · HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [★ Advanced · HPC configs ▶️](./hpc_config.md)
+🧭 [◀️ Part 8 · HPC](./hpc.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [★ Advanced · HPC configs ▶️](./hpc_config.md)

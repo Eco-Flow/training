@@ -1,6 +1,6 @@
 # Interacting with code on GitHub (Issues, PRs, README & Claude Code)
 
-🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · HPC ▶️](./hpc.md)
+🧭 [◀️ Part 6 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 8 · HPC ▶️](./hpc.md)
 
 ---
 
@@ -12,7 +12,7 @@ So far you've *run* pipelines other people built. In real research you'll also n
 
 On GitHub, that all happens through a small set of tools: the **README**, **Issues**, and **Pull Requests**. In this part you'll learn what each one is for, and then watch (and try) the full loop: **spot a problem → open an issue → fix it → open a pull request.**
 
-We'll use a real pipeline as our example: **[`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)** — the same pipeline you ran in Part 5.
+We'll use a real pipeline as our example: **[`Eco-Flow/nanoporemetabarcoding`](https://github.com/Eco-Flow/nanoporemetabarcoding)** — the same pipeline you ran in Part 6.
 
 > ℹ️ **You don't need to be a programmer for this.** Reporting a clear issue or fixing a README typo is a genuine, valued contribution to open-source science — and it's how most people make their *first* contribution.
 
@@ -193,4 +193,4 @@ Now do it yourself. Use the list of README problems you noted in **Step 1** (or 
 
 ---
 
-🧭 [◀️ Part 5 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 7 · HPC ▶️](./hpc.md)
+🧭 [◀️ Part 6 · Nanopore metabarcoding](./nanopore_metabarcoding.md) &nbsp;|&nbsp; [🏠 Course menu](../README.md) &nbsp;|&nbsp; **Next:** [Part 8 · HPC ▶️](./hpc.md)
