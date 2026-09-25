@@ -16,7 +16,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 -  **Downstream analysis**. Diversity stats, plots, abundance tables.
 -  **Reporting**. MultiQC summary plus QIIME2 visualizations (`.qzv` files).
 
-![nf-core logo](https://github.com/Eco-Flow/training/assets/9978862/cdb59557-128d-48f8-8df1-0a6b548f89e9)
+<img src="img/ampliseq_workflow.png" alt="nf-core/rnaseq usage page" width="700"/>
 
 ### What you'll do
 
@@ -29,9 +29,9 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 - Explore the **results** (quality reports and abundance tables)
 - Learn to **`-resume`** a run and change pipeline options
 
-> ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training/ampliseq`** folder. Check with:
+> ✅ **Before you start**, make sure you've completed [Setup](./setup.md) and that your terminal is inside the **`eco-flow-training/ampliseq`** folder. To go that folder do:
 > ```bash
-> pwd     # should end in eco-flow-training/ampliseq
+> cd eco-flow-training/ampliseq
 > ```
 > Everything below assumes you run commands from there. In Codespaces the full path is `/workspaces/training/eco-flow-training/ampliseq`; on a local machine substitute your own path (use `pwd` to see it).
 
@@ -77,16 +77,24 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 
 > ▶️ **Challenge — inspect a FASTQ file**
 >
-> Try to answer these two questions from the data:
 >
-> 1. How many lines are in the FASTQ file?
-> 2. What is the length of the reads?
+> Let's have a quick overview of the FASTQ files using `ls`:
 >
-> Use these commands:
+> ```bash
+> ls -lha data/ # Size of files should be roughly similar if they all came from the same run
+> ```
+>
+> Now let's check the number of lines and the size of the first sequence:
 >
 > ```bash
 > zcat data/SRR10070130_1.fastq.gz | wc -l
 > zcat data/SRR10070130_1.fastq.gz | head -n 2 | tail -n 1 | tr -d '\n' | wc -c
+> ```
+>
+> Let's make sure the reverse FASTQ has the same number of lines
+>
+> ```bash
+> zcat data/SRR10070130_2.fastq.gz | wc -l
 > ```
 >
 > <details>
@@ -97,7 +105,7 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 > 250
 > ```
 >
-> The first command shows there are `200000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `50000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `102`. So the reads are `101` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
+> The first command shows there are `12000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `3000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `251`. So the reads are `250` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
 > </details>
 
 ### Structure of a typical FASTQ file
@@ -126,14 +134,12 @@ This layout is important because it lets the pipeline keep the sequence and its 
 
 Go to the nf-core/ampliseq page and read what the pipeline does and what inputs it expects: 👉 **https://nf-co.re/ampliseq/2.18.0**
 
-<img src="img/ampliseq_workflow.png" alt="nf-core/rnaseq usage page" width="700"/>
-
 <details>
 <summary>Cheat sheet — what the pipeline needs</summary>
 
 To run nf-core/ampliseq you need:
 
-* an **input samplesheet** (CSV) that links to your raw RNA-Seq FASTQ data - MANDATORY
+* an **input samplesheet** (CSV) that links to your raw amplicon sequencing FASTQ data - MANDATORY
 * an **input metadata** (CSV) wuth information about your samples - OPTIONAL
 * **Forward** and **Reverse** primers used during PCR amplification - OPTIONAL
 
@@ -176,7 +182,7 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 ## Step 4 - Build the sample metadata
 
-The **sample metadata** is a CSV file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow the QIIME2 specifications. It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
+The **sample metadata** is a CSV (comma separated) file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow [QIIME2's metadata specifications](https://docs.qiime2.org/2024.10/tutorials/metadata/). It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
 Create a file called `metadata.csv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano metadata.csv`).
 
@@ -194,10 +200,10 @@ Try to build the sample metadata yourself using the [example on the nf-core page
 
 ```csv
 ID,habitat
-SRR10070130,River water
-SRR10070131,River water
-SRR10102392,Soil
-SRR10102393,Soil
+SRR10070130,river
+SRR10070131,river
+SRR10102392,soil
+SRR10102393,soil
 ```
 
 The `ID` values are the raw SRR accessions — they must match the `sample` column from `samplesheet.csv` exactly. `habitat` is the grouping column we chose, with repeated (but not all-unique) values so QIIME2 can use it for downstream comparisons.
@@ -206,6 +212,7 @@ The `ID` values are the raw SRR accessions — they must match the `sample` colu
 ## Step 5 — Run the pipeline
 
 Now run let's **run nf-core/ampliseq** using these pipeline specific flags:
+
 -  samplesheet (`--input`)
 -  sample metadata (`--metadata`)
 -  forward primers (`--FW_primer`) (check [**The experiment**](#the-experiment) section)
@@ -236,9 +243,6 @@ process {
     }
 }
 
-params {
-    skip_markduplicates = true   // skip a memory-heavy step we don't need here
-}
 ```
 
 - **`resourceLimits`** is a Nextflow feature that *caps* each step's request. If the pipeline asks a step for 12 GB, Nextflow quietly clamps it down to our 6 GB limit so it still fits on the machine.
@@ -345,7 +349,7 @@ We ran the pipeline with minimal input and with defualt parameters. The default 
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
 -  `--ref_taxonomy_storage`. Local storage for DADA2 reference taxonomic database for taxonomic assignment.
 -  `--min_frequency`. Filter out ASVs below this abundance treshold.
--  `--min_samples`. Keep ASVs presemt it at least this numner of samples.
+-  `--min_samples`. Keep ASVs present in at least this numner of samples.
 
 Let's run the pipeline again chaning this parameters:
 
@@ -416,14 +420,6 @@ Once the pipeline finishes (`Pipeline completed successfully`), look inside your
 
 The full catalogue of outputs is documented here: https://nf-co.re/ampliseq/2.18.0/docs/output/ — spend ~10 minutes skimming it while the run finishes.
 
-**The two things to look at first:**
-
-1. **The MultiQC report** — `results/multiqc/multiqc_report.html`. This single HTML page summarises quality across *all* samples. To view it in Codespaces, right-click the file in the Explorer and choose **"Open with Live Server"** (the extension is pre-installed), or download it (right-click → Download) and open it in your browser.
-
-2. **The FastQC results** — under `results/fastqc/`. Check whether the raw reads were good quality. This guide explains how to read the FastQC plots and quality scores: https://bioinfo.cd-genomics.com/quality-control-how-do-you-read-your-fastqc-results.html
-
-We'll discuss the reports together in class.
-
 ---
 
 ## Step 7 — Resuming a run
@@ -446,7 +442,7 @@ Add **`-resume`** and Nextflow will reuse the **cached** results of any steps th
 
 ## Finish
 
-🎉 **You've finished the course!** You've run a complete, reproducible RNA-Seq pipeline — from raw reads to gene counts and quality reports — using industry-standard nf-core tooling.
+🎉 **You've finished the course!** You've run a complete, reproducible amplicon sequencing pipeline — from raw reads to gene counts and quality reports — using industry-standard nf-core tooling.
 
 **Next steps:**
 
