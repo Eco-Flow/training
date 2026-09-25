@@ -140,7 +140,7 @@ Go to the nf-core/ampliseq page and read what the pipeline does and what inputs 
 To run nf-core/ampliseq you need:
 
 * an **input samplesheet** (CSV) that links to your raw amplicon sequencing FASTQ data - MANDATORY
-* an **input metadata** (CSV) wuth information about your samples - OPTIONAL
+* an **input metadata** (CSV) with information about your samples - OPTIONAL
 * **Forward** and **Reverse** primers used during PCR amplification - OPTIONAL
 
 Samples are linked between the two files via the samplesheet's `sample` column and the metadata's `ID` column - their values must match.
