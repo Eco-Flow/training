@@ -237,7 +237,7 @@ Once this tiny test passes, you can trust the config for real runs.
 
 ## Next — running it for real
 
-With a working config, you run pipelines like any other user of your cluster: swap `-profile docker` for **`-profile singularity -c mycluster.config`**, and keep the Nextflow driver alive while the pipeline runs. How to do that (a driver job script for Slurm or SGE, `tmux`, or `-bg`) is covered in **[Part 7 · Running a pipeline on an HPC](./hpc.md)**, Step 5.
+With a working config, you run pipelines like any other user of your cluster: swap `-profile docker` for **`-profile singularity -c mycluster.config`**, and keep the Nextflow driver alive while the pipeline runs. How to do that (a driver job script for Slurm or SGE, `tmux`, or `-bg`) is covered in **[Part 7 · Running a pipeline on an HPC](./hpc.md)**, Steps 5 and 6.
 
 > 🤝 **Share your config.** Once it works, consider adding it to [nf-core/configs](https://github.com/nf-core/configs), so everyone at your institution can simply use `-profile <your_cluster>`. That's a pull request, just like in [Part 6](./github_basics.md).
 

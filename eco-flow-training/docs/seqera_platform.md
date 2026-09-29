@@ -126,7 +126,7 @@ The page updates as the run progresses. There's a lot on it; these are the parts
 > ▶️ **Challenge — read the run**
 >
 > 1. In **Tasks**, open the FASTQC task and find the **work directory** and the **command** it ran. Does the command look like the `.command.sh` you read in Part 3?
-> 2. In **Metrics**, which process used the most memory? In [Part 7 Step 2](./hpc.md) you found that FASTQC *asks* for 12 GB. How much did it actually use?
+> 2. In **Metrics**, which process used the most memory? In [Part 7 Step 4](./hpc.md) you found that FASTQC *asks* for 12 GB. How much did it actually use?
 > 3. Run the command again with `-resume` added. What changes in the **Tasks** tab?
 
 <details markdown="1">
