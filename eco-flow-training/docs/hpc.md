@@ -513,7 +513,7 @@ If yours is listed, add it as a profile and Nextflow knows how to talk to your c
 nextflow run nf-core/demo -r 1.2.0 -profile test,<your_cluster> --outdir demo_results
 ```
 
-That's the `-profile ucl_myriad` you saw in [Part 5](./nanopore_metabarcoding.md). **Open your cluster's page first** — most list setup steps, such as which Java module to load.
+That's the `-profile ucl_myriad` you saw in [Part 6](./nanopore_metabarcoding.md). **Open your cluster's page first** — most list setup steps, such as which Java module to load.
 
 <details markdown="1">
 <summary>❓ Not listed? Where to get a config</summary>
@@ -652,7 +652,7 @@ nf-core/rnaseq 3.26.0 needs **Nextflow 25.04.3 or newer** (`nextflow -version`).
 | **Pre-download if compute nodes are offline** | Use `nextflow pull` or `nf-core pipelines download` on the login node |
 | **Add `-resume` after fixing a problem** | Finished steps are reused instead of recomputed |
 | **Read `<outdir>/pipeline_info/`** | nf-core writes an execution report, timeline and trace there, showing how much memory and time each step *really* used |
-| **Keep your run command in a script** (like `run.sh`) and in git | Reproducible, easy to rerun, easy to share (see [Part 6](./github_basics.md)) |
+| **Keep your run command in a script** (like `run.sh`) and in git | Reproducible, easy to rerun, easy to share (see [Part 7](./github_basics.md)) |
 | **Clean up when you're happy** | `nextflow clean -f`, or delete `work/`, but only once you won't need `-resume` |
 
 > 🔍 **Exit codes 130–145** (for example `137` or `140`) usually mean the **scheduler killed the job** for going over its memory or time. nf-core pipelines retry once with double the resources (Step 4). If a step fails again, it needs more than it's allowed: ask your HPC team, or see how to raise a label's resources on the ★ [advanced page](./hpc_config.md).
@@ -676,7 +676,7 @@ nf-core/rnaseq 3.26.0 needs **Nextflow 25.04.3 or newer** (`nextflow -version`).
 
 **Next steps:**
 
-- Continue to **[Part 8 · Seqera Platform ▶️](./seqera_platform.md)** to watch your runs live in the browser.
+- Continue to **[Part 9 · Seqera Platform ▶️](./seqera_platform.md)** to watch your runs live in the browser.
 - Your cluster has no ready-made config? See ★ **[Advanced: setting up Nextflow for your HPC](./hpc_config.md)**.
 - Stuck? The [nf-core Slack](https://nf-co.re/join/slack) is full of people running pipelines on clusters like yours. Or get in touch with us at Eco-Flow: **ecoflow . ucl @ gmail . com**
 
