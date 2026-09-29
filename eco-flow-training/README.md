@@ -27,7 +27,7 @@ Work through it top to bottom — or jump to whatever you need.
 | **2** | [Pipelines with Nextflow](./docs/pipelines.md) | Lecture | What Nextflow and nf-core are, and why pipelines matter for reproducible, scalable science. |
 | **3** | [Run an nf-core RNA-Seq pipeline](./docs/nfcore_rnaseq.md) | Practical | Hands-on — run a real nf-core/rnaseq analysis end to end, from raw reads to results. |
 | **4** | [Differential expression](./docs/differential.md) | Practical · R | Analyse the gene counts from Part 3 with DESeq2 to find differentially expressed genes. |
-| **5** | [Run an nf-core ampliseq pipeline](./docs/nfcore_ampliseq.md) | Practical · 🚧 draft | Run a real nf-core/ampliseq analysis on amplicon sequencing data. |
+| **5** | [Run an nf-core ampliseq pipeline](./docs/nfcore_ampliseq.md) | Practical | Run a real nf-core/ampliseq analysis on amplicon sequencing data. |
 | **6** | [Run nanoporemetabarcoding pipeline](./docs/nanopore_metabarcoding.md) | Practical | Run the nanopore metabarcoding pipeline. |
 | **7** | [Interacting with code on GitHub](./docs/github_basics.md) | Practical | Issues, Pull Requests, READMEs and Claude Code — how to report, fix and contribute changes, using the nanopore pipeline as the example. |
 | **8** | [Running a pipeline on an HPC](./docs/hpc.md) | Practical · optional | Turn your Codespace into a working Slurm cluster and run an nf-core pipeline through it — submit and watch jobs, let Nextflow do the submitting, keep a run alive, then see what changes on your own cluster. No HPC account needed. |
