@@ -150,7 +150,13 @@ Samples are linked between the two files via the samplesheet's `sample` column a
 
 ## Step 3 — Build the samplesheet
 
-The **samplesheet** is a CSV file that tells the pipeline which files belong to which sample. Create a file called `samplesheet.csv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano samplesheet.csv`).
+The **samplesheet** is a CSV file that tells the pipeline which files belong to which sample.
+
+Create a file called `samplesheet.csv` in the `eco-flow-training/ampliseq` folder:
+
+```bash
+touch samplesheet.csv
+```
 
 It has four columns:
 
@@ -182,9 +188,13 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 ## Step 4 - Build the sample metadata
 
-The **sample metadata** is a CSV (comma separated) file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing).  It must follow [QIIME2's metadata specifications](https://docs.qiime2.org/2024.10/tutorials/metadata/). It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
+The **sample metadata** is a TSV (tab separated) file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing). It must follow [QIIME2's metadata specifications](https://docs.qiime2.org/2024.10/tutorials/metadata/). It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
-Create a file called `metadata.csv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano metadata.csv`).
+Create a file called `metadata.tsv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano metadata.tsv`):
+
+```bash
+touch metadata.tsv
+```
 
 It has four columns:
 
@@ -196,14 +206,14 @@ It has four columns:
 Try to build the sample metadata yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#metadata) and the table from [**The experiment**](#the-experiment) section as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet. You can name the grouping column `habitat`, as we did in the table above.
 
 <details>
-<summary>Cheat sheet — full metadata.csv</summary>
+<summary>Cheat sheet — full metadata.tsv</summary>
 
-```csv
-ID,habitat
-SRR10070130,river
-SRR10070131,river
-SRR10102392,soil
-SRR10102393,soil
+```tsv
+ID	habitat
+SRR10070130	river
+SRR10070131	river
+SRR10102392	soil
+SRR10102393	soil
 ```
 
 The `ID` values are the raw SRR accessions — they must match the `sample` column from `samplesheet.csv` exactly. `habitat` is the grouping column we chose, with repeated (but not all-unique) values so QIIME2 can use it for downstream comparisons.
@@ -258,7 +268,7 @@ nextflow run nf-core/ampliseq \
 -profile docker \
 -c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
 --input ./samplesheet.csv \
---metadata ./metadata.csv \
+--metadata ./metadata.tsv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
 --RV_primer GGACTACNVGGGTWTCTAAT \
 --outdir results
@@ -292,7 +302,7 @@ The `\` at the end of each line just lets one command span several lines for rea
 >   input              : samplesheet.csv
 >   FW_primer          : GTGYCAGCMGCCGCGGTAA
 >   RV_primer          : GGACTACNVGGGTWTCTAAT
->   metadata           : metadata.csv
+>   metadata           : metadata.tsv
 >   outdir             : results
 >
 > Differential abundance analysis
@@ -349,7 +359,7 @@ We ran the pipeline with minimal input and with defualt parameters. The default 
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
 -  `--ref_taxonomy_storage`. Local storage for DADA2 reference taxonomic database for taxonomic assignment.
 -  `--min_frequency`. Filter out ASVs below this abundance treshold.
--  `--min_samples`. Keep ASVs present in at least this numner of samples.
+-  `--min_samples`. Keep ASVs present in at least this number of samples.
 
 Let's run the pipeline again chaning this parameters:
 
@@ -362,7 +372,7 @@ nextflow run nf-core/ampliseq \
 -profile docker \
 -c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
 --input ./samplesheet.csv \
---metadata ./metadata.csv \
+--metadata ./metadata.tsv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
 --RV_primer GGACTACNVGGGTWTCTAAT \
 --dada_ref_taxonomy rdp \
@@ -385,9 +395,9 @@ You didn't supply one of the required parameters. Check every `--input`, `--meta
 </details>
 
 <details>
-<summary>❌ <code>Not a valid path value: 'metadata.csv'</code></summary>
+<summary>❌ <code>Not a valid path value: 'metadata.tsv'</code></summary>
 
-A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/ampliseq/metadata.csv`, and confirm the file exists with `ls -l`.
+A path is wrong or not absolute. Provide the **full** path, e.g. `/workspaces/training/eco-flow-training/ampliseq/metadata.tsv`, and confirm the file exists with `ls -l`.
 </details>
 
 <details>
