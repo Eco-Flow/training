@@ -45,10 +45,10 @@ We'll compare soil and river samples. DNA was extracted from both sites, and amp
 
 | Sample | Habitat | Reads |
 | --- | --- | --- |
-| SRR10070130 | River water | paired-end (`_1` + `_2`) |
-| SRR10070131 | River water | paired-end (`_1` + `_2`) |
-| SRR10102392 | Soil | paired-end (`_1` + `_2`) |
-| SRR10102393 | Soil | paired-end (`_1` + `_2`) |
+| SRR10070130 | river | paired-end (`_1` + `_2`) |
+| SRR10070131 | river water | paired-end (`_1` + `_2`) |
+| SRR10102392 | soil | paired-end (`_1` + `_2`) |
+| SRR10102393 | soil | paired-end (`_1` + `_2`) |
 
 Like mentioned, the primers for this course target the 16S rRNA V4 region, using the standard Earth Microbiome Project primer pair:
 
