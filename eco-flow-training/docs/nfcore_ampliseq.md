@@ -8,11 +8,13 @@
 
 ⏱ **Estimated time:** ~60–90 minutes (including pipeline run time) &nbsp;•&nbsp; 🟡 Practical
 
-In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a taxonomy classification, downstream analysis, and a quality report. **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
+In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a taxonomy classification, downstream analysis, and a quality report.
+
+**nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
 
 -  **QC** and **primer trimming**.
 -  **Amplicon denoising** (error-correction). Via DADA2 or QIIME2.
--  **Taxonomic classification**. Using a reference database (e.g. SILVA, UNITE, GTB), via DADA2 or QIIME2
+-  **Taxonomic classification**. Using a reference database (e.g. SILVA, UNITE, GTDB), via DADA2 or QIIME2.
 -  **Downstream analysis**. Diversity stats, plots, abundance tables.
 -  **Reporting**. MultiQC summary plus QIIME2 visualizations (`.qzv` files).
 
@@ -39,7 +41,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 
 We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling and comparison between sites. There are 2 replicates in each site:
 
-<img src="img/river_soil_microbe_zoom.png" width="380.8"/>
+<img src="img/river_soil_microbe_zoom.png" width="381"/>
 
 | Sample | Habitat | Reads |
 | --- | --- | --- |
@@ -103,9 +105,10 @@ The FASTQ files are compressed with `gzip` (they end in `.gz`), so they aren't d
 > ```
 > 12000
 > 250
+> 12000
 > ```
 >
-> The first command shows there are `12000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `3000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `251`. So the reads are `250` bases long. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
+> The first command shows there are `12000` lines in the file. A FASTQ record uses **4 lines per read**, so that corresponds to `3000` reads. The second command uses `head` and `tail` to grab the second line of the file, which is the first read sequence, and `wc -c` counts the number of characters in it. We add `tr -d '\n'` to strip the trailing newline first — without it, `wc -c` would also count the line break and report `251`. So the reads are `250` bases long. The third command confirms the reverse FASTQ also has `12000` lines — the same as the forward file, as expected for paired reads that are still properly mated. There are many ways to do this, and even copying the file into an editor and looking at it manually is fine.
 > </details>
 
 ### Structure of a typical FASTQ file
@@ -166,7 +169,7 @@ It has four columns:
 | `fastq_1` | Full path to the forward reads (R1) |
 | `fastq_2` | Full path to the reverse reads (R2) — **leave empty for single-end** samples |
 
-> ⚠️ **Paired vs single-end:** all samples here a paired-end, but the samplesheet can also accepts single-end samples. If the sample is single-end, fill `fastq_1`, leave `fastq_2` blank — note the trailing comma.
+> ⚠️ **Paired vs single-end:** all samples here are paired-end, but the samplesheet can also accept single-end samples. If the sample is single-end, fill `fastq_1`, leave `fastq_2` blank — note the trailing comma.
 
 Try to build the samplesheet yourself using the [example on the nf-core page](https://nf-co.re/ampliseq/2.18.0/docs/usage/#sample-sheet-input) and the table from the [**The experiment**](#the-experiment) section as a guide to build the 2 river water and 2 soil samples, then compare with the cheat sheet.
 
@@ -186,11 +189,11 @@ The `sample` values are the raw SRR accessions, but they can be any other string
 
 > 💡 **Using absolute paths is highly recommended.** The paths above are the Codespaces location. On a local machine, replace `/workspaces/training/eco-flow-training/ampliseq` with the output of your own `pwd`.
 
-## Step 4 - Build the sample metadata
+## Step 4 — Build the sample metadata
 
 The **sample metadata** is a TSV (tab separated) file that gives information about the samples for downstream analysis (barplots, diversity indices, and differential abundance testing). It must follow [QIIME2's metadata specifications](https://docs.qiime2.org/2024.10/tutorials/metadata/). It's optional, but if it's not provided, the pipeline will skip the downstream analyses.
 
-Create a file called `metadata.tsv` in the `eco-flow-training/ampliseq` folder (e.g. with `nano metadata.tsv`):
+Create a file called `metadata.tsv` in the `eco-flow-training/ampliseq` folder:
 
 ```bash
 touch metadata.tsv
@@ -221,13 +224,15 @@ The `ID` values are the raw SRR accessions — they must match the `sample` colu
 
 ## Step 5 — Run the pipeline
 
-Now run let's **run nf-core/ampliseq** using these pipeline specific flags:
+Let's **run nf-core/ampliseq** using these pipeline-specific flags:
 
 -  samplesheet (`--input`)
 -  sample metadata (`--metadata`)
--  forward primers (`--FW_primer`) (check [**The experiment**](#the-experiment) section)
--  reverse primers (`--RV_primer`) (check [**The experiment**](#the-experiment) section)
+-  forward primers (`--FW_primer`)
+-  reverse primers (`--RV_primer`)
 -  output directory name (`--outdir`, choose anything).
+
+(the primer sequences are in the [**The experiment**](#the-experiment) section above)
 
 Read the official run instructions here: https://nf-co.re/ampliseq/2.18.0/docs/usage
 
@@ -266,7 +271,7 @@ process {
 nextflow run nf-core/ampliseq \
 -r 2.18.0 \
 -profile docker \
--c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
+-c codespaces.config \
 --input ./samplesheet.csv \
 --metadata ./metadata.tsv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
@@ -354,14 +359,14 @@ The `\` at the end of each line just lets one command span several lines for rea
 
 ### Other options
 
-We ran the pipeline with minimal input and with defualt parameters. The default parameters are hidden, but they are present in our run, and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
+We ran the pipeline with minimal input and with default parameters. The default parameters are hidden, but they are present in our run, and can be changed. To explore the rest of the input/parameters options the pipeline offers, go to https://nf-co.re/ampliseq/2.18.0/parameters/. Some examples include:
 
 -  `--dada_ref_taxonomy`. DADA2 reference taxonomy database for taxonomic assignment. There's a fixed number of supported databases.
 -  `--ref_taxonomy_storage`. Local storage for DADA2 reference taxonomic database for taxonomic assignment.
--  `--min_frequency`. Filter out ASVs below this abundance treshold.
+-  `--min_frequency`. Filter out ASVs below this abundance threshold.
 -  `--min_samples`. Keep ASVs present in at least this number of samples.
 
-Let's run the pipeline again chaning this parameters:
+Let's run the pipeline again, changing these parameters:
 
 <details>
 <summary>Cheat sheet — the full command</summary>
@@ -370,7 +375,7 @@ Let's run the pipeline again chaning this parameters:
 nextflow run nf-core/ampliseq \
 -r 2.18.0 \
 -profile docker \
--c /workspaces/training/eco-flow-training/ampliseq/codespaces.config \
+-c codespaces.config \
 --input ./samplesheet.csv \
 --metadata ./metadata.tsv \
 --FW_primer GTGYCAGCMGCCGCGGTAA \
@@ -452,7 +457,7 @@ Add **`-resume`** and Nextflow will reuse the **cached** results of any steps th
 
 ## Finish
 
-🎉 **You've finished the course!** You've run a complete, reproducible amplicon sequencing pipeline — from raw reads to gene counts and quality reports — using industry-standard nf-core tooling.
+🎉 **You've finished the course!** You've run a complete, reproducible amplicon sequencing pipeline — from raw reads to ASV/taxonomy tables and diversity reports — using industry-standard nf-core tooling.
 
 **Next steps:**
 
