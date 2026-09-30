@@ -10,6 +10,8 @@
 
 In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/ampliseq](https://nf-co.re/ampliseq/2.18.0)) on example data — from raw sequencing reads all the way to a taxonomy classification, downstream analysis, and a quality report.
 
+<img src="img/ampliseq_workflow.png" alt="nf-core/rnaseq usage page" width="700"/>
+
 **nf-core/ampliseq** is a bioinformatics pipeline used for amplicon sequencing, supporting:
 
 -  **QC** and **primer trimming**.
@@ -18,12 +20,10 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 -  **Downstream analysis**. Diversity stats, plots, abundance tables.
 -  **Reporting**. MultiQC summary plus QIIME2 visualizations (`.qzv` files).
 
-<img src="img/ampliseq_workflow.png" alt="nf-core/rnaseq usage page" width="700"/>
-
 ### What you'll do
 
 - Inspect the raw amplicon sequencing data
-- Work out what inputs the pipeline needs
+- Work out the inputs of the pipeline
 - Build a **samplesheet** describing your samples
 - Build a **sample metadata** for downstream analysis
 <!-- - Download a reference **database!!!?????** -->
@@ -39,7 +39,7 @@ In this practical you'll run the **nf-core ampliseq pipeline** ([nf-core/amplise
 
 ### The experiment
 
-We'll compare soil and river samples. DNA was extracted from both sites, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling and comparison between sites. There are 2 replicates in each site:
+We'll compare soil and river samples. DNA was extracted from both sites, with 2 replicates each, and amplicon sequencing was performed targeting the 16S rRNA V4 region for microbiome profiling and comparison between sites:
 
 <img src="img/river_soil_microbe_zoom.png" width="381"/>
 
@@ -57,7 +57,7 @@ Like mentioned, the primers for this course target the 16S rRNA V4 region, using
 | `GTGYCAGCMGCCGCGGTAA` | 16S rRNA V4, forward (515F) |
 | `GGACTACNVGGGTWTCTAAT` | 16S rRNA V4, reverse (806R) |
 
-This is of course not a good experiment design, its purpose is to give the sequences some context.
+This is of course not a good experiment design -there's no statistical power since we only have 2 replicates-, but its purpose is simply to give the test data some context.
 
 ---
 
